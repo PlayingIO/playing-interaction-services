@@ -11,7 +11,7 @@ module.exports = function(options = {}) {
     },
     after: {
       all: [
-        hooks.presentEntity(FavoriteEntity),
+        hooks.presentEntity(FavoriteEntity, options),
         hooks.responder()
       ]
     }

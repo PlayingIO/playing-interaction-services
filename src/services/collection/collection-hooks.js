@@ -35,7 +35,7 @@ module.exports = function(options = {}) {
     after: {
       all: [
         hooks.populate('parent', { service: 'folders' }),
-        content.presentDocument({ collection: CollectionEntity }),
+        hooks.presentEntity(CollectionEntity, options),
         content.hasFolderishChild(),
         hooks.responder()
       ]
