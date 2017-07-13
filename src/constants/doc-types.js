@@ -1,7 +1,8 @@
 import { DocTypes } from 'playing-content-services/lib/constants';
 
 export default Object.assign({
-  Collection: {
+  collection: {
+    "packages": "playing-interaction-elements",
     "type":"Collection",
     "facets":[
       "Folderish",

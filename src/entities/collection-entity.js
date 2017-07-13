@@ -2,7 +2,7 @@ import { omit, pick } from 'lodash';
 import Entity from 'mostly-entity';
 import { getBreadcrumbs } from 'playing-content-services/lib/helpers';
 import BlobEntity from 'playing-content-services/lib/entities/blob-entity';
-import { CollectionTypes } from '~/constants';
+import { DocTypes } from '~/constants';
 
 const CollectionEntity = new Entity('Collection', {
   file: { using: BlobEntity },
@@ -20,14 +20,15 @@ CollectionEntity.expose('metadata', {}, obj => {
   if (obj.metadata) return obj.metadata;
   
   const breadcrumbs = getBreadcrumbs(obj);
-  const facets = [];
+  const facets = DocTypes[obj.type].facets;
   const favorites = [];
-  const subtypes = Object.values(pick(CollectionTypes, ['File']));
+  const packages = DocTypes[obj.type].packages;
   const permissions = ['Everything', 'Read', 'Write', 'ReadWrite', 'ReadChildren', 'AddChildren', 'RemoveChildren'];
+  const subtypes = Object.values(pick(DocTypes, ['File']));
   const thumbnail = {
     url: 'bower_components/playing-content-elements/images/icons/collection.png'
   };
-  return Object.assign({}, { breadcrumbs, facets, favorites, permissions, subtypes, thumbnail });
+  return Object.assign({}, { breadcrumbs, facets, favorites, packages, permissions, subtypes, thumbnail });
 });
 
 CollectionEntity.excepts('destroyedAt');

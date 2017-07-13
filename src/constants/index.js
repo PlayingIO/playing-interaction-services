@@ -1,5 +1,5 @@
-import CollectionTypes from './collection-types';
+import DocTypes from './collection-types';
 
 export default {
-  CollectionTypes
+  DocTypes
 };
