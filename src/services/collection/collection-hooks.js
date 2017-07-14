@@ -1,6 +1,6 @@
 import { discard } from 'feathers-hooks-common';
 import { hooks as auth } from 'feathers-authentication';
-import { queryWithCurrentUser } from 'feathers-authentication-hooks';
+import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
 import { hooks } from 'mostly-feathers-mongoose';
 import CollectionEntity from '~/entities/collection-entity';
 import * as content from 'playing-content-services/lib/services/content-hooks';
@@ -18,6 +18,7 @@ module.exports = function(options = {}) {
         queryWithCurrentUser({ idField: 'id', as: 'owner' })
       ],
       create: [
+        associateCurrentUser({ idField: 'id', as: 'owner' }),
         content.computePath(),
         content.fetchBlobs()
       ],
@@ -35,6 +36,7 @@ module.exports = function(options = {}) {
     after: {
       all: [
         hooks.populate('parent', { service: 'folders' }),
+        hooks.populate('entries', { serviceBy: 'type' }),
         hooks.presentEntity(CollectionEntity, options),
         content.hasFolderishChild(),
         hooks.responder()

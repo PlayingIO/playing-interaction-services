@@ -2,6 +2,11 @@ import timestamps from 'mongoose-timestamp';
 import { plugins } from 'mostly-feathers-mongoose';
 
 const fields = {
+  entries: [{
+    _id: false,
+    id: { type: 'ObjectId' },
+    type: { type: 'String' }
+  }],
   owner: { type: 'ObjectId' }
 };
 
