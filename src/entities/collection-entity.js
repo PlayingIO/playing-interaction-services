@@ -16,19 +16,15 @@ CollectionEntity.expose('parent', (obj, options) => {
   return obj.parent;
 });
 
-CollectionEntity.expose('metadata', {}, obj => {
-  if (obj.metadata) return obj.metadata;
+CollectionEntity.expose('metadata', (obj, options) => {
+  obj.metadata = obj.metadata || {};
   
-  const breadcrumbs = getBreadcrumbs(obj);
-  const facets = DocTypes[obj.type].facets;
-  const favorites = [];
-  const packages = DocTypes[obj.type].packages;
-  const permissions = ['Everything', 'Read', 'Write', 'ReadWrite', 'ReadCanCollect'];
-  const subtypes = Object.values(pick(DocTypes, ['File']));
-  const thumbnail = {
-    url: 'bower_components/playing-content-elements/images/icons/collection.png'
-  };
-  return Object.assign({}, { breadcrumbs, facets, favorites, packages, permissions, subtypes, thumbnail });
+  const Types = options.DocTypes || DocTypes;
+
+  obj.metadata.facets = Types[obj.type].facets;
+  obj.metadata.packages = Types[obj.type].packages;
+
+  return obj.metadata;
 });
 
 CollectionEntity.excepts('destroyedAt');

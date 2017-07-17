@@ -29,9 +29,12 @@ class CollectionEntryService extends Service {
       let entries = results.data || results;
       if (entries && entries.length > 0) {
         const service = plural(entries[0].type || 'document');
-        return this.app.service(service).find({ query: {
-          _id: { $in: map(entries, 'entry') }
-        }});
+        return this.app.service(service).find({
+          query: {
+            _id: { $in: map(entries, 'entry') },
+          },
+          headers: params.headers
+        });
       } else {
         return [];
       }

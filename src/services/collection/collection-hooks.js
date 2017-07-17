@@ -39,7 +39,7 @@ module.exports = function(options = {}) {
         hooks.populate('entries', { serviceBy: 'type' }),
         hooks.populate('owner', { service: 'users' }),
         hooks.presentEntity(CollectionEntity, options),
-        content.documentEnrichers(),
+        content.documentEnrichers(options),
         hooks.responder()
       ]
     }
