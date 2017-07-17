@@ -23,7 +23,7 @@ CollectionEntity.expose('metadata', {}, obj => {
   const facets = DocTypes[obj.type].facets;
   const favorites = [];
   const packages = DocTypes[obj.type].packages;
-  const permissions = ['Everything', 'Read', 'Write', 'ReadWrite', 'ReadChildren', 'AddChildren', 'RemoveChildren'];
+  const permissions = ['Everything', 'Read', 'Write', 'ReadWrite', 'ReadCanCollect'];
   const subtypes = Object.values(pick(DocTypes, ['File']));
   const thumbnail = {
     url: 'bower_components/playing-content-elements/images/icons/collection.png'
