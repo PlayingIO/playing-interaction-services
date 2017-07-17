@@ -8,7 +8,7 @@ import defaultHooks from './collection-hooks';
 const debug = makeDebug('playing:interaction-services:collections');
 
 const defaultOptions = {
-  name: 'collection-service'
+  name: 'collections'
 };
 
 class CollectionService extends Service {
@@ -17,52 +17,37 @@ class CollectionService extends Service {
     super(options);
   }
 
+  get(id, params) {
+    params.$select = params.$select || [];
+    
+    let collection = null;
+    
+    return super.get(id, params).then((result) => {
+      collection = result;
+
+      if (collection && params.$select.indexOf('entries') > -1) {
+        const entries = this.app.Service('collection-entries');
+        return entries.find({ query: {
+          parent: collection.id
+        }});
+      } else {
+        return null;
+      }
+    }).then((results) => {
+      if (results) {
+        collection.entries = results.data || results;
+      }
+      return collection;
+    });
+  }
+
   setup(app) {
     super.setup(app);
     this.hooks(defaultHooks(this.options));
   }
 
-  find(params) {
-    params = params || { query: {} };
-    if (params.query.id) {
-      return this.get(params.query.id).then((col) => col.entries);
-    }
-    return super.find(params);
-  }
-
   suggestion(id, data, params) {
     return super.find(params);
-  }
-
-  addToCollection(id, data, params, original) {
-    assert(data.document, 'data.document not provided.');
-
-    const documents = this.app.service('documents');
-    return documents.get(data.document).then((doc) => {
-      if (!doc) throw new Error('data.document not exists');
-      let entries = unionWith(
-        original.entries || [],
-        [{ id: doc.id, type: doc.type }],
-        (entry, other) => String(entry.id) === String(other.id)
-      );
-      debug('addToCollection', entries);
-      return super.patch(id, { entries: entries });
-    });
-  }
-
-  removeFromCollection(id, data, params, original) {
-    assert(data.document, 'data.document not provided.');
-
-    const documents = this.app.service('documents');
-    return documents.get(data.document).then((doc) => {
-      if (!doc) throw new Error('data.document not exists');
-      let entries = filter(
-        original.entries || [],
-        (entry) => String(entry.id) === data.document
-      );
-      debug('removeFromCollection', entries);
-      return super.patch(id, { entries: entries });
-    });
   }
 }
 

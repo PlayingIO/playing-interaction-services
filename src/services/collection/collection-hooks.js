@@ -24,12 +24,12 @@ module.exports = function(options = {}) {
       ],
       update: [
         hooks.depopulate('parent'),
-        discard('id', 'metadata', 'path', 'createdAt', 'updatedAt', 'destroyedAt'),
+        discard('id', 'metadata', 'owner', 'path', 'createdAt', 'updatedAt', 'destroyedAt'),
         content.fetchBlobs()
       ],
       patch: [
         hooks.depopulate('parent'),
-        discard('id', 'metadata', 'path', 'createdAt', 'updatedAt', 'destroyedAt'),
+        discard('id', 'metadata', 'owner', 'path', 'createdAt', 'updatedAt', 'destroyedAt'),
         content.fetchBlobs()
       ]
     },
@@ -39,7 +39,7 @@ module.exports = function(options = {}) {
         hooks.populate('entries', { serviceBy: 'type' }),
         hooks.populate('owner', { service: 'users' }),
         hooks.presentEntity(CollectionEntity, options),
-        content.hasFolderishChild(),
+        content.documentEnrichers(),
         hooks.responder()
       ]
     }
