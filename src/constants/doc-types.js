@@ -5,12 +5,9 @@ export default Object.assign({
     "packages": "playing-interaction-elements",
     "type":"Collection",
     "facets":[
-      "Folderish",
       "Versionable",
-      "Publishable",
-      "Commentable",
-      "HasRelatedText",
-      "Downloadable"
+      "Collection",
+      "NotCollectionMember"
     ]
   }
 }, DocTypes);

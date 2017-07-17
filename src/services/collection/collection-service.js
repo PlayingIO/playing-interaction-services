@@ -27,11 +27,11 @@ class CollectionService extends Service {
   }
 
   addToCollection(id, data, params, original) {
-    assert(data.params && data.params.document, 'params.document not provided.');
+    assert(data.document, 'data.document not provided.');
 
     const documents = this.app.service('documents');
-    return documents.get(data.params.document).then((doc) => {
-      if (!doc) throw new Error('params.document not exists');
+    return documents.get(data.document).then((doc) => {
+      if (!doc) throw new Error('data.document not exists');
       let entries = unionWith(
         original.entries || [],
         [{ id: doc.id, type: doc.type }],

@@ -37,6 +37,7 @@ module.exports = function(options = {}) {
       all: [
         hooks.populate('parent', { service: 'folders' }),
         hooks.populate('entries', { serviceBy: 'type' }),
+        hooks.populate('owner', { service: 'users' }),
         hooks.presentEntity(CollectionEntity, options),
         content.hasFolderishChild(),
         hooks.responder()
