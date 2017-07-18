@@ -1,7 +1,7 @@
 import assert from 'assert';
 import makeDebug from 'debug';
 import { filter, flatten, groupBy, map, unionWith } from 'lodash';
-import { Service, createService } from 'mostly-feathers-mongoose';
+import { Service, helpers, createService } from 'mostly-feathers-mongoose';
 import { plural } from 'pluralize';
 import CollectionEntryModel from '~/models/collection-entry-model';
 import { populateByService } from 'playing-content-services/lib/helpers';
@@ -84,6 +84,14 @@ class CollectionEntryService extends Service {
       },
       provider: params.provider,
       $multi: true
+    });
+  }
+
+  reorder(id, data, params, original) {
+    return this.get(data.target).then((target) => {
+      if (!target) throw new Error("data.target not exists");
+      target = target.data || target;
+      return helpers.reorderPosition(this.Model, original, target.position, { classify: 'parent' });
     });
   }
 }

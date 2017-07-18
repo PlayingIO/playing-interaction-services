@@ -49,6 +49,29 @@ class CollectionService extends Service {
   suggestion(id, data, params) {
     return super.find(params);
   }
+
+  moveCollectionMember(id, data, params, original) {
+    assert(data.select, 'data.select is not provided.');
+    assert(data.target, 'data.target is not provided.');
+
+    const entries = this.app.service('collection-entries');
+
+    return Promise.all(
+      [data.select, data.target].map(entry => {
+        return entries.first({ query: {
+          entry: entry,
+          parent: original.id
+        }});
+      })
+    ).then(([select, target]) => {
+      debug('moveCollectionMember', select, target);
+      if (!select) throw new Error('data.select entry not exists.');
+      if (!target) throw new Error('data.target entry not exists.');
+      return entries.patch(select._id,
+        { target: target._id },
+        { __action: 'reorder' });
+    }).then(() => original);
+  }
 }
 
 export default function init(app, options, hooks) {

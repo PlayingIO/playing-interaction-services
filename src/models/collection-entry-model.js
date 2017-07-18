@@ -12,6 +12,6 @@ export default function(app, name) {
   const mongoose = app.get('mongoose');
   const schema = new mongoose.Schema(fields);
   schema.plugin(timestamps);
-  schema.plugin(plugins.sortable);
+  schema.plugin(plugins.sortable, { classify: 'parent' });
   return mongoose.model(name, schema);
 }
