@@ -3,8 +3,8 @@ import { plugins } from 'mostly-feathers-mongoose';
 
 const fields = {
   parent: { type: 'ObjectId' }, // collection
-  entry: { type: 'ObjectId' },
-  type: { type: 'String' },
+  entry: { type: 'ObjectId' },  // document id
+  type: { type: 'String' },     // document type
   owner: { type: 'ObjectId' }
 };
 
