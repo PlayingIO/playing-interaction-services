@@ -1,9 +1,10 @@
 import assert from 'assert';
 import makeDebug from 'debug';
-import { filter, map, unionWith } from 'lodash';
+import { filter, flatten, groupBy, map, unionWith } from 'lodash';
 import { Service, createService } from 'mostly-feathers-mongoose';
 import { plural } from 'pluralize';
 import CollectionEntryModel from '~/models/collection-entry-model';
+import { populateByService } from 'playing-content-services/lib/helpers';
 import defaultHooks from './collection-entry-hooks';
 
 const debug = makeDebug('playing:interaction-services:collection-entries');
@@ -24,15 +25,14 @@ class CollectionEntryService extends Service {
   }
 
   find(params) {
-    let entries = null;
+    params = params || { query: {} };
+    params.query.$sort = params.query.$sort || { position: 1 };
+
     return super.find(params).then((results) => {
-      let entries = results.data || results;
-      if (entries && entries.length > 0) {
-        const service = plural(entries[0].type || 'document');
-        return this.app.service(service).find({
-          query: {
-            _id: { $in: map(entries, 'entry') },
-          },
+      let documents = results.data || results;
+      if (documents && documents.length > 0) {
+        return populateByService(this.app, documents, 'entry', 'type', {
+          provider: params.provider,
           headers: params.headers
         });
       } else {
