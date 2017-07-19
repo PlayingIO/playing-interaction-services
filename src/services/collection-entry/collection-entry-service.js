@@ -72,19 +72,23 @@ class CollectionEntryService extends Service {
   }
 
   remove(id, params) {
-    assert(params.query.collection, 'query.collection not provided.');
-    assert(params.query.document, 'query.document not provided.');
-    assert(params.query.owner, 'query.owner not provided.');
+    if (id) {
+      return super.remove(id, params);
+    } else {
+      assert(params.query.collection, 'query.collection not provided.');
+      assert(params.query.document, 'query.document not provided.');
+      assert(params.query.owner, 'query.owner not provided.');
 
-    return super.remove(null, {
-      query: {
-        entry: params.query.document,
-        parent: params.query.collection,
-        owner: params.query.owner
-      },
-      provider: params.provider,
-      $multi: true
-    });
+      return super.remove(null, {
+        query: {
+          entry: params.query.document,
+          parent: params.query.collection,
+          owner: params.query.owner
+        },
+        provider: params.provider,
+        $multi: true
+      });
+    }
   }
 
   reorder(id, data, params, original) {
