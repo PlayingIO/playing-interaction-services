@@ -72,7 +72,7 @@ class CollectionEntryService extends Service {
   }
 
   remove(id, params) {
-    if (id) {
+    if (id && id !== 'null') {
       return super.remove(id, params);
     } else {
       assert(params.query.collection, 'query.collection not provided.');
@@ -81,7 +81,7 @@ class CollectionEntryService extends Service {
 
       return super.remove(null, {
         query: {
-          entry: params.query.document,
+          entry: { $in: params.query.document.split(',') },
           parent: params.query.collection,
           owner: params.query.owner
         },

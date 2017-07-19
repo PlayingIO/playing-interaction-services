@@ -1,4 +1,4 @@
-import DocTypes from './collection-types';
+import DocTypes from './doc-types';
 
 export default {
   DocTypes
