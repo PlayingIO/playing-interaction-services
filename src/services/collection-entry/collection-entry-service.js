@@ -31,10 +31,10 @@ class CollectionEntryService extends Service {
     return super.find(params).then((results) => {
       let documents = results.data || results;
       if (documents && documents.length > 0) {
-        return populateByService(this.app, documents, 'entry', 'type', {
+        return populateByService(this.app, 'entry', 'type', {
           provider: params.provider,
           headers: params.headers
-        });
+        })(documents);
       } else {
         return [];
       }
