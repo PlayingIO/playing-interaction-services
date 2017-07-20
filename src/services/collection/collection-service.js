@@ -17,6 +17,11 @@ class CollectionService extends Service {
     super(options);
   }
 
+  setup(app) {
+    super.setup(app);
+    this.hooks(defaultHooks(this.options));
+  }
+  
   get(id, params) {
     params.$select = params.$select || [];
     
@@ -39,11 +44,6 @@ class CollectionService extends Service {
       }
       return collection;
     });
-  }
-
-  setup(app) {
-    super.setup(app);
-    this.hooks(defaultHooks(this.options));
   }
 
   suggestion(id, data, params) {

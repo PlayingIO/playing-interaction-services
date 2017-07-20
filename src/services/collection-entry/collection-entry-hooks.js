@@ -2,7 +2,6 @@ import { discard } from 'feathers-hooks-common';
 import { hooks as auth } from 'feathers-authentication';
 import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
 import { hooks } from 'mostly-feathers-mongoose';
-import CollectionEntryEntity from '~/entities/collection-entry-entity';
 import * as content from 'playing-content-services/lib/services/content-hooks';
 
 module.exports = function(options = {}) {
@@ -34,7 +33,6 @@ module.exports = function(options = {}) {
     },
     after: {
       all: [
-        hooks.presentEntity(CollectionEntryEntity, options),
         hooks.responder()
       ]
     }

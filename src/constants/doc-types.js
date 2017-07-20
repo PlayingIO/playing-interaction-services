@@ -9,5 +9,14 @@ export default Object.assign({
       "Collection",
       "NotCollectionMember"
     ]
+  },
+  favorite: {
+    "packages": "playing-interaction-elements",
+    "type":"Favorite",
+    "facets":[
+      "Versionable",
+      "Collection",
+      "NotCollectionMember"
+    ]
   }
 }, DocTypes);

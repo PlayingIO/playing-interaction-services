@@ -2,7 +2,7 @@ import timestamps from 'mongoose-timestamp';
 import { plugins } from 'mostly-feathers-mongoose';
 
 const fields = {
-  owner: { type: 'ObjectId' }
+  owner: { type: 'ObjectId' },
 };
 
 export default function(app, name) {
