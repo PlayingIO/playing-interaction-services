@@ -27,9 +27,7 @@ class FavoriteService extends Service {
     this.hooks(defaultHooks(this.options));
   }
   
-  find(params) {
-    assert(params && params.query.owner, 'query.owner not provided.');
-
+  _getUserFavorite(params) {
     return super.find(params).then((result) => {
       // create own favorite if not exists
       if (result && result.data.length === 0) {
@@ -45,8 +43,57 @@ class FavoriteService extends Service {
     });
   }
 
-  create(data, params) {
+  // get the default user favorite
+  find(params) {
+    params = params || { query: {} };
+    assert(params.query.owner, 'query.owner not provided.');
+    return this._getUserFavorite(params);
+  }
 
+  // get the favorited document
+  get(id, params) {
+    params = params || { query: {} };
+    assert(params.query.owner, 'query.owner not provided.');
+    
+    const entries = this.app.service('document-entries');
+
+    return this._getUserFavorite(params).then((favorite) => {
+      if (favorite) {
+        return entries.find({ query: {
+          entry: id,
+          parent: favorite.id,
+          owner: params.query.owner
+        }}).then((results) => {
+          if (results && results.length > 0) {
+            return results[0];
+          } else {
+            return null;
+          }
+        });
+      } else {
+        return null;
+      }
+    });
+  }
+
+  create(data, params) {
+    assert(data.document || data.documents, 'data.document(s) not provided.');
+    assert(data.owner, 'data.owner not provided.');
+
+    const entries = this.app.service('document-entries');
+    
+    return this._getUserFavorite(params).then((favorite) => {
+      if (favorite) {
+        debug('Add to favorite', favorite.id, 'with', data.document || data.documents);
+        return entries.create({
+          favorite: favorite.id,
+          document: data.document || data.documents,
+          owner: data.owner
+        }, params);
+      } else {
+        throw new Error('User favorite collection not exists');
+      }
+    });
   }
 }
 

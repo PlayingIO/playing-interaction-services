@@ -42,28 +42,32 @@ class DocumentEntryService extends Service {
   }
 
   create(data, params) {
-    assert(data.collection, 'data.collection not provided.');
+    debug('create', data, params);
+    assert(data.collection || data.favorite, 'data.collection or data.favorite not provided.');
     assert(data.document || data.documents, 'data.document(s) not provided.');
     assert(data.owner, 'data.owner not provided.');
 
     const documents = this.app.service('documents');
     const collections = this.app.service('collections');
+    const favorites = this.app.service('favorites');
     
     const entries = [].concat(data.document || data.documents);
 
-    return Promise.all([
-      documents.find({ query: {
-        _id: { $in: entries }
-      }}),
-      collections.get(data.collection),
-    ]).then(([results, col]) => {
+    const getDocuments = documents.find({ query: {
+      _id: { $in: entries }
+    }});
+    const getCollection = data.collection
+      ? collections.get(data.collection)
+      : favorites.get(data.favorite);
+
+    return Promise.all([getDocuments, getCollection]).then(([results, col]) => {
       let docs = results.data || results;
       if (!docs || docs.length !== entries.length) throw new Error('some data.document not exists');
       if (!col) throw new Error('data.collection not exists');
       return Promise.all(docs.map((doc) => {
         return super.upsert({
           entry: doc.id,
-          parent: data.collection,
+          parent: col.id,
           type: doc.type,
           owner: data.owner
         });

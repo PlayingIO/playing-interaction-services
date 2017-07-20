@@ -27,17 +27,19 @@ module.exports = function(options = {}) {
         disallow()
       ],
       remove: [
-        disallow()
+        queryWithCurrentUser({ idField: 'id', as: 'owner' })
       ]
     },
     after: {
       all: [
+        hooks.responder()
+      ],
+      find: [
         hooks.populate('parent', { service: 'folders' }),
         hooks.populate('entries', { serviceBy: 'type' }),
         hooks.populate('owner', { service: 'users' }),
-        hooks.presentEntity(FavoriteEntity, options),
         content.documentEnrichers(options),
-        hooks.responder()
+        hooks.presentEntity(FavoriteEntity, options),
       ]
     }
   };
