@@ -3,17 +3,17 @@ import makeDebug from 'debug';
 import { filter, flatten, groupBy, map, unionWith } from 'lodash';
 import { Service, helpers, createService } from 'mostly-feathers-mongoose';
 import { plural } from 'pluralize';
-import CollectionEntryModel from '~/models/collection-entry-model';
+import DocumentEntryModel from '~/models/document-entry-model';
 import { populateByService } from 'playing-content-services/lib/helpers';
-import defaultHooks from './collection-entry-hooks';
+import defaultHooks from './document-entry-hooks';
 
-const debug = makeDebug('playing:interaction-services:collection-entries');
+const debug = makeDebug('playing:interaction-services:document-entries');
 
 const defaultOptions = {
-  name: 'collection-entries'
+  name: 'document-entries'
 };
 
-class CollectionEntryService extends Service {
+class DocumentEntryService extends Service {
   constructor(options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);
@@ -101,8 +101,8 @@ class CollectionEntryService extends Service {
 }
 
 export default function init(app, options, hooks) {
-  options = Object.assign({ ModelName: 'collection-entry' }, options);
-  return createService(app, CollectionEntryService, CollectionEntryModel, options);
+  options = Object.assign({ ModelName: 'document-entry' }, options);
+  return createService(app, DocumentEntryService, DocumentEntryModel, options);
 }
 
-init.Service = CollectionEntryService;
+init.Service = DocumentEntryService;

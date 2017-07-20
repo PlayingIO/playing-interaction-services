@@ -28,8 +28,7 @@ class FavoriteService extends Service {
   }
   
   find(params) {
-    params = params || { query: {} };
-    assert(params.query.owner, 'query.owner not provided.');
+    assert(params && params.query.owner, 'query.owner not provided.');
 
     return super.find(params).then((result) => {
       // create own favorite if not exists
@@ -44,6 +43,10 @@ class FavoriteService extends Service {
         return result && result.data[0];
       }
     });
+  }
+
+  create(data, params) {
+
   }
 }
 

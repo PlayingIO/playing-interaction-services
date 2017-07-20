@@ -18,7 +18,7 @@ module.exports = function(options = {}) {
         queryWithCurrentUser({ idField: 'id', as: 'owner' })
       ],
       create: [
-        disallow()
+        associateCurrentUser({ idField: 'id', as: 'owner' })
       ],
       update: [
         disallow()
@@ -33,6 +33,7 @@ module.exports = function(options = {}) {
     after: {
       all: [
         hooks.populate('parent', { service: 'folders' }),
+        hooks.populate('entries', { serviceBy: 'type' }),
         hooks.populate('owner', { service: 'users' }),
         hooks.presentEntity(FavoriteEntity, options),
         content.documentEnrichers(options),

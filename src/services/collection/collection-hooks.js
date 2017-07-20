@@ -40,23 +40,21 @@ module.exports = function(options = {}) {
       ],
       create: [
         associateCurrentUser({ idField: 'id', as: 'owner' }),
-        content.computePath(),
-        content.fetchBlobs()
+        content.computePath()
       ],
       update: [
         hooks.depopulate('parent'),
-        discard('id', 'metadata', 'owner', 'path', 'createdAt', 'updatedAt', 'destroyedAt'),
-        content.fetchBlobs()
+        discard('id', 'metadata', 'owner', 'path', 'createdAt', 'updatedAt', 'destroyedAt')
       ],
       patch: [
         hooks.depopulate('parent'),
-        discard('id', 'metadata', 'owner', 'path', 'createdAt', 'updatedAt', 'destroyedAt'),
-        content.fetchBlobs()
+        discard('id', 'metadata', 'owner', 'path', 'createdAt', 'updatedAt', 'destroyedAt')
       ]
     },
     after: {
       all: [
         hooks.populate('parent', { service: 'folders' }),
+        hooks.populate('entries', { serviceBy: 'type' }),
         hooks.populate('owner', { service: 'users' }),
         hooks.presentEntity(CollectionEntity, options),
         content.documentEnrichers(options),

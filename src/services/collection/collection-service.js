@@ -31,7 +31,7 @@ class CollectionService extends Service {
       collection = result;
 
       if (collection && params.$select.indexOf('entries') > -1) {
-        const entries = this.app.Service('collection-entries');
+        const entries = this.app.Service('document-entries');
         return entries.find({ query: {
           parent: collection.id
         }});
@@ -54,7 +54,7 @@ class CollectionService extends Service {
     assert(data.select, 'data.select is not provided.');
     assert(data.target, 'data.target is not provided.');
 
-    const entries = this.app.service('collection-entries');
+    const entries = this.app.service('document-entries');
 
     return Promise.all(
       [data.select, data.target].map(entry => {
