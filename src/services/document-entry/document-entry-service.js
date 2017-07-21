@@ -47,29 +47,30 @@ class DocumentEntryService extends Service {
     assert(data.document || data.documents, 'data.document(s) not provided.');
     assert(data.owner, 'data.owner not provided.');
 
+    const category = data.collection? 'collection' : (data.favorite? 'favorite' : 'documents');
+    const parent = data.collection || data.favorite;
+
     const documents = this.app.service('documents');
-    const collections = this.app.service('collections');
-    const favorites = this.app.service('favorites');
+    const collections = this.app.service(plural(category));
     
     const entries = [].concat(data.document || data.documents);
 
     const getDocuments = documents.find({ query: {
       _id: { $in: entries }
     }});
-    const getCollection = data.collection
-      ? collections.get(data.collection)
-      : favorites.get(data.favorite);
+    const getCollection = collections.get(parent);
 
-    return Promise.all([getDocuments, getCollection]).then(([results, col]) => {
+    return Promise.all([getDocuments, getCollection]).then(([results, parent]) => {
       let docs = results.data || results;
       if (!docs || docs.length !== entries.length) throw new Error('some data.document not exists');
-      if (!col) throw new Error('data.collection not exists');
+      if (!parent) throw new Error('parent collection not exists');
       return Promise.all(docs.map((doc) => {
         return super.upsert({
           entry: doc.id,
-          parent: col.id,
+          parent: parent.id,
           type: doc.type,
-          owner: data.owner
+          owner: data.owner,
+          category: category
         });
       }));
     });
@@ -79,14 +80,14 @@ class DocumentEntryService extends Service {
     if (id && id !== 'null') {
       return super.remove(id, params);
     } else {
-      assert(params.query.collection, 'query.collection not provided.');
+      assert(params.query.collection || params.query.favorite, 'query.collection or query.favorite not provided.');
       assert(params.query.document, 'query.document not provided.');
       assert(params.query.owner, 'query.owner not provided.');
 
       return super.remove(null, {
         query: {
           entry: { $in: params.query.document.split(',') },
-          parent: params.query.collection,
+          parent: params.query.collection || params.query.favorite,
           owner: params.query.owner
         },
         provider: params.provider,
