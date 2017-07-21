@@ -33,7 +33,8 @@ class DocumentEntryService extends Service {
       if (documents && documents.length > 0) {
         return populateByService(this.app, 'entry', 'type', {
           provider: params.provider,
-          headers: params.headers
+          headers: params.headers,
+          retained: ['id', 'parent'] // retain as _id and _parent
         })(documents).then(data => {
           results.data = data;
           return results;
