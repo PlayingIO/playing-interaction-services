@@ -29,14 +29,17 @@ class DocumentEntryService extends Service {
     params.query.$sort = params.query.$sort || { position: 1 };
 
     return super.find(params).then((results) => {
-      let documents = results.data || results;
+      let documents = results.data;
       if (documents && documents.length > 0) {
         return populateByService(this.app, 'entry', 'type', {
           provider: params.provider,
           headers: params.headers
-        })(documents);
+        })(documents).then(data => {
+          results.data = data;
+          return results;
+        });
       } else {
-        return [];
+        return results;
       }
     });
   }

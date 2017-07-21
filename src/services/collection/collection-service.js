@@ -67,9 +67,12 @@ class CollectionService extends Service {
       debug('moveCollectionMember', select, target);
       if (!select) throw new Error('data.select entry not exists.');
       if (!target) throw new Error('data.target entry not exists.');
-      return entries.patch(select._id,
-        { target: target._id },
-        { __action: 'reorder' });
+      // select._id is document-entry _id
+      return entries.patch(select._id, {
+        target: target._id
+      }, {
+        __action: 'reorder'
+      });
     }).then(() => original);
   }
 }
