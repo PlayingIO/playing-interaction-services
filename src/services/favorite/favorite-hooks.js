@@ -23,12 +23,14 @@ module.exports = function(options = {}) {
       update: [
         associateCurrentUser({ idField: 'id', as: 'owner' }),
         hooks.depopulate('parent'),
-        discard('id', 'metadata', 'path', 'createdAt', 'updatedAt', 'destroyedAt')
+        content.computePath(),
+        discard('id', 'metadata', 'createdAt', 'updatedAt', 'destroyedAt'),
       ],
       patch: [
         associateCurrentUser({ idField: 'id', as: 'owner' }),
         hooks.depopulate('parent'),
-        discard('id', 'metadata', 'path', 'createdAt', 'updatedAt', 'destroyedAt')
+        content.computePath(),
+        discard('id', 'metadata', 'createdAt', 'updatedAt', 'destroyedAt'),
       ],
       remove: [
         queryWithCurrentUser({ idField: 'id', as: 'owner' })
