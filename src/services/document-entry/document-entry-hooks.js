@@ -11,24 +11,24 @@ module.exports = function(options = {}) {
         auth.authenticate('jwt')
       ],
       get: [
-        queryWithCurrentUser({ idField: 'id', as: 'owner' })
+        queryWithCurrentUser({ idField: 'id', as: 'creator' })
       ],
       find: [
-        queryWithCurrentUser({ idField: 'id', as: 'owner' })
+        queryWithCurrentUser({ idField: 'id', as: 'creator' })
       ],
       create: [
-        associateCurrentUser({ idField: 'id', as: 'owner' })
+        associateCurrentUser({ idField: 'id', as: 'creator' })
       ],
       update: [
-        associateCurrentUser({ idField: 'id', as: 'owner' }),
-        hooks.depopulate('entry', 'owner')
+        associateCurrentUser({ idField: 'id', as: 'creator' }),
+        hooks.depopulate('entry', 'creator')
       ],
       patch: [
-        associateCurrentUser({ idField: 'id', as: 'owner' }),
-        hooks.depopulate('entry', 'owner')
+        associateCurrentUser({ idField: 'id', as: 'creator' }),
+        hooks.depopulate('entry', 'creator')
       ],
       remove: [
-        queryWithCurrentUser({ idField: 'id', as: 'owner' })
+        queryWithCurrentUser({ idField: 'id', as: 'creator' })
       ],
     },
     after: {

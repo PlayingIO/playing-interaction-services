@@ -12,26 +12,26 @@ module.exports = function(options = {}) {
         auth.authenticate('jwt')
       ],
       get: [
-        queryWithCurrentUser({ idField: 'id', as: 'owner' })
+        queryWithCurrentUser({ idField: 'id', as: 'creator' })
       ],
       find: [
-        queryWithCurrentUser({ idField: 'id', as: 'owner' })
+        queryWithCurrentUser({ idField: 'id', as: 'creator' })
       ],
       create: [
-        associateCurrentUser({ idField: 'id', as: 'owner' })
+        associateCurrentUser({ idField: 'id', as: 'creator' })
       ],
       update: [
-        associateCurrentUser({ idField: 'id', as: 'owner' }),
+        associateCurrentUser({ idField: 'id', as: 'creator' }),
         hooks.depopulate('parent'),
         discard('id', 'metadata', 'path', 'createdAt', 'updatedAt', 'destroyedAt')
       ],
       patch: [
-        associateCurrentUser({ idField: 'id', as: 'owner' }),
+        associateCurrentUser({ idField: 'id', as: 'creator' }),
         hooks.depopulate('parent'),
         discard('id', 'metadata', 'path', 'createdAt', 'updatedAt', 'destroyedAt')
       ],
       remove: [
-        queryWithCurrentUser({ idField: 'id', as: 'owner' })
+        queryWithCurrentUser({ idField: 'id', as: 'creator' })
       ]
     },
     after: {
@@ -41,7 +41,7 @@ module.exports = function(options = {}) {
       find: [
         hooks.populate('parent', { service: 'folders' }),
         hooks.populate('entries', { serviceBy: 'type' }),
-        hooks.populate('owner', { service: 'users' }),
+        hooks.populate('creator', { service: 'users' }),
         content.documentEnrichers(options),
         hooks.presentEntity(FavoriteEntity, options),
       ]

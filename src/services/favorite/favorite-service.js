@@ -27,14 +27,14 @@ class FavoriteService extends Service {
     this.hooks(defaultHooks(this.options));
   }
   
-  _getUserFavorite(owner) {
-    return super.find({ query: { owner } }).then((result) => {
+  _getUserFavorite(creator) {
+    return super.find({ query: { creator } }).then((result) => {
       // create own favorite if not exists
       if (result && result.data.length === 0) {
         return super.create({
           title: 'My Favorite',
           description: 'User favorite collection',
-          owner: owner,
+          creator: creator,
           path: '/favorites/' + shortid.generate()
         });
       } else {
@@ -45,7 +45,7 @@ class FavoriteService extends Service {
 
   find(params) {
     params = params || { query: {} };
-    assert(params.query.owner, 'query.owner not provided.');
+    assert(params.query.creator, 'query.creator not provided.');
     return super.find(params);
   }
 
@@ -55,8 +55,8 @@ class FavoriteService extends Service {
     const action = params.__action;
     
     if (id === 'me') {
-      assert(params.query.owner, 'query.owner not provided.');
-      return this._getUserFavorite(params.query.owner).then((favorite) => {
+      assert(params.query.creator, 'query.creator not provided.');
+      return this._getUserFavorite(params.query.creator).then((favorite) => {
         if (action) {
           assert(this[action], 'No such action method: ' + action);
           return this[action].call(this, id, {}, params, favorite);
@@ -73,14 +73,14 @@ class FavoriteService extends Service {
   entry(id, data, params, favorite) {
     params = params || { query: {} };
     assert(params.query.entry, 'query.entry not provided.');
-    assert(params.query.owner, 'query.owner not provided.');
+    assert(params.query.creator, 'query.creator not provided.');
     
     const entries = this.app.service('document-entries');
 
     return entries.find({ query: {
       entry: params.query.entry,
       parent: favorite.id,
-      owner: params.query.owner
+      creator: params.query.creator
     }}).then((results) => {
       if (results && results.length > 0) {
         return results[0];
@@ -93,7 +93,7 @@ class FavoriteService extends Service {
   // add a document to the user favorite
   addToFavorites(id, data, params, favorite) {
     assert(data.document || data.documents, 'data.document(s) not provided.');
-    assert(data.owner, 'data.owner not provided.');
+    assert(data.creator, 'data.creator not provided.');
 
     const entries = this.app.service('document-entries');
     
@@ -101,7 +101,7 @@ class FavoriteService extends Service {
     return entries.create({
       favorite: favorite.id,
       document: data.document || data.documents,
-      owner: data.owner
+      creator: data.creator
     }, params);
   }
 
@@ -109,7 +109,7 @@ class FavoriteService extends Service {
   removeFromFavorites(id, data, params, favorite) {
     debug('removeFromFavorites', id, data, params, favorite);
     assert(data.document || data.documents, 'data.document(s) not provided.');
-    assert(data.owner, 'data.owner not provided.');
+    assert(data.creator, 'data.creator not provided.');
     
     const entries = this.app.service('document-entries');
 
@@ -117,7 +117,7 @@ class FavoriteService extends Service {
     return entries.remove(null, { query: {
       favorite: favorite.id,
       document: data.document || data.documents,
-      owner: data.owner
+      creator: data.creator
     }});
   }
 }

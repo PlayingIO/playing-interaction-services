@@ -48,7 +48,7 @@ class DocumentEntryService extends Service {
     debug('create', data, params);
     assert(data.collection || data.favorite, 'data.collection or data.favorite not provided.');
     assert(data.document || data.documents, 'data.document(s) not provided.');
-    assert(data.owner, 'data.owner not provided.');
+    assert(data.creator, 'data.creator not provided.');
 
     const category = data.collection? 'collection' : (data.favorite? 'favorite' : 'documents');
     const parent = data.collection || data.favorite;
@@ -72,7 +72,7 @@ class DocumentEntryService extends Service {
           entry: doc.id,
           parent: parent.id,
           type: doc.type,
-          owner: data.owner,
+          creator: data.creator,
           category: category
         });
       }));
@@ -85,13 +85,13 @@ class DocumentEntryService extends Service {
     } else {
       assert(params.query.collection || params.query.favorite, 'query.collection or query.favorite not provided.');
       assert(params.query.document, 'query.document not provided.');
-      assert(params.query.owner, 'query.owner not provided.');
+      assert(params.query.creator, 'query.creator not provided.');
 
       return super.remove(null, {
         query: {
           entry: { $in: params.query.document.split(',') },
           parent: params.query.collection || params.query.favorite,
-          owner: params.query.owner
+          creator: params.query.creator
         },
         provider: params.provider,
         $multi: true

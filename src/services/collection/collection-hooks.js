@@ -33,37 +33,40 @@ module.exports = function(options = {}) {
         auth.authenticate('jwt')
       ],
       get: [
-        queryWithCurrentUser({ idField: 'id', as: 'owner' })
+        queryWithCurrentUser({ idField: 'id', as: 'creator' })
       ],
       find: [
-        queryWithCurrentUser({ idField: 'id', as: 'owner' })
+        queryWithCurrentUser({ idField: 'id', as: 'creator' })
       ],
       create: [
-        associateCurrentUser({ idField: 'id', as: 'owner' }),
+        associateCurrentUser({ idField: 'id', as: 'creator' }),
         content.computePath()
       ],
       update: [
-        associateCurrentUser({ idField: 'id', as: 'owner' }),
+        associateCurrentUser({ idField: 'id', as: 'creator' }),
         hooks.depopulate('parent'),
         content.computePath(),
-        discard('id', 'metadata', 'owner', 'createdAt', 'updatedAt', 'destroyedAt')
+        discard('id', 'metadata', 'creator', 'createdAt', 'updatedAt', 'destroyedAt')
       ],
       patch: [
-        associateCurrentUser({ idField: 'id', as: 'owner' }),
+        associateCurrentUser({ idField: 'id', as: 'creator' }),
         hooks.depopulate('parent'),
         content.computePath(),
-        discard('id', 'metadata', 'owner', 'createdAt', 'updatedAt', 'destroyedAt')
+        discard('id', 'metadata', 'creator', 'createdAt', 'updatedAt', 'destroyedAt')
       ]
     },
     after: {
       all: [
         hooks.populate('parent', { service: 'folders' }),
         hooks.populate('entries', { serviceBy: 'type' }),
-        hooks.populate('owner', { service: 'users' }),
+        hooks.populate('creator', { service: 'users' }),
         hooks.presentEntity(CollectionEntity, options),
         content.documentEnrichers(options),
         addCollectionEnrichers(options),
         hooks.responder()
+      ],
+      create: [
+        hooks.publishEvent('collection.create', { prefix: 'playing' })
       ]
     }
   };

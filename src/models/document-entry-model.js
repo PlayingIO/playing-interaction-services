@@ -5,7 +5,7 @@ const fields = {
   parent: { type: 'ObjectId' }, // collection
   entry: { type: 'ObjectId' },  // document id
   type: { type: 'String' },     // document type
-  owner: { type: 'ObjectId' },
+  creator: { type: 'ObjectId' },
   category: { type: 'String', enum: ['collection', 'favorite', 'like'] }
 };
 
