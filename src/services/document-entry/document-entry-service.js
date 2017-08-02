@@ -4,7 +4,6 @@ import { filter, flatten, groupBy, map, unionWith } from 'lodash';
 import { Service, helpers, createService } from 'mostly-feathers-mongoose';
 import { plural } from 'pluralize';
 import DocumentEntryModel from '~/models/document-entry-model';
-import { populateByService } from 'playing-content-services/lib/helpers';
 import defaultHooks from './document-entry-hooks';
 
 const debug = makeDebug('playing:interaction-services:document-entries');
@@ -31,7 +30,7 @@ class DocumentEntryService extends Service {
     return super.find(params).then((results) => {
       let documents = results.data;
       if (documents && documents.length > 0) {
-        return populateByService(this.app, 'entry', 'type', {
+        return helpers.populateByService(this.app, 'entry', 'type', {
           provider: params.provider,
           headers: params.headers,
           retained: ['id', 'parent'] // retain as _id and _parent
