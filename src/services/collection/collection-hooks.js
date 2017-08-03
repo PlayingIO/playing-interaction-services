@@ -58,7 +58,7 @@ module.exports = function(options = {}) {
     after: {
       all: [
         hooks.populate('parent', { service: 'folders' }),
-        hooks.populate('entries', { serviceBy: 'type' }),
+        hooks.populate('entries', { serviceField: 'type' }),
         hooks.populate('creator', { service: 'users' }),
         hooks.presentEntity(CollectionEntity, options),
         content.documentEnrichers(options),
