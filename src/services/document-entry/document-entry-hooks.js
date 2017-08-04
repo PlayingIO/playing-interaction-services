@@ -3,6 +3,7 @@ import { hooks as auth } from 'feathers-authentication';
 import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
 import { hooks } from 'mostly-feathers-mongoose';
 import * as content from 'playing-content-services/lib/services/content-hooks';
+import DocumentEntryEntity from '~/entities/document-entry-entity';
 
 module.exports = function(options = {}) {
   return {
@@ -11,10 +12,10 @@ module.exports = function(options = {}) {
         auth.authenticate('jwt')
       ],
       get: [
-        queryWithCurrentUser({ idField: 'id', as: 'creator' })
+        // queryWithCurrentUser({ idField: 'id', as: 'creator' })
       ],
       find: [
-        queryWithCurrentUser({ idField: 'id', as: 'creator' })
+        // queryWithCurrentUser({ idField: 'id', as: 'creator' })
       ],
       create: [
         associateCurrentUser({ idField: 'id', as: 'creator' })
@@ -33,6 +34,10 @@ module.exports = function(options = {}) {
     },
     after: {
       all: [
+        hooks.populate('parent', { service: 'documents' }),
+        hooks.populate('entry', { path: '@type' }), // absolute path
+        hooks.populate('creator', { service: 'users' }),
+        hooks.presentEntity(DocumentEntryEntity, options),
         hooks.responder()
       ]
     }
