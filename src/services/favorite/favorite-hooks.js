@@ -1,6 +1,6 @@
 import { hooks as auth } from 'feathers-authentication';
 import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
-import { disallow, discard } from 'feathers-hooks-common';
+import { disallow, discard, iff } from 'feathers-hooks-common';
 import { hooks } from 'mostly-feathers-mongoose';
 import * as content from 'playing-content-services/lib/services/content-hooks';
 import FavoriteEntity from '~/entities/favorite-entity';
@@ -40,10 +40,20 @@ module.exports = function(options = {}) {
       ],
       find: [
         hooks.populate('parent', { service: 'folders' }),
-        hooks.populate('entries', { path: 'type' }),
+        hooks.populate('entries', { path: 'type', retained: true }),
         hooks.populate('creator', { service: 'users' }),
         content.documentEnrichers(options),
         hooks.presentEntity(FavoriteEntity, options),
+      ],
+      patch: [
+        iff(
+          hooks.isAction('addToFavorites'),
+          hooks.publishEvent('favorite.added', { prefix: 'playing' })
+        ),
+        iff(
+          hooks.isAction('removeFromFavorites'),
+          hooks.publishEvent('favorite.removed', { prefix: 'playing' })
+        )
       ]
     }
   };
