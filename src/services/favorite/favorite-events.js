@@ -23,7 +23,7 @@ export function subFavoriteEvents(app, options) {
               actor: `user:${creator.id}`,
               verb: 'addedToFavorites',
               object: `document:${document.id}`,
-              foreignId: `favorite:favorite.id`,
+              foreignId: `favorite:${favorite.id}`,
               message: 'favorite the document',
               cc: [`user:${creator.id}`]
             });
@@ -54,7 +54,7 @@ export function subUnFavoriteEvents(app, options) {
               actor: `user:${creator.id}`,
               verb: 'removeFromFavorites',
               object: `document:${document.id}`,
-              foreignId: `favorite:favorite.id`,
+              foreignId: `favorite:${favorite.id}`,
               message: 'unfavorite the document',
               cc: [`user:${creator.id}`]
             });
