@@ -30,9 +30,9 @@ class CollectionService extends Service {
     return super.get(id, params).then((result) => {
       collection = result;
 
-      if (collection && params.$select.indexOf('entries') > -1) {
-        const entries = this.app.Service('document-entries');
-        return entries.find({ query: {
+      if (collection && params.$select.indexOf('documents') > -1) {
+        const documents = this.app.service('catalogs');
+        return catalogs.find({ query: {
           parent: collection.id
         }});
       } else {
@@ -40,7 +40,7 @@ class CollectionService extends Service {
       }
     }).then((results) => {
       if (results) {
-        collection.entries = results.data || results;
+        collection.documents = results.data || results;
       }
       return collection;
     });
@@ -54,22 +54,21 @@ class CollectionService extends Service {
     assert(data.select, 'data.select is not provided.');
     assert(data.target, 'data.target is not provided.');
 
-    const entries = this.app.service('document-entries');
+    const catalogs = this.app.service('catalogs');
 
     return Promise.all(
-      [data.select, data.target].map(entry => {
-        return entries.first({ query: {
-          entry: entry,
+      [data.select, data.target].map(item => {
+        return catalogs.first({ query: {
+          document: item,
           parent: original.id
         }});
       })
     ).then(([select, target]) => {
       debug('moveCollectionMember', select, target);
-      if (!select) throw new Error('data.select entry not exists.');
-      if (!target) throw new Error('data.target entry not exists.');
-      // select._id is document-entry _id
-      return entries.patch(select._id, {
-        target: target._id
+      if (!select) throw new Error('data.select document not exists.');
+      if (!target) throw new Error('data.target document not exists.');
+      return catalogs.patch(select.id, {
+        target: target.id
       }, {
         __action: 'reorder'
       });

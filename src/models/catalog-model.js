@@ -1,12 +1,16 @@
 import timestamps from 'mongoose-timestamp';
 import { plugins } from 'mostly-feathers-mongoose';
 
+/*
+ * sortable list of document colleciton
+ */
+
 const fields = {
-  parent: { type: 'ObjectId' }, // collection
-  entry: { type: 'ObjectId' },  // document id
-  type: { type: 'String' },     // document type
-  creator: { type: 'ObjectId' },
-  category: { type: 'String', enum: ['collection', 'favorite', 'like'] }
+  parent: { type: 'ObjectId' },   // collection id
+  category: { type: 'String' },   // collection type
+  document: { type: 'ObjectId' }, // document id
+  type: { type: 'String' },       // document type
+  creator: { type: 'ObjectId' }
 };
 
 export default function(app, name) {

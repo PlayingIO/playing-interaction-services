@@ -3,16 +3,16 @@ import makeDebug from 'debug';
 import { filter, flatten, groupBy, map, unionWith } from 'lodash';
 import { Service, helpers, createService } from 'mostly-feathers-mongoose';
 import { plural } from 'pluralize';
-import DocumentEntryModel from '~/models/document-entry-model';
-import defaultHooks from './document-entry-hooks';
+import CatalogModel from '~/models/catalog-model';
+import defaultHooks from './catalog-hooks';
 
-const debug = makeDebug('playing:interaction-services:document-entries');
+const debug = makeDebug('playing:interaction-services:catalogs');
 
 const defaultOptions = {
-  name: 'document-entries'
+  name: 'catalogs'
 };
 
-class DocumentEntryService extends Service {
+class CatalogService extends Service {
   constructor(options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);
@@ -42,24 +42,24 @@ class DocumentEntryService extends Service {
     const documents = this.app.service('documents');
     const collections = this.app.service(plural(category));
     
-    const entries = [].concat(data.document || data.documents);
+    const ids = [].concat(data.document || data.documents);
 
     const getDocuments = documents.find({ query: {
-      _id: { $in: entries }
+      _id: { $in: ids }
     }});
     const getCollection = collections.get(parent);
 
     return Promise.all([getDocuments, getCollection]).then(([results, parent]) => {
       let docs = results.data || results;
-      if (!docs || docs.length !== entries.length) throw new Error('some data.document not exists');
+      if (!docs || docs.length !== ids.length) throw new Error('some data.document not exists');
       if (!parent) throw new Error('parent collection not exists');
       return Promise.all(docs.map((doc) => {
         return super.upsert({
-          entry: doc.id,
+          document: doc.id,
           parent: parent.id,
           type: doc.type,
-          creator: data.creator,
-          category: category
+          category: category,
+          creator: data.creator
         });
       }));
     });
@@ -75,7 +75,7 @@ class DocumentEntryService extends Service {
 
       return super.remove(null, {
         query: {
-          entry: { $in: params.query.document.split(',') },
+          document: { $in: params.query.document.split(',') },
           parent: params.query.collection || params.query.favorite,
           creator: params.query.creator
         },
@@ -95,8 +95,8 @@ class DocumentEntryService extends Service {
 }
 
 export default function init(app, options, hooks) {
-  options = Object.assign({ ModelName: 'document-entry' }, options);
-  return createService(app, DocumentEntryService, DocumentEntryModel, options);
+  options = Object.assign({ ModelName: 'catalog' }, options);
+  return createService(app, CatalogService, CatalogModel, options);
 }
 
-init.Service = DocumentEntryService;
+init.Service = CatalogService;

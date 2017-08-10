@@ -73,15 +73,15 @@ class FavoriteService extends Service {
   }
 
   // get a document from the user favorite
-  entry(id, data, params, favorite) {
+  document(id, data, params, favorite) {
     params = params || { query: {} };
-    assert(params.query.entry, 'query.entry not provided.');
+    assert(params.query.document, 'query.document not provided.');
     assert(params.query.creator, 'query.creator not provided.');
     
-    const entries = this.app.service('document-entries');
+    const catalogs = this.app.service('catalogs');
 
-    return entries.find({ query: {
-      entry: params.query.entry,
+    return catalogs.find({ query: {
+      document: params.query.document,
       parent: favorite.id,
       creator: params.query.creator
     }}).then((results) => {
@@ -98,10 +98,10 @@ class FavoriteService extends Service {
     assert(data.document || data.documents, 'data.document(s) not provided.');
     assert(data.creator, 'data.creator not provided.');
 
-    const entries = this.app.service('document-entries');
+    const catalogs = this.app.service('catalogs');
     
     debug('Add to favorite', favorite.id, 'with', data.document || data.documents);
-    return entries.create({
+    return catalogs.create({
       favorite: favorite.id,
       document: data.document || data.documents,
       creator: data.creator
@@ -114,10 +114,10 @@ class FavoriteService extends Service {
     assert(data.document || data.documents, 'data.document(s) not provided.');
     assert(data.creator, 'data.creator not provided.');
     
-    const entries = this.app.service('document-entries');
+    const catalogs = this.app.service('catalogs');
 
     debug('Remove from favorite', favorite.id, 'with', data.document || data.documents);
-    return entries.remove(null, { query: {
+    return catalogs.remove(null, { query: {
       favorite: favorite.id,
       document: data.document || data.documents,
       creator: data.creator
