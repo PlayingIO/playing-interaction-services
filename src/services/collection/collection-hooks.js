@@ -19,6 +19,7 @@ const addCollectionEnrichers = (options) => (hook) => {
   
   if (enrichers.indexOf('permissions') > -1) {
     results.forEach((doc) => {
+      doc.metadata = doc.metadata || {};
       doc.metadata.permissions = doc.metadata.permissions || [];
       doc.metadata.permissions.push('ReadCanCollect');
     });
@@ -58,7 +59,6 @@ module.exports = function(options = {}) {
     after: {
       all: [
         hooks.populate('parent', { service: 'folders' }),
-        // hooks.populate('documents', { path: 'type', retained: true }),
         hooks.populate('creator', { service: 'users' }),
         hooks.presentEntity(CollectionEntity, options),
         content.documentEnrichers(options),

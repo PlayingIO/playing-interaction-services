@@ -36,7 +36,7 @@ module.exports = function(options = {}) {
     after: {
       all: [
         hooks.populate('parent', { path: '@category' }), // absolute path
-        hooks.populate('document', { path: '@type', fallThrough: true }),   // absolute path
+        hooks.populate('document', { path: '@type', fallThrough: true }), // absolute path
         hooks.populate('creator', { service: 'users' }),
         hooks.presentEntity(CatalogEntity, options),
         hooks.responder()

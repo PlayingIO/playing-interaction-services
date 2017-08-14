@@ -48,7 +48,7 @@ class FavoriteService extends Service {
 
   find(params) {
     params = params || { query: {} };
-    assert(params.query.creator, 'query.creator not provided.');
+    
     return super.find(params);
   }
 

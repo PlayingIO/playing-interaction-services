@@ -50,6 +50,9 @@ class CollectionService extends Service {
     return super.find(params);
   }
 
+  /*
+   * reorder items in the collection
+   */
   moveCollectionMember(id, data, params, original) {
     assert(data.select, 'data.select is not provided.');
     assert(data.target, 'data.target is not provided.');
