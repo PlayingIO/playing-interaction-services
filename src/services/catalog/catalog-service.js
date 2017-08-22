@@ -36,7 +36,7 @@ class CatalogService extends Service {
     assert(data.document || data.documents, 'data.document(s) not provided.');
     assert(data.creator, 'data.creator not provided.');
 
-    const category = data.collection? 'collection' : (data.favorite? 'favorite' : 'documents');
+    const category = data.collection? 'collection' : (data.favorite? 'favorite' : 'document');
     const parent = data.collection || data.favorite;
 
     const documents = this.app.service('documents');

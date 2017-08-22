@@ -6,19 +6,19 @@ const debug = makeDebug('playing:interaction-services:favorite:events');
 const createActivity = function(app, favorite, verb, message) {
   const feeds = app.service('feeds');
   const activities = app.service('activities');
+  const documents = app.service('documents');
 
-  const creator = favorite && favorite.creator;
   return fp.map((document) => {
-    feeds.get(`document:${document.id}`).then((feed) => {
-      if (creator && feed) {
+    return feeds.get(`document:${document}`).then((feed) => {
+      if (feed) {
         activities.create({
           feed: feed.id,
-          actor: `user:${creator.id}`,
+          actor: `user:${favorite.creator}`,
           verb: verb,
-          object: `document:${document.id}`,
+          object: `document:${document}`,
           foreignId: `favorite:${favorite.id}`,
           message: message,
-          cc: [`user:${creator.id}`]
+          cc: [`user:${favorite.creator}`]
         });
       }
     });
