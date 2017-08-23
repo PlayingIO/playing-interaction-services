@@ -19,9 +19,12 @@ FavoriteEntity.expose('parent', (obj, options) => {
 FavoriteEntity.expose('metadata', (obj, options) => {
   obj.metadata = obj.metadata || {};
   
-  const type = (options.DocTypes || DocTypes)[obj.type];
-  obj.metadata.facets = type && type.facets;
-  obj.metadata.packages = type && type.packages;
+  const Types = options.DocTypes || DocTypes;
+
+  if (Types[obj.type]) {
+    obj.metadata.facets = Types[obj.type].facets;
+    obj.metadata.packages = Types[obj.type].packages;
+  }
 
   return obj.metadata;
 });
