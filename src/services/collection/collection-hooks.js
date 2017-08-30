@@ -1,7 +1,7 @@
 import assert from 'assert';
 import { hooks as auth } from 'feathers-authentication';
 import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
-import { discard } from 'feathers-hooks-common';
+import { discard, iff, isProvider } from 'feathers-hooks-common';
 import { hooks } from 'mostly-feathers-mongoose';
 import * as content from 'playing-content-services/lib/services/content-hooks';
 import CollectionEntity from '~/entities/collection-entity';
@@ -58,6 +58,7 @@ module.exports = function(options = {}) {
     },
     after: {
       all: [
+        iff(isProvider('external'), discard('ACL')),
         hooks.populate('parent', { service: 'folders' }),
         hooks.populate('creator', { service: 'users' }),
         hooks.presentEntity(CollectionEntity, options),

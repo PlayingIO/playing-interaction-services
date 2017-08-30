@@ -1,6 +1,6 @@
 import { hooks as auth } from 'feathers-authentication';
 import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
-import { disallow, discard, iff } from 'feathers-hooks-common';
+import { disallow, discard, iff, isProvider } from 'feathers-hooks-common';
 import { hooks } from 'mostly-feathers-mongoose';
 import * as content from 'playing-content-services/lib/services/content-hooks';
 import FavoriteEntity from '~/entities/favorite-entity';
@@ -21,11 +21,13 @@ module.exports = function(options = {}) {
         associateCurrentUser({ idField: 'id', as: 'creator' })
       ],
       update: [
+        queryWithCurrentUser({ idField: 'id', as: 'creator' }),
         associateCurrentUser({ idField: 'id', as: 'creator' }),
         hooks.depopulate('parent'),
         discard('id', 'metadata', 'path', 'createdAt', 'updatedAt', 'destroyedAt')
       ],
       patch: [
+        queryWithCurrentUser({ idField: 'id', as: 'creator' }),
         associateCurrentUser({ idField: 'id', as: 'creator' }),
         hooks.depopulate('parent'),
         discard('id', 'metadata', 'path', 'createdAt', 'updatedAt', 'destroyedAt')
@@ -36,6 +38,7 @@ module.exports = function(options = {}) {
     },
     after: {
       all: [
+        iff(isProvider('external'), discard('ACL')),
         hooks.responder()
       ],
       find: [
