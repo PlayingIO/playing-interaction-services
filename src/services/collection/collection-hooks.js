@@ -58,12 +58,12 @@ module.exports = function(options = {}) {
     },
     after: {
       all: [
-        iff(isProvider('external'), discard('ACL')),
         hooks.populate('parent', { service: 'folders' }),
         hooks.populate('creator', { service: 'users' }),
-        hooks.presentEntity(CollectionEntity, options),
         content.documentEnrichers(options),
         addCollectionEnrichers(options),
+        hooks.presentEntity(CollectionEntity, options),
+        iff(isProvider('external'), discard('ACL')),
         hooks.responder()
       ],
       create: [
