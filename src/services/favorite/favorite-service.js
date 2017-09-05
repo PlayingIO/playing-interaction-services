@@ -102,7 +102,7 @@ class FavoriteService extends Service {
     
     debug('Add to favorite', favorite.id, 'with', data.document || data.documents);
     return catalogs.create({
-      favorite: favorite.id,
+      parent: favorite.id,
       document: data.document || data.documents,
       creator: data.creator
     }, params);
@@ -118,7 +118,7 @@ class FavoriteService extends Service {
 
     debug('Remove from favorite', favorite.id, 'with', data.document || data.documents);
     return catalogs.remove(null, { query: {
-      favorite: favorite.id,
+      parent: favorite.id,
       document: data.document || data.documents,
       creator: data.creator
     }});

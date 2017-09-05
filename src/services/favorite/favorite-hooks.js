@@ -42,7 +42,7 @@ module.exports = function(options = {}) {
         hooks.responder()
       ],
       find: [
-        hooks.populate('parent', { service: 'folders' }),
+        hooks.populate('parent', { service: 'documents' }),
         hooks.populate('creator', { service: 'users' }),
         content.documentEnrichers(options),
         hooks.presentEntity(FavoriteEntity, options),

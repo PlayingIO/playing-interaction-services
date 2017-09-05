@@ -32,27 +32,22 @@ class CatalogService extends Service {
 
   create(data, params) {
     debug('create', data, params);
-    assert(data.collection || data.favorite, 'data.collection or data.favorite not provided.');
+    assert(data.parent, 'data.parent not provided.');
     assert(data.document || data.documents, 'data.document(s) not provided.');
     assert(data.creator, 'data.creator not provided.');
 
-    const category = data.collection? 'collection' : (data.favorite? 'favorite' : 'document');
-    const parent = data.collection || data.favorite;
-
     const documents = this.app.service('documents');
-    const collections = this.app.service(plural(category));
     
     const ids = [].concat(data.document || data.documents);
 
-    const getDocuments = documents.find({ query: {
-      _id: { $in: ids }
-    }});
-    const getCollection = collections.get(parent);
+    const getDocuments = documents.find({ query: { _id: { $in: ids } } });
+    const getCollection = documents.get(data.parent);
 
     return Promise.all([getDocuments, getCollection]).then(([results, parent]) => {
-      let docs = results.data || results;
+      const docs = results.data || results;
       if (!docs || docs.length !== ids.length) throw new Error('some data.document not exists');
       if (!parent) throw new Error('parent collection not exists');
+      const category = parent.type;
       return Promise.all(docs.map((doc) => {
         return super.upsert({
           document: doc.id,
@@ -69,14 +64,14 @@ class CatalogService extends Service {
     if (id && id !== 'null') {
       return super.remove(id, params);
     } else {
-      assert(params.query.collection || params.query.favorite, 'query.collection or query.favorite not provided.');
+      assert(params.query.parent, 'query.parent not provided.');
       assert(params.query.document, 'query.document not provided.');
       assert(params.query.creator, 'query.creator not provided.');
 
       return super.remove(null, {
         query: {
           document: { $in: params.query.document.split(',') },
-          parent: params.query.collection || params.query.favorite,
+          parent: params.query.parent,
           creator: params.query.creator
         },
         provider: params.provider,
