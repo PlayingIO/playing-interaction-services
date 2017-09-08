@@ -13,12 +13,12 @@ const createActivity = function(app, favorite, verb, message) {
       if (feed) {
         activities.create({
           feed: feed.id,
-          actor: `user:${favorite.creator}`,
+          actor: `user:${favorite.user}`,
           verb: verb,
           object: `document:${document}`,
           foreignId: `favorite:${favorite.id}`,
           message: message,
-          cc: [`user:${favorite.creator}`]
+          cc: [`user:${favorite.user}`]
         });
       }
     });

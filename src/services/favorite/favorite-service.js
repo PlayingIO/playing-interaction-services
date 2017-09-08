@@ -72,39 +72,18 @@ class FavoriteService extends Service {
     }
   }
 
-  // get a document from the user favorite
-  document(id, data, params, favorite) {
-    params = params || { query: {} };
-    assert(params.query.document, 'query.document not provided.');
-    assert(params.query.creator, 'query.creator not provided.');
-    
-    const catalogs = this.app.service('catalogs');
-
-    return catalogs.find({ query: {
-      document: params.query.document,
-      parent: favorite.id,
-      creator: params.query.creator
-    }}).then((results) => {
-      if (results && results.length > 0) {
-        return results[0];
-      } else {
-        return null;
-      }
-    });
-  }
-
   // add a document to the user favorite
   addToFavorites(id, data, params, favorite) {
     assert(data.document || data.documents, 'data.document(s) not provided.');
     assert(data.creator, 'data.creator not provided.');
 
-    const catalogs = this.app.service('catalogs');
+    const userFavorites = this.app.service('user-favorites');
     
     debug('Add to favorite', favorite.id, 'with', data.document || data.documents);
-    return catalogs.create({
-      parent: favorite.id,
+    return userFavorites.create({
+      favorite: favorite.id,
       document: data.document || data.documents,
-      creator: data.creator
+      user: data.creator
     }, params);
   }
 
@@ -114,13 +93,13 @@ class FavoriteService extends Service {
     assert(data.document || data.documents, 'data.document(s) not provided.');
     assert(data.creator, 'data.creator not provided.');
     
-    const catalogs = this.app.service('catalogs');
+    const userFavorites = this.app.service('user-favorites');
 
     debug('Remove from favorite', favorite.id, 'with', data.document || data.documents);
-    return catalogs.remove(null, { query: {
-      parent: favorite.id,
+    return userFavorites.remove(null, { query: {
+      favorite: favorite.id,
       document: data.document || data.documents,
-      creator: data.creator
+      user: data.creator
     }});
   }
 }
