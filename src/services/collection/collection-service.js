@@ -46,14 +46,14 @@ class CollectionService extends Service {
     });
   }
 
-  suggestion(id, data, params) {
+  _suggestion(id, data, params) {
     return super.find(params);
   }
 
   /*
    * reorder items in the collection
    */
-  moveCollectionMember(id, data, params, original) {
+  _moveCollectionMember(id, data, params, original) {
     assert(data.select, 'data.select is not provided.');
     assert(data.target, 'data.target is not provided.');
 

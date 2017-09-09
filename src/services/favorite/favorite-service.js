@@ -73,7 +73,7 @@ class FavoriteService extends Service {
   }
 
   // add a document to the user favorite
-  addToFavorites(id, data, params, favorite) {
+  _addToFavorites(id, data, params, favorite) {
     assert(data.document || data.documents, 'data.document(s) not provided.');
     assert(data.creator, 'data.creator not provided.');
 
@@ -88,7 +88,7 @@ class FavoriteService extends Service {
   }
 
   // remove a document from the user favorite
-  removeFromFavorites(id, data, params, favorite) {
+  _removeFromFavorites(id, data, params, favorite) {
     debug('removeFromFavorites', id, data, params, favorite);
     assert(data.document || data.documents, 'data.document(s) not provided.');
     assert(data.creator, 'data.creator not provided.');
