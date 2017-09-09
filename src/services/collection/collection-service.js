@@ -22,30 +22,6 @@ class CollectionService extends Service {
     this.hooks(defaultHooks(this.options));
   }
   
-  get(id, params) {
-    params.$select = params.$select || [];
-    
-    let collection = null;
-    
-    return super.get(id, params).then((result) => {
-      collection = result;
-
-      if (collection && params.$select.indexOf('documents') > -1) {
-        const documents = this.app.service('catalogs');
-        return catalogs.find({ query: {
-          parent: collection.id
-        }});
-      } else {
-        return null;
-      }
-    }).then((results) => {
-      if (results) {
-        collection.documents = results.data || results;
-      }
-      return collection;
-    });
-  }
-
   _suggestion(id, data, params) {
     return super.find(params);
   }

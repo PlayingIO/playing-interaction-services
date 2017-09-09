@@ -66,6 +66,9 @@ module.exports = function(options = {}) {
         iff(isProvider('external'), discard('ACL')),
         hooks.responder()
       ],
+      find: [
+        hooks.assoc('documents', { service: 'user-collections', field: 'collect' })
+      ],
       create: [
         hooks.publishEvent('collection.create', { prefix: 'playing' })
       ]
