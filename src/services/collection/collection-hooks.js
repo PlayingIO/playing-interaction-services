@@ -70,7 +70,7 @@ module.exports = function(options = {}) {
         hooks.assoc('documents', { service: 'user-collections', field: 'collect' })
       ],
       create: [
-        hooks.publishEvent('collection.create', { prefix: 'playing' })
+        hooks.publishEvent('document.create', { prefix: 'playing' })
       ]
     }
   };
