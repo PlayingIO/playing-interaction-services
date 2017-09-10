@@ -58,7 +58,7 @@ module.exports = function(options = {}) {
     },
     after: {
       all: [
-        hooks.populate('parent', { service: 'documents' }),
+        hooks.populate('parent', { service: 'documents', fallThrough: ['headers'] }),
         hooks.populate('creator', { service: 'users' }),
         content.documentEnrichers(options),
         addCollectionEnrichers(options),
