@@ -33,7 +33,7 @@ class UserCollectionService extends Service {
   get(id, params) {
     params = Object.assign({ query: {} }, params);
     params.query.document = params.query.document || id;
-    return super.first(params);
+    return this._first(null, params);
   }
 
   create(data, params) {
@@ -54,7 +54,7 @@ class UserCollectionService extends Service {
       if (!docs || docs.length !== ids.length) throw new Error('some data.document not exists');
       if (!collection) throw new Error('parent collection not exists');
       return Promise.all(docs.map((doc) => {
-        return super.upsert({
+        return super._upsert(null, {
           document: doc.id,
           collect: collection.id,
           type: doc.type,
