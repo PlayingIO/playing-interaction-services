@@ -37,7 +37,7 @@ class CollectionService extends Service {
 
     return Promise.all(
       [data.select, data.target].map(item => {
-        return userCollections.first({ query: {
+        return userCollections.action('first').find({ query: {
           document: item,
           collect: original.id
         }});
@@ -46,7 +46,7 @@ class CollectionService extends Service {
       debug('moveCollectionMember', select, target);
       if (!select) throw new Error('data.select document not exists.');
       if (!target) throw new Error('data.target document not exists.');
-      return userCollections.action('patch', 'reorder', select.id, {
+      return userCollections.action('reorder').patch(select.id, {
         target: target.id
       });
     }).then(() => original);
