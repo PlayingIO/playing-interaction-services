@@ -1,6 +1,7 @@
 import assert from 'assert';
 import makeDebug from 'debug';
 import { createService } from 'mostly-feathers-mongoose';
+import fp from 'mostly-func';
 import shortid from 'shortid';
 
 import FavoriteModel from '~/models/favorite-model';
@@ -30,18 +31,20 @@ class FavoriteService extends Service {
     subUnFavoriteEvents(this.app, this.options);
   }
   
-  _getUserFavorite(creator) {
-    return super.find({ query: { creator } }).then((result) => {
+  _getUserFavorite(params) {
+    params = fp.assign(params, { paginate: false });
+    return super.find(params).then((result) => {
       // create own favorite if not exists
-      if (result && result.data.length === 0) {
+      if (result && result.length === 0) {
+        assert(params.query.creator, 'params.query.creator not provided');
         return super.create({
           title: 'My Favorite',
           description: 'User favorite collection',
-          creator: creator,
+          creator: params.query.creator,
           path: '/favorites/' + shortid.generate()
         });
       } else {
-        return result && result.data[0];
+        return result && result[0];
       }
     });
   }
@@ -59,7 +62,7 @@ class FavoriteService extends Service {
     
     if (id === 'me') {
       assert(params.query.creator, 'query.creator not provided.');
-      return this._getUserFavorite(params.query.creator).then((favorite) => {
+      return this._getUserFavorite(params).then((favorite) => {
         if (action) {
           assert(this[action], 'No such action method: ' + action);
           return this[action].call(this, id, {}, params, favorite);

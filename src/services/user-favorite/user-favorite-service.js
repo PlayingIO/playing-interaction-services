@@ -37,7 +37,6 @@ class UserFavoriteService extends Service {
   }
 
   create(data, params) {
-    assert(data.favorite, 'data.favorite not provided.');
     assert(data.document || data.documents, 'data.document(s) not provided.');
     assert(data.user, 'data.user not provided.');
 
@@ -46,11 +45,18 @@ class UserFavoriteService extends Service {
     
     const ids = [].concat(data.document || data.documents);
 
-    const getDocuments = documents.find({ query: { _id: { $in: ids } } });
-    const getFavorite = favorites.get(data.favorite);
+    const getDocuments = documents.find({
+      query: {
+        _id: { $in: ids },
+        $select: ['type']
+      },
+      paginate: false,
+    });
+    const getFavorite = data.favorite
+      ? favorites.get(data.favorite, { query: { $select: ['id'] } })
+      : favorites.get('me', { query: { creator: data.user, $select: ['id'] } });
 
-    return Promise.all([getDocuments, getFavorite]).then(([results, favorite]) => {
-      const docs = results.data || results;
+    return Promise.all([getDocuments, getFavorite]).then(([docs, favorite]) => {
       if (!docs || docs.length !== ids.length) throw new Error('some data.document not exists');
       if (!favorite) throw new Error('favorite collection not exists');
       return Promise.all(docs.map((doc) => {
