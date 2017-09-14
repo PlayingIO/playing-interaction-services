@@ -2,7 +2,6 @@ import assert from 'assert';
 import makeDebug from 'debug';
 import { filter, flatten, groupBy, map, unionWith } from 'lodash';
 import { Service, helpers, createService } from 'mostly-feathers-mongoose';
-import { plural } from 'pluralize';
 import UserLikeModel from '~/models/user-like-model';
 import defaultHooks from './user-like-hooks';
 
@@ -44,7 +43,7 @@ class UserLikeService extends Service {
     });
 
     return getDocuments.then((docs) => {
-      if (!docs || docs.length !== ids.length) throw new Error('some data.document not exists');
+      if (!docs || docs.length !== ids.length) throw new Error('some data.document(s) not exists');
       return Promise.all(docs.map((doc) => {
         return super._upsert(null, {
           document: doc.id,

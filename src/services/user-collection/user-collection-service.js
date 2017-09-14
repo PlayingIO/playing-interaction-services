@@ -2,7 +2,6 @@ import assert from 'assert';
 import makeDebug from 'debug';
 import { filter, flatten, groupBy, map, unionWith } from 'lodash';
 import { Service, helpers, createService } from 'mostly-feathers-mongoose';
-import { plural } from 'pluralize';
 import UserCollectionModel from '~/models/user-collection-model';
 import defaultHooks from './user-collection-hooks';
 
@@ -52,7 +51,7 @@ class UserCollectionService extends Service {
 
     return Promise.all([getDocuments, getCollection]).then(([results, collection]) => {
       const docs = results.data || results;
-      if (!docs || docs.length !== ids.length) throw new Error('some data.document not exists');
+      if (!docs || docs.length !== ids.length) throw new Error('some data.document(s) not exists');
       if (!collection) throw new Error('parent collection not exists');
       return Promise.all(docs.map((doc) => {
         return super._upsert(null, {

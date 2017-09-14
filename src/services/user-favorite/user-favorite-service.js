@@ -2,7 +2,6 @@ import assert from 'assert';
 import makeDebug from 'debug';
 import { filter, flatten, groupBy, map, unionWith } from 'lodash';
 import { Service, helpers, createService } from 'mostly-feathers-mongoose';
-import { plural } from 'pluralize';
 import UserFavoriteModel from '~/models/user-favorite-model';
 import defaultHooks from './user-favorite-hooks';
 
@@ -55,7 +54,7 @@ class UserFavoriteService extends Service {
       : favorites.get('me', { query: { creator: data.user, $select: ['id'] } });
 
     return Promise.all([getDocuments, getFavorite]).then(([docs, favorite]) => {
-      if (!docs || docs.length !== ids.length) throw new Error('some data.document not exists');
+      if (!docs || docs.length !== ids.length) throw new Error('some data.document(s) not exists');
       if (!favorite) throw new Error('favorite collection not exists');
       return Promise.all(docs.map((doc) => {
         return super._upsert(null, {
