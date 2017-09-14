@@ -32,6 +32,7 @@ class UserFavoriteService extends Service {
 
   get(id, params) {
     params = Object.assign({ query: {} }, params);
+    assert(params.query.user, 'params.query.user not provided');
     params.query.document = params.query.document || id;
     return super._first(null, null, params);
   }
@@ -46,10 +47,7 @@ class UserFavoriteService extends Service {
     const ids = [].concat(data.document || data.documents);
 
     const getDocuments = documents.find({
-      query: {
-        _id: { $in: ids },
-        $select: ['type']
-      },
+      query: { _id: { $in: ids }, $select: ['type'] },
       paginate: false,
     });
     const getFavorite = data.favorite

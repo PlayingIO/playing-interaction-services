@@ -13,10 +13,10 @@ module.exports = function(options = {}) {
         queryWithCurrentUser({ idField: 'id', as: 'user' })
       ],
       get: [
-        hooks.prefixSelect('document', { excepts: ['favorite', 'user']})
+        hooks.prefixSelect('document')
       ],
       find: [
-        hooks.prefixSelect('document', { excepts: ['favorite', 'user']})
+        hooks.prefixSelect('document')
       ],
       create: [
         associateCurrentUser({ idField: 'id', as: 'user' })
