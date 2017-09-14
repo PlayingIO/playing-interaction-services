@@ -11,7 +11,7 @@ const fields = {
   user: { type: 'ObjectId', required: true }      // user id
 };
 
-export default function(app, name) {
+export default function model (app, name) {
   const mongoose = app.get('mongoose');
   const schema = new mongoose.Schema(fields);
   schema.plugin(timestamps);
@@ -19,3 +19,5 @@ export default function(app, name) {
   schema.index({ collect: 1, document: 1, user: 1 });
   return mongoose.model(name, schema);
 }
+
+model.schema = fields;
