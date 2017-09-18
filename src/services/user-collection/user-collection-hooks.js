@@ -1,4 +1,4 @@
-import { discard } from 'feathers-hooks-common';
+import { discard, iff, isProvider } from 'feathers-hooks-common';
 import { hooks as auth } from 'feathers-authentication';
 import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
 import { hooks } from 'mostly-feathers-mongoose';
@@ -10,7 +10,8 @@ module.exports = function(options = {}) {
     before: {
       all: [
         auth.authenticate('jwt'),
-        queryWithCurrentUser({ idField: 'id', as: 'user' })
+        iff(isProvider('external'),
+          queryWithCurrentUser({ idField: 'id', as: 'user' }))
       ],
       get: [
         hooks.prefixSelect('document', { excepts: ['collect', 'user']})
@@ -19,19 +20,19 @@ module.exports = function(options = {}) {
         hooks.prefixSelect('document', { excepts: ['collect', 'user']})
       ],
       create: [
-        associateCurrentUser({ idField: 'id', as: 'user' })
+        iff(isProvider('external'),
+          associateCurrentUser({ idField: 'id', as: 'user' }))
       ],
       update: [
-        associateCurrentUser({ idField: 'id', as: 'user' }),
+        iff(isProvider('external'),
+          associateCurrentUser({ idField: 'id', as: 'user' })),
         hooks.depopulate('document', 'user')
       ],
       patch: [
-        associateCurrentUser({ idField: 'id', as: 'user' }),
+        iff(isProvider('external'),
+          associateCurrentUser({ idField: 'id', as: 'user' })),
         hooks.depopulate('document', 'user')
-      ],
-      remove: [
-        queryWithCurrentUser({ idField: 'id', as: 'user' })
-      ],
+      ]
     },
     after: {
       all: [

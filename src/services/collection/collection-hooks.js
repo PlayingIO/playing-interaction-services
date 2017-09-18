@@ -31,26 +31,25 @@ module.exports = function(options = {}) {
   return {
     before: {
       all: [
-        auth.authenticate('jwt')
-      ],
-      get: [
-        queryWithCurrentUser({ idField: 'id', as: 'creator' })
-      ],
-      find: [
-        queryWithCurrentUser({ idField: 'id', as: 'creator' })
+        auth.authenticate('jwt'),
+        iff(isProvider('external'),
+          queryWithCurrentUser({ idField: 'id', as: 'creator' }))
       ],
       create: [
-        associateCurrentUser({ idField: 'id', as: 'creator' }),
+        iff(isProvider('external'),
+          associateCurrentUser({ idField: 'id', as: 'creator' })),
         content.computePath()
       ],
       update: [
-        associateCurrentUser({ idField: 'id', as: 'creator' }),
+        iff(isProvider('external'),
+          associateCurrentUser({ idField: 'id', as: 'creator' })),
         hooks.depopulate('parent'),
         content.computePath(),
         discard('id', 'metadata', 'creator', 'createdAt', 'updatedAt', 'destroyedAt')
       ],
       patch: [
-        associateCurrentUser({ idField: 'id', as: 'creator' }),
+        iff(isProvider('external'),
+          associateCurrentUser({ idField: 'id', as: 'creator' })),
         hooks.depopulate('parent'),
         content.computePath(),
         discard('id', 'metadata', 'creator', 'createdAt', 'updatedAt', 'destroyedAt')
