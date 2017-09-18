@@ -2,7 +2,7 @@ import { hooks as auth } from 'feathers-authentication';
 import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
 import { disallow, discard, iff, isProvider } from 'feathers-hooks-common';
 import { hooks } from 'mostly-feathers-mongoose';
-import * as content from 'playing-content-services/lib/services/content-hooks';
+import { hooks as content } from 'playing-content-services';
 import FavoriteEntity from '~/entities/favorite-entity';
 
 module.exports = function(options = {}) {
