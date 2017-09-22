@@ -23,6 +23,13 @@ class UserCommentService extends Service {
     this.hooks(defaultHooks(this.options));
   }
 
+  get(id, params) {
+    params = Object.assign({ query: {} }, params);
+    assert(params.query.user, 'params.query.user not provided');
+    params.query.document = params.query.document || id;
+    return super._first(null, null, params);
+  }
+
   create(data, params) {
     assert(data.subject || data.subjects, 'data.subject(s) not provided.');
     assert(data.type, 'data.type not provided');
