@@ -35,7 +35,7 @@ module.exports = function(options = {}) {
     },
     after: {
       all: [
-        hooks.populate('document', { path: '@type', fallThrough: ['headers'] }), // absolute path
+        hooks.populate('document', { path: '@type', fallThrough: ['headers', 'user'] }), // absolute path
         hooks.populate('user', { service: 'users' }),
         hooks.presentEntity(UserCommentEntity, options),
         hooks.responder()
