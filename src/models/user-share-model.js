@@ -2,18 +2,14 @@ import timestamps from 'mongoose-timestamp';
 import { plugins } from 'mostly-feathers-mongoose';
 
 /*
- * comments of a document
+ * share of a document
  */
 const fields = {
-  audiences: [{ type: 'String' }],                // public/private or somebody
-  archived: { type: Boolean, default: false },    // is archived
-  content: { type: 'String', required: true },    // content
-  likesCount: { type: 'Number', default: 0 },     // number of likes
-  mimetype: { type: 'String' },                   // mimetype of content
+  group: { type: 'ObjectId', required: true },    // share with group
   payload: { type: 'Mixed' },                     // extra info
   subject: { type: 'ObjectId', required: true },  // subject or document
   type: { type: 'String', required: true },       // subject document type
-  user: { type: 'ObjectId', required: true }      // commenter id
+  user: { type: 'ObjectId', required: true }      // share with user
 };
 
 export default function model (app, name) {

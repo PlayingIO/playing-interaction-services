@@ -2,7 +2,7 @@ import { discard, iff, isProvider } from 'feathers-hooks-common';
 import { hooks as auth } from 'feathers-authentication';
 import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
 import { hooks } from 'mostly-feathers-mongoose';
-import UserCommentEntity from '~/entities/user-like-entity';
+import UserShareEntity from '~/entities/user-like-entity';
 
 module.exports = function(options = {}) {
   return {
@@ -36,8 +36,9 @@ module.exports = function(options = {}) {
     after: {
       all: [
         hooks.populate('subject', { path: '@type', fallThrough: ['headers', 'user'] }), // absolute path
+        hooks.populate('group', { service: 'groups' }),
         hooks.populate('user', { service: 'users' }),
-        hooks.presentEntity(UserCommentEntity, options),
+        hooks.presentEntity(UserShareEntity, options),
         hooks.responder()
       ],
       find: [

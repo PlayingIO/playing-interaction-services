@@ -3,38 +3,37 @@ import makeDebug from 'debug';
 import { filter, flatten, groupBy, map, unionWith } from 'lodash';
 import { Service, helpers, createService } from 'mostly-feathers-mongoose';
 import { plural } from 'pluralize';
-import UserCommentModel from '~/models/user-comment-model';
-import defaultHooks from './user-comment-hooks';
+import UserShareModel from '~/models/user-share-model';
+import defaultHooks from './user-share-hooks';
 
-const debug = makeDebug('playing:interaction-services:user-comments');
+const debug = makeDebug('playing:interaction-services:user-shares');
 
 const defaultOptions = {
-  name: 'user-comments'
+  name: 'user-shares'
 };
 
-class UserCommentService extends Service {
-  constructor(options) {
+class UserShareService extends Service {
+  constructor (options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);
   }
 
-  setup(app) {
+  setup (app) {
     super.setup(app);
     this.hooks(defaultHooks(this.options));
   }
 
-  get(id, params) {
+  get (id, params) {
     params = Object.assign({ query: {} }, params);
     assert(params.query.user, 'params.query.user not provided');
     params.query.subject = params.query.subject || id;
     return super._first(null, null, params);
   }
 
-  create(data, params) {
+  create (data, params) {
     assert(data.subject || data.subjects, 'data.subject(s) not provided.');
     assert(data.type, 'data.type not provided');
-    assert(data.user, 'data.user not provided.');
-    assert(data.content, 'data.content not provided.');
+    assert(data.user || data.group, 'data.user or data.group not provided.');
 
     const subjects = this.app.service(plural(data.type));
     
@@ -58,9 +57,9 @@ class UserCommentService extends Service {
   }
 }
 
-export default function init(app, options, hooks) {
-  options = Object.assign({ ModelName: 'user-comment' }, options);
-  return createService(app, UserCommentService, UserCommentModel, options);
+export default function init (app, options, hooks) {
+  options = Object.assign({ ModelName: 'user-share' }, options);
+  return createService(app, UserShareService, UserShareModel, options);
 }
 
-init.Service = UserCommentService;
+init.Service = UserShareService;
