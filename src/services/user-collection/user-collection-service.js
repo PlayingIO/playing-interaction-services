@@ -1,6 +1,5 @@
 import assert from 'assert';
 import makeDebug from 'debug';
-import { filter, flatten, groupBy, map, unionWith } from 'lodash';
 import { Service, helpers, createService } from 'mostly-feathers-mongoose';
 import UserCollectionModel from '~/models/user-collection-model';
 import defaultHooks from './user-collection-hooks';

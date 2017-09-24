@@ -1,6 +1,5 @@
 import assert from 'assert';
 import makeDebug from 'debug';
-import { filter, flatten, groupBy, map, unionWith } from 'lodash';
 import { Service, helpers, createService } from 'mostly-feathers-mongoose';
 import UserFavoriteModel from '~/models/user-favorite-model';
 import defaultHooks from './user-favorite-hooks';
