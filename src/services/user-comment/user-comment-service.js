@@ -33,7 +33,7 @@ class UserCommentService extends Service {
     assert(data.subject || data.subjects, 'data.subject(s) not provided.');
     assert(data.type, 'data.type not provided');
     assert(data.user, 'data.user not provided.');
-    assert(data.content, 'data.content not provided.');
+    assert(data.comment, 'data.comment not provided.');
 
     const subjects = this.app.service(plural(data.type));
     
@@ -54,6 +54,19 @@ class UserCommentService extends Service {
         });
       }));
     });
+  }
+
+  remove(id, params) {
+    params = Object.assign({ query: {} }, params);
+    assert(params.query.userId || params.query.user, 'params.query.userId not provided');
+    assert(params.query.commentedAt, 'params.query.commentedAt not provided');
+    params.query.subject = params.query.subject || id;
+    return super.remove(null, { query: {
+      subject: params.query.subject,
+      user: params.query.userId || params.query.user,
+      commentedAt: params.query.commentedAt,
+      $multi: true
+    }});
   }
 }
 

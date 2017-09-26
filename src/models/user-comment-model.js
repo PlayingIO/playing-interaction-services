@@ -7,7 +7,8 @@ import { plugins } from 'mostly-feathers-mongoose';
 const fields = {
   audiences: [{ type: 'String' }],                // public/private or somebody
   archived: { type: Boolean, default: false },    // is archived
-  content: { type: 'String', required: true },    // content
+  comment: { type: 'String', required: true },    // comment
+  commentedAt: { type: 'Date' },                  // commented at
   likesCount: { type: 'Number', default: 0 },     // number of likes
   mimetype: { type: 'String' },                   // mimetype of content
   payload: { type: 'Mixed' },                     // extra info
