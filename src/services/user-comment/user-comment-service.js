@@ -24,9 +24,8 @@ class UserCommentService extends Service {
 
   get(id, params) {
     params = Object.assign({ query: {} }, params);
-    assert(params.query.user, 'params.query.user not provided');
     params.query.subject = params.query.subject || id;
-    return super._first(null, null, params);
+    return this.find(params);
   }
 
   create(data, params) {

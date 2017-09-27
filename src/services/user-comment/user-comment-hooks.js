@@ -8,29 +8,28 @@ module.exports = function(options = {}) {
   return {
     before: {
       all: [
-        auth.authenticate('jwt'),
-        iff(isProvider('external'),
-          queryWithCurrentUser({ idField: 'id', as: 'user' }))
-      ],
-      get: [
-        hooks.prefixSelect('subject')
-      ],
-      find: [
-        hooks.prefixSelect('subject')
       ],
       create: [
+        auth.authenticate('jwt'),
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'user' }))
       ],
       update: [
+        auth.authenticate('jwt'),
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'user' })),
         hooks.depopulate('subject', 'user')
       ],
       patch: [
+        auth.authenticate('jwt'),
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'user' })),
         hooks.depopulate('subject', 'user')
+      ],
+      remove: [
+        auth.authenticate('jwt'),
+        iff(isProvider('external'),
+          queryWithCurrentUser({ idField: 'id', as: 'user' }))
       ]
     },
     after: {
@@ -39,12 +38,6 @@ module.exports = function(options = {}) {
         hooks.populate('user', { service: 'users' }),
         hooks.presentEntity(UserCommentEntity, options),
         hooks.responder()
-      ],
-      find: [
-        hooks.flatMerge('subject')
-      ],
-      get: [
-        hooks.flatMerge('subject')
       ]
     }
   };
