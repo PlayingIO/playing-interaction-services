@@ -33,11 +33,11 @@ class CollectionService extends Service {
     assert(data.select, 'data.select is not provided.');
     assert(data.target, 'data.target is not provided.');
 
-    const userCollections = this.app.service('user-collections');
+    const svcUserCollections = this.app.service('user-collections');
 
     return Promise.all(
       [data.select, data.target].map(item => {
-        return userCollections.action('first').find({ query: {
+        return svcUserCollections.action('first').find({ query: {
           document: item,
           collect: original.id
         }});
@@ -46,7 +46,7 @@ class CollectionService extends Service {
       debug('moveCollectionMember', select, target);
       if (!select) throw new Error('data.select document not exists.');
       if (!target) throw new Error('data.target document not exists.');
-      return userCollections.action('reorder').patch(select.id, {
+      return svcUserCollections.action('reorder').patch(select.id, {
         target: target.id
       });
     }).then(() => original);

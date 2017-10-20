@@ -80,10 +80,10 @@ class FavoriteService extends Service {
     assert(data.document || data.documents, 'data.document(s) not provided.');
     assert(data.creator, 'data.creator not provided.');
 
-    const userFavorites = this.app.service('user-favorites');
+    const svcUserFavorites = this.app.service('user-favorites');
     
     debug('Add to favorite', favorite.id, 'with', data.document || data.documents);
-    return userFavorites.create({
+    return svcUserFavorites.create({
       favorite: favorite.id,
       document: data.document || data.documents,
       user: data.creator
@@ -96,10 +96,10 @@ class FavoriteService extends Service {
     assert(data.document || data.documents, 'data.document(s) not provided.');
     assert(data.creator, 'data.creator not provided.');
     
-    const userFavorites = this.app.service('user-favorites');
+    const svcUserFavorites = this.app.service('user-favorites');
 
     debug('Remove from favorite', favorite.id, 'with', data.document || data.documents);
-    return userFavorites.remove(null, { query: {
+    return svcUserFavorites.remove(null, { query: {
       favorite: favorite.id,
       document: data.document || data.documents,
       user: data.creator

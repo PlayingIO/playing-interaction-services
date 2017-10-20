@@ -4,14 +4,14 @@ import fp from 'mostly-func';
 const debug = makeDebug('playing:interaction-services:favorite:events');
 
 const createActivity = function(app, favorite, verb, message) {
-  const feeds = app.service('feeds');
-  const activities = app.service('activities');
-  const documents = app.service('documents');
+  const svcFeeds = app.service('feeds');
+  const svcActivities = app.service('activities');
+  const svcDocuments = app.service('documents');
 
   return fp.map((document) => {
-    return feeds.get(`document:${document}`).then((feed) => {
+    return svcFeeds.get(`document:${document}`).then((feed) => {
       if (feed) {
-        activities.create({
+        svcActivities.create({
           feed: feed.id,
           actor: `user:${favorite.user}`,
           verb: verb,
@@ -41,8 +41,8 @@ export function subFavoriteEvents(app, options) {
 }
 
 export function subUnFavoriteEvents(app, options) {
-  const feeds = app.service('feeds');
-  const activities = app.service('activities');
+  const svcFeeds = app.service('feeds');
+  const svcActivities = app.service('activities');
   app.trans.add({
     pubsub$: true,
     topic: 'playing.events',
