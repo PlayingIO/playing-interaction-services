@@ -40,13 +40,13 @@ class UserCollectionService extends Service {
     assert(data.document || data.documents, 'data.document(s) not provided.');
     assert(data.user, 'data.user not provided.');
 
-    const documents = this.app.service('documents');
-    const collections = this.app.service('collections');
+    const svcDocuments = this.app.service('documents');
+    const svcCollections = this.app.service('collections');
     
     const ids = [].concat(data.document || data.documents);
 
-    const getDocuments = documents.find({ query: { _id: { $in: ids } } });
-    const getCollection = collections.get(data.collect);
+    const getDocuments = svcDocuments.find({ query: { _id: { $in: ids } } });
+    const getCollection = svcCollections.get(data.collect);
 
     return Promise.all([getDocuments, getCollection]).then(([results, collection]) => {
       const docs = results.data || results;

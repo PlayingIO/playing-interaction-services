@@ -39,18 +39,18 @@ class UserFavoriteService extends Service {
     assert(data.document || data.documents, 'data.document(s) not provided.');
     assert(data.user, 'data.user not provided.');
 
-    const documents = this.app.service('documents');
-    const favorites = this.app.service('favorites');
+    const svcDocuments = this.app.service('documents');
+    const svcFavorites = this.app.service('favorites');
     
     const ids = [].concat(data.document || data.documents);
 
-    const getDocuments = documents.find({
+    const getDocuments = svcDocuments.find({
       query: { _id: { $in: ids }, $select: ['type'] },
       paginate: false,
     });
     const getFavorite = data.favorite
-      ? favorites.get(data.favorite, { query: { $select: ['id'] } })
-      : favorites.get('me', { query: { creator: data.user, $select: ['id'] } });
+      ? svcFavorites.get(data.favorite, { query: { $select: ['id'] } })
+      : svcFavorites.get('me', { query: { creator: data.user, $select: ['id'] } });
 
     return Promise.all([getDocuments, getFavorite]).then(([docs, favorite]) => {
       if (!docs || docs.length !== ids.length) throw new Error('some data.document(s) not exists');

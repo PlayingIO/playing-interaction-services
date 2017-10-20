@@ -34,11 +34,11 @@ class UserShareService extends Service {
     assert(data.type, 'data.type not provided');
     assert(data.user || data.group, 'data.user or data.group not provided.');
 
-    const subjects = this.app.service(plural(data.type));
+    const svcSubjects = this.app.service(plural(data.type));
     
     const ids = [].concat(data.subject || data.subjects);
 
-    const getSubjects = subjects.find({
+    const getSubjects = svcSubjects.find({
       query: { _id: { $in: ids }, $select: ['type'] },
       paginate: false,
     });

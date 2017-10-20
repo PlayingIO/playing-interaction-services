@@ -39,8 +39,8 @@ class UserFeedbackService extends Service {
 
     let getSubjects = null;
     if (data.type) {
-      const subjects = this.app.service(plural(data.type));
-      getSubjects = subjects.find({
+      const svcSubjects = this.app.service(plural(data.type));
+      getSubjects = svcSubjects.find({
         query: {
           _id: { $in: fp.map(id => mongoose.Types.ObjectId(id), ids) },
           $select: ['type']

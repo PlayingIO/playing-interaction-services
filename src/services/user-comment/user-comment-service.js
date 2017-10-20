@@ -34,11 +34,11 @@ class UserCommentService extends Service {
     assert(data.user, 'data.user not provided.');
     assert(data.comment, 'data.comment not provided.');
 
-    const subjects = this.app.service(plural(data.type));
+    const svcSubjects = this.app.service(plural(data.type));
     
     const ids = [].concat(data.subject || data.subjects);
 
-    const getSubjects = subjects.find({
+    const getSubjects = svcSubjects.find({
       query: { _id: { $in: ids }, $select: ['type'] },
       paginate: false,
     });

@@ -32,11 +32,11 @@ class UserLikeService extends Service {
     assert(data.document || data.documents, 'data.document(s) not provided.');
     assert(data.user, 'data.user not provided.');
 
-    const documents = this.app.service('documents');
+    const svcDocuments = this.app.service('documents');
     
     const ids = [].concat(data.document || data.documents);
 
-    const getDocuments = documents.find({
+    const getDocuments = svcDocuments.find({
       query: { _id: { $in: ids }, $select: ['type'] },
       paginate: false,
     });
