@@ -18,5 +18,13 @@ export default Object.assign({
       "Collection",
       "NotCollectionMember"
     ]
-  }
+  },
+  workspace: {
+    "type": "Workspace",
+    "packages": "playing-interaction-elements",
+    "facets": [
+      "Folderish"
+    ],
+    "subtypes": ['collection', 'file', 'folder', 'note']
+  },
 }, DocTypes);
