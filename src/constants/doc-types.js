@@ -7,6 +7,7 @@ export default Object.assign({
     "facets":[
       "Versionable",
       "Collection",
+      "Tagable",
       "NotCollectionMember"
     ]
   },
@@ -16,6 +17,7 @@ export default Object.assign({
     "facets":[
       "Versionable",
       "Collection",
+      "Tagable",
       "NotCollectionMember"
     ]
   },
