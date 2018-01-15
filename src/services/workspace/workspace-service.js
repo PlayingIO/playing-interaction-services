@@ -34,11 +34,12 @@ class WorkspaceService extends Service {
       // create own workspace if not exists
       if (result && result.length === 0) {
         assert(params.query.creator, 'params.query.creator not provided');
+        let name = 'workspace-' + shortid.generate();
         return super.create({
           title: 'My Workspace',
           description: 'User workspace',
           creator: params.query.creator,
-          path: '/workspaces/' + shortid.generate()
+          path: '/folder-workspaces/' + name
         });
       } else {
         return result && result[0];
