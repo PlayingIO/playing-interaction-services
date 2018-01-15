@@ -38,20 +38,20 @@ module.exports = function(options = {}) {
       create: [
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'creator' })),
-        content.computePath()
+        content.computePath({ type: 'collection' })
       ],
       update: [
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'creator' })),
         hooks.depopulate('parent'),
-        content.computePath(),
+        content.computePath({ type: 'collection' }),
         discard('id', 'metadata', 'creator', 'createdAt', 'updatedAt', 'destroyedAt')
       ],
       patch: [
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'creator' })),
         hooks.depopulate('parent'),
-        content.computePath(),
+        content.computePath({ type: 'collection' }),
         discard('id', 'metadata', 'creator', 'createdAt', 'updatedAt', 'destroyedAt')
       ]
     },
