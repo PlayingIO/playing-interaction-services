@@ -1,7 +1,7 @@
 import assert from 'assert';
 import { hooks as auth } from 'feathers-authentication';
 import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
-import { discard, iff, isProvider } from 'feathers-hooks-common';
+import { iff, isProvider } from 'feathers-hooks-common';
 import { hooks } from 'mostly-feathers-mongoose';
 import { hooks as content } from 'playing-content-services';
 import CollectionEntity from '~/entities/collection-entity';
@@ -45,14 +45,14 @@ module.exports = function(options = {}) {
           associateCurrentUser({ idField: 'id', as: 'creator' })),
         hooks.depopulate('parent'),
         content.computePath({ type: 'collection' }),
-        discard('id', 'metadata', 'creator', 'createdAt', 'updatedAt', 'destroyedAt')
+        hooks.discardPath('id', 'metadata', 'creator', 'createdAt', 'updatedAt', 'destroyedAt')
       ],
       patch: [
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'creator' })),
         hooks.depopulate('parent'),
         content.computePath({ type: 'collection' }),
-        discard('id', 'metadata', 'creator', 'createdAt', 'updatedAt', 'destroyedAt')
+        hooks.discardPath('id', 'metadata', 'creator', 'createdAt', 'updatedAt', 'destroyedAt')
       ]
     },
     after: {
@@ -62,7 +62,7 @@ module.exports = function(options = {}) {
         content.documentEnrichers(options),
         addCollectionEnrichers(options),
         hooks.presentEntity(CollectionEntity, options),
-        iff(isProvider('external'), discard('ACL')),
+        iff(isProvider('external'), hooks.discardPath('ACL')),
         hooks.responder()
       ],
       find: [
