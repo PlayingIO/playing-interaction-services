@@ -8,7 +8,7 @@ const fields = {
   group: { type: 'ObjectId', required: true },    // share with group
   payload: { type: 'Mixed' },                     // extra info
   subject: { type: 'ObjectId', required: true },  // subject or document
-  type: { type: 'String', required: true },       // subject document type
+  type: { type: String, required: true },         // subject document type
   user: { type: 'ObjectId', required: true }      // share with user
 };
 

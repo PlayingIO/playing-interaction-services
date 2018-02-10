@@ -7,7 +7,7 @@ import { plugins } from 'mostly-feathers-mongoose';
 const fields = {
   document: { type: 'ObjectId', required: true }, // document id
   payload: { type: 'Mixed' },                     // extra info
-  type: { type: 'String', required: true },       // document type
+  type: { type: String, required: true },         // document type
   user: { type: 'ObjectId', required: true }      // user id
 };
 
