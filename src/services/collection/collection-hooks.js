@@ -15,7 +15,7 @@ const addCollectionEnrichers = (options) => (hook) => {
   }
 
   let enrichers = hook.params.headers['enrichers-document'].split(',').map(e => e.trim());
-  let results = [].concat(hook.result? hook.result.data || hook.result : []);
+  let results = [].concat(hook.result && hook.result.data || hook.result || []);
   
   if (enrichers.indexOf('permissions') > -1) {
     results.forEach((doc) => {
