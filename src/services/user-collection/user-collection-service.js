@@ -49,7 +49,7 @@ class UserCollectionService extends Service {
     const getCollection = svcCollections.get(data.collect);
 
     return Promise.all([getDocuments, getCollection]).then(([results, collection]) => {
-      const docs = results.data || results;
+      const docs = results && results.data || results;
       if (!docs || docs.length !== ids.length) throw new Error('some data.document(s) not exists');
       if (!collection) throw new Error('parent collection not exists');
       return Promise.all(docs.map((doc) => {
