@@ -36,12 +36,12 @@ class UserLikeService extends Service {
     
     const ids = [].concat(data.document || data.documents);
 
-    const getDocuments = svcDocuments.find({
+    const getDocuments = () => svcDocuments.find({
       query: { _id: { $in: ids }, $select: ['type'] },
       paginate: false,
     });
 
-    return getDocuments.then((docs) => {
+    return getDocuments().then((docs) => {
       if (!docs || docs.length !== ids.length) throw new Error('some data.document(s) not exists');
       return Promise.all(docs.map((doc) => {
         return super._upsert(null, {

@@ -44,15 +44,18 @@ class UserFavoriteService extends Service {
     
     const ids = [].concat(data.document || data.documents);
 
-    const getDocuments = svcDocuments.find({
+    const getDocuments = () => svcDocuments.find({
       query: { _id: { $in: ids }, $select: ['type'] },
       paginate: false,
     });
-    const getFavorite = data.favorite
+    const getFavorite = () => data.favorite
       ? svcFavorites.get(data.favorite, { query: { $select: ['id'] } })
       : svcFavorites.get('me', { query: { creator: data.user, $select: ['id'] } });
 
-    return Promise.all([getDocuments, getFavorite]).then(([docs, favorite]) => {
+    return Promise.all([
+      getDocuments(),
+      getFavorite()
+    ]).then(([docs, favorite]) => {
       if (!docs || docs.length !== ids.length) throw new Error('some data.document(s) not exists');
       if (!favorite) throw new Error('favorite collection not exists');
       return Promise.all(docs.map((doc) => {

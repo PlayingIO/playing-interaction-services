@@ -38,12 +38,12 @@ class UserShareService extends Service {
     
     const ids = [].concat(data.subject || data.subjects);
 
-    const getSubjects = svcSubjects.find({
+    const getSubjects = () => svcSubjects.find({
       query: { _id: { $in: ids }, $select: ['type'] },
       paginate: false,
     });
 
-    return getSubjects.then((docs) => {
+    return getSubjects().then((docs) => {
       if (!docs || docs.length !== ids.length) throw new Error('some data.subject(s) not exists');
       return Promise.all(docs.map((doc) => {
         return super._upsert(null, data, {

@@ -45,10 +45,13 @@ class UserCollectionService extends Service {
     
     const ids = [].concat(data.document || data.documents);
 
-    const getDocuments = svcDocuments.find({ query: { _id: { $in: ids } } });
-    const getCollection = svcCollections.get(data.collect);
+    const getDocuments = () => svcDocuments.find({ query: { _id: { $in: ids } } });
+    const getCollection = () => svcCollections.get(data.collect);
 
-    return Promise.all([getDocuments, getCollection]).then(([results, collection]) => {
+    return Promise.all([
+      getDocuments(),
+      getCollection()
+    ]).then(([results, collection]) => {
       const docs = results && results.data || results;
       if (!docs || docs.length !== ids.length) throw new Error('some data.document(s) not exists');
       if (!collection) throw new Error('parent collection not exists');
