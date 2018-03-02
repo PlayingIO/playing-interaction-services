@@ -1,4 +1,3 @@
-import timestamps from 'mongoose-timestamp';
 import { plugins, getModel } from 'mostly-feathers-mongoose';
 import { models } from 'playing-content-services';
 

@@ -1,5 +1,8 @@
-import timestamps from 'mongoose-timestamp';
 import { plugins } from 'mostly-feathers-mongoose';
+
+const options = {
+  timestamps: true
+};
 
 /*
  * sortable list of documents in user's favorite collection
@@ -14,8 +17,7 @@ const fields = {
 
 export default function model (app, name) {
   const mongoose = app.get('mongoose');
-  const schema = new mongoose.Schema(fields);
-  schema.plugin(timestamps);
+  const schema = new mongoose.Schema(fields, options);
   schema.plugin(plugins.sortable, { classify: 'favorite' });
   schema.index({ document: 1, user: 1 });
   return mongoose.model(name, schema);
