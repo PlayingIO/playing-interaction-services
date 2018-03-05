@@ -1,5 +1,5 @@
 import { plugins } from 'mostly-feathers-mongoose';
-import { models as users } from 'mostly-user-services';
+import { models as users } from 'playing-user-services';
 
 const options = {
   timestamps: true
@@ -12,7 +12,7 @@ const fields = {
   document: { type: 'ObjectId', required: true }, // document id
   type: { type: String, required: true },         // document type
   user: { type: 'ObjectId', required: true },     // user/group id
-  permission: users.permission                    // permission
+  permission: users.permission.schema             // permission
 };
 
 export default function model (app, name) {
