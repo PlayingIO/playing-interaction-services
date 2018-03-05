@@ -45,14 +45,14 @@ module.exports = function(options = {}) {
           associateCurrentUser({ idField: 'id', as: 'creator' })),
         hooks.depopulate('parent'),
         content.computePath({ type: 'collection' }),
-        hooks.discardPath('id', 'metadata', 'creator', 'createdAt', 'updatedAt', 'destroyedAt')
+        hooks.discardFields('id', 'metadata', 'creator', 'createdAt', 'updatedAt', 'destroyedAt')
       ],
       patch: [
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'creator' })),
         hooks.depopulate('parent'),
         content.computePath({ type: 'collection' }),
-        hooks.discardPath('id', 'metadata', 'creator', 'createdAt', 'updatedAt', 'destroyedAt')
+        hooks.discardFields('id', 'metadata', 'creator', 'createdAt', 'updatedAt', 'destroyedAt')
       ]
     },
     after: {
@@ -62,7 +62,7 @@ module.exports = function(options = {}) {
         content.documentEnrichers(options),
         addCollectionEnrichers(options),
         hooks.presentEntity(CollectionEntity, options),
-        iff(isProvider('external'), hooks.discardPath('ACL')),
+        iff(isProvider('external'), hooks.discardFields('ACL')),
         hooks.responder()
       ],
       find: [

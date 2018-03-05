@@ -21,18 +21,18 @@ module.exports = function(options = {}) {
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'creator' })),
         hooks.depopulate('parent'),
-        hooks.discardPath('id', 'metadata', 'path', 'createdAt', 'updatedAt', 'destroyedAt')
+        hooks.discardFields('id', 'metadata', 'path', 'createdAt', 'updatedAt', 'destroyedAt')
       ],
       patch: [
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'creator' })),
         hooks.depopulate('parent'),
-        hooks.discardPath('id', 'metadata', 'path', 'createdAt', 'updatedAt', 'destroyedAt')
+        hooks.discardFields('id', 'metadata', 'path', 'createdAt', 'updatedAt', 'destroyedAt')
       ]
     },
     after: {
       all: [
-        iff(isProvider('external'), hooks.discardPath('ACL')),
+        iff(isProvider('external'), hooks.discardFields('ACL')),
         hooks.responder()
       ],
       find: [
