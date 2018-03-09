@@ -56,11 +56,8 @@ class UserFeedbackService extends Service {
     return getSubjects.then((docs) => {
       if (!docs || docs.length !== ids.length) throw new Error('some data.subject(s) not exists');
       return Promise.all(docs.map((doc) => {
-        return super._upsert(null, data, {
-          subject: doc.id,
-          type: doc.type,
-          user: data.user
-        });
+        const feedback = fp.merge({ subject: doc.id, type: doc.type }, data);
+        return super.create(feedback);
       }));
     });
   }
