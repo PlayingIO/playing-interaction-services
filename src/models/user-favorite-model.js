@@ -19,7 +19,7 @@ export default function model (app, name) {
   const mongoose = app.get('mongoose');
   const schema = new mongoose.Schema(fields, options);
   schema.plugin(plugins.sortable, { classify: 'favorite' });
-  schema.index({ document: 1, user: 1 });
+  schema.index({ favorite: 1, document: 1, user: 1 }, { unique: true });
   return mongoose.model(name, schema);
 }
 
