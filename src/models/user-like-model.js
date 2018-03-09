@@ -17,7 +17,7 @@ const fields = {
 export default function model (app, name) {
   const mongoose = app.get('mongoose');
   const schema = new mongoose.Schema(fields, options);
-  schema.index({ document: 1, user: 1 });
+  schema.index({ document: 1, user: 1 }, { unique: true });
   return mongoose.model(name, schema);
 }
 
