@@ -8,7 +8,7 @@ const options = {
  * share of a document
  */
 const fields = {
-  group: { type: 'ObjectId', required: true },    // share with group
+  group: { type: 'ObjectId' },                    // share with group
   payload: { type: 'Mixed' },                     // extra info
   subject: { type: 'ObjectId', required: true },  // subject or document
   type: { type: String, required: true },         // subject document type
