@@ -1,5 +1,6 @@
 import { omit, pick } from 'lodash';
 import Entity from 'mostly-entity';
+import fp from 'mostly-func';
 import { getBreadcrumbs } from 'playing-content-services/lib/helpers';
 import BlobEntity from 'playing-content-services/lib/entities/blob-entity';
 import { DocTypes } from '~/constants';
@@ -26,7 +27,7 @@ FavoriteEntity.expose('metadata', (obj, options) => {
     obj.metadata.packages = Types[obj.type].packages;
   }
 
-  return obj.metadata;
+  return fp.sortKeys(obj.metadata);
 });
 
 FavoriteEntity.excepts('destroyedAt');
