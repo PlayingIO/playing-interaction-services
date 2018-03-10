@@ -37,6 +37,7 @@ module.exports = function(options = {}) {
       ],
       find: [
         hooks.populate('parent', { service: 'documents', fallThrough: ['headers'] }),
+        hooks.populate('ancestors', { service: 'documents', fallThrough: ['headers'] }),
         hooks.populate('creator', { service: 'users' }),
         content.documentEnrichers(options),
         hooks.presentEntity(FavoriteEntity, options),
