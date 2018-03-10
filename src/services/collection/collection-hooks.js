@@ -44,20 +44,23 @@ module.exports = function(options = {}) {
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'creator' })),
         hooks.depopulate('parent'),
+        hooks.discardFields('id', 'metadata', 'ancestors', 'creator', 'createdAt', 'updatedAt', 'destroyedAt'),
         content.computePath({ type: 'collection' }),
-        hooks.discardFields('id', 'metadata', 'creator', 'createdAt', 'updatedAt', 'destroyedAt')
+        content.computeAncestors()
       ],
       patch: [
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'creator' })),
         hooks.depopulate('parent'),
+        hooks.discardFields('id', 'metadata', 'ancestors', 'creator', 'createdAt', 'updatedAt', 'destroyedAt'),
         content.computePath({ type: 'collection' }),
-        hooks.discardFields('id', 'metadata', 'creator', 'createdAt', 'updatedAt', 'destroyedAt')
+        content.computeAncestors()
       ]
     },
     after: {
       all: [
         hooks.populate('parent', { service: 'documents', fallThrough: ['headers'] }),
+        hooks.populate('ancestors', { service: 'documents', fallThrough: ['headers'] }),
         hooks.populate('creator', { service: 'users' }),
         content.documentEnrichers(options),
         addCollectionEnrichers(options),
