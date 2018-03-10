@@ -1,6 +1,6 @@
 import assert from 'assert';
 import makeDebug from 'debug';
-import { Service, helpers, createService } from 'mostly-feathers-mongoose';
+import { Service, createService } from 'mostly-feathers-mongoose';
 import { plural } from 'pluralize';
 import UserCommentModel from '~/models/user-comment-model';
 import defaultHooks from './user-comment-hooks';

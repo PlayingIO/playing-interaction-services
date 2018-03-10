@@ -1,6 +1,6 @@
 import assert from 'assert';
 import makeDebug from 'debug';
-import { Service, helpers, createService } from 'mostly-feathers-mongoose';
+import { Service, createService } from 'mostly-feathers-mongoose';
 import UserLikeModel from '~/models/user-like-model';
 import defaultHooks from './user-like-hooks';
 

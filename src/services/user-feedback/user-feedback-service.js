@@ -1,7 +1,7 @@
 import assert from 'assert';
 import makeDebug from 'debug';
 import mongoose from 'mongoose';
-import { Service, helpers, createService } from 'mostly-feathers-mongoose';
+import { Service, createService } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
 import { plural } from 'pluralize';
 import UserFeedbackModel from '~/models/user-feedback-model';

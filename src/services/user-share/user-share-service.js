@@ -1,6 +1,6 @@
 import assert from 'assert';
 import makeDebug from 'debug';
-import { Service, helpers, createService } from 'mostly-feathers-mongoose';
+import { Service, createService } from 'mostly-feathers-mongoose';
 import { plural } from 'pluralize';
 import UserShareModel from '~/models/user-share-model';
 import defaultHooks from './user-share-hooks';
