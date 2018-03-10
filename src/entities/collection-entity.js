@@ -1,7 +1,5 @@
-import { omit, pick } from 'lodash';
 import Entity from 'mostly-entity';
 import fp from 'mostly-func';
-import { getBreadcrumbs } from 'playing-content-services/lib/helpers';
 import BlobEntity from 'playing-content-services/lib/entities/blob-entity';
 import { DocTypes } from '~/constants';
 
@@ -12,7 +10,7 @@ const CollectionEntity = new Entity('Collection', {
 
 CollectionEntity.expose('parent', (obj, options) => {
   if (options.provider && obj.parent && obj.parent.parent) {
-    return omit(obj.parent, ['parent']);
+    return fp.omit(['parent'], obj.parent);
   }
   return obj.parent;
 });
