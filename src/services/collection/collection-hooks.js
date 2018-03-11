@@ -60,7 +60,7 @@ module.exports = function(options = {}) {
     after: {
       all: [
         hooks.populate('parent', { service: 'documents', fallThrough: ['headers'] }),
-        hooks.populate('ancestors', { service: 'documents', fallThrough: ['headers'] }),
+        hooks.populate('ancestors'), // with typed id
         hooks.populate('creator', { service: 'users' }),
         content.documentEnrichers(options),
         addCollectionEnrichers(options),
