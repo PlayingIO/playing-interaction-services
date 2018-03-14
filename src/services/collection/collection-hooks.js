@@ -65,7 +65,6 @@ module.exports = function(options = {}) {
         content.documentEnrichers(options),
         addCollectionEnrichers(options),
         hooks.presentEntity(CollectionEntity, options),
-        iff(isProvider('external'), hooks.discardFields('ACL')),
         hooks.responder()
       ],
       find: [

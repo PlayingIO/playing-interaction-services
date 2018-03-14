@@ -32,7 +32,6 @@ module.exports = function(options = {}) {
     },
     after: {
       all: [
-        iff(isProvider('external'), hooks.discardFields('ACL')),
         hooks.responder()
       ],
       find: [
