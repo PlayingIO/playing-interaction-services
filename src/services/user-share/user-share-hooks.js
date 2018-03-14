@@ -1,5 +1,4 @@
 import { iff, isProvider } from 'feathers-hooks-common';
-import { hooks as auth } from 'feathers-authentication';
 import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
 import { hooks } from 'mostly-feathers-mongoose';
 import UserShareEntity from '~/entities/user-share-entity';
@@ -8,7 +7,7 @@ module.exports = function(options = {}) {
   return {
     before: {
       all: [
-        auth.authenticate('jwt'),
+        hooks.authenticate('jwt', options),
         iff(isProvider('external'),
           queryWithCurrentUser({ idField: 'id', as: 'user' }))
       ],
