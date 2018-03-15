@@ -50,13 +50,13 @@ class FavoriteService extends Service {
   }
 
   find(params) {
-    params = params || { query: {} };
+    params = fp.assign({ query: {} }, params);
     
     return super.find(params);
   }
 
   get(id, params) {
-    params = params || { query: {} };
+    params = fp.assign({ query: {} }, params);
     
     const action = params.__action;
     
