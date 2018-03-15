@@ -9,24 +9,24 @@ module.exports = function(options = {}) {
       all: [
       ],
       create: [
-        hooks.authenticate('jwt', options),
+        hooks.authenticate('jwt', options.auth),
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'user' }))
       ],
       update: [
-        hooks.authenticate('jwt', options),
+        hooks.authenticate('jwt', options.auth),
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'user' })),
         hooks.depopulate('subject', 'user')
       ],
       patch: [
-        hooks.authenticate('jwt', options),
+        hooks.authenticate('jwt', options.auth),
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'user' })),
         hooks.depopulate('subject', 'user')
       ],
       remove: [
-        hooks.authenticate('jwt', options),
+        hooks.authenticate('jwt', options.auth),
         iff(isProvider('external'),
           queryWithCurrentUser({ idField: 'id', as: 'user' }))
       ]

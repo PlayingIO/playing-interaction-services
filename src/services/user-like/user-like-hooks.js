@@ -7,7 +7,7 @@ module.exports = function(options = {}) {
   return {
     before: {
       all: [
-        hooks.authenticate('jwt', options),
+        hooks.authenticate('jwt', options.auth),
         iff(isProvider('external'),
           queryWithCurrentUser({ idField: 'id', as: 'user' }))
       ],
