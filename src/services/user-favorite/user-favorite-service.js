@@ -1,6 +1,8 @@
 import assert from 'assert';
 import makeDebug from 'debug';
 import { Service, helpers, createService } from 'mostly-feathers-mongoose';
+import fp from 'mostly-func';
+
 import UserFavoriteModel from '~/models/user-favorite-model';
 import defaultHooks from './user-favorite-hooks';
 
