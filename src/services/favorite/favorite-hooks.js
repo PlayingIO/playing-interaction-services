@@ -1,6 +1,7 @@
 import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
 import { disallow, iff, isProvider } from 'feathers-hooks-common';
 import { hooks } from 'mostly-feathers-mongoose';
+import { cache } from 'mostly-feathers-cache';
 import { hooks as content } from 'playing-content-services';
 import FavoriteEntity from '~/entities/favorite-entity';
 
@@ -10,7 +11,8 @@ module.exports = function(options = {}) {
       all: [
         hooks.authenticate('jwt', options.auth),
         iff(isProvider('external'),
-          queryWithCurrentUser({ idField: 'id', as: 'creator' }))
+          queryWithCurrentUser({ idField: 'id', as: 'creator' })),
+        cache(options.cache)
       ],
       create: [
         iff(isProvider('external'),
@@ -38,6 +40,7 @@ module.exports = function(options = {}) {
         hooks.populate('ancestors'), // with typed id
         hooks.populate('creator', { service: 'users' }),
         content.documentEnrichers(options),
+        cache(options.cache),
         hooks.presentEntity(FavoriteEntity, options),
       ],
       patch: [
