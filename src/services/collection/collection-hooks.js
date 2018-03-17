@@ -2,7 +2,9 @@ import assert from 'assert';
 import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
 import { iff, isProvider } from 'feathers-hooks-common';
 import { hooks } from 'mostly-feathers-mongoose';
+import { cache } from 'mostly-feathers-cache';
 import { hooks as content } from 'playing-content-services';
+
 import CollectionEntity from '~/entities/collection-entity';
 
 const addCollectionEnrichers = (options) => (hook) => {
@@ -32,7 +34,8 @@ module.exports = function(options = {}) {
       all: [
         hooks.authenticate('jwt', options.auth),
         iff(isProvider('external'),
-          queryWithCurrentUser({ idField: 'id', as: 'creator' }))
+          queryWithCurrentUser({ idField: 'id', as: 'creator' })),
+        cache(options.cache)
       ],
       create: [
         iff(isProvider('external'),
@@ -63,6 +66,7 @@ module.exports = function(options = {}) {
         hooks.populate('creator', { service: 'users' }),
         content.documentEnrichers(options),
         addCollectionEnrichers(options),
+        cache(options.cache),
         hooks.presentEntity(CollectionEntity, options),
         hooks.responder()
       ],
