@@ -1,12 +1,15 @@
 import { iff, isProvider } from 'feathers-hooks-common';
 import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
 import { hooks } from 'mostly-feathers-mongoose';
+import { cache } from 'mostly-feathers-cache';
+
 import UserCommentEntity from '~/entities/user-like-entity';
 
 module.exports = function(options = {}) {
   return {
     before: {
       all: [
+        cache(options.cache)
       ],
       create: [
         hooks.authenticate('jwt', options.auth),
@@ -35,6 +38,7 @@ module.exports = function(options = {}) {
       all: [
         hooks.populate('subject', { path: '@type', fallThrough: ['headers', 'user'] }), // absolute path
         hooks.populate('user', { service: 'users' }),
+        cache(options.cache),
         hooks.presentEntity(UserCommentEntity, options),
         hooks.responder()
       ]
