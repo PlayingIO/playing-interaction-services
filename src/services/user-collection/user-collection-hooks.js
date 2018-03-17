@@ -1,6 +1,8 @@
 import { iff, isProvider } from 'feathers-hooks-common';
 import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
 import { hooks } from 'mostly-feathers-mongoose';
+import { cache } from 'mostly-feathers-cache';
+
 import UserCollectionEntity from '~/entities/user-collection-entity';
 
 module.exports = function(options = {}) {
@@ -9,7 +11,8 @@ module.exports = function(options = {}) {
       all: [
         hooks.authenticate('jwt', options.auth),
         iff(isProvider('external'),
-          queryWithCurrentUser({ idField: 'id', as: 'user' }))
+          queryWithCurrentUser({ idField: 'id', as: 'user' })),
+        cache(options.cache)
       ],
       get: [
         hooks.prefixSelect('document', { excepts: ['collect', 'user']})
@@ -37,6 +40,7 @@ module.exports = function(options = {}) {
         hooks.populate('collect', { service: 'collections' }),
         hooks.populate('document', { path: '@type', fallThrough: ['headers', 'user'] }), // absolute path
         hooks.populate('user', { service: 'users' }),
+        cache(options.cache),
         hooks.presentEntity(UserCollectionEntity, options),
         hooks.responder()
       ],
