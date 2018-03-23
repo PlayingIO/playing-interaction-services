@@ -5,7 +5,7 @@ import { cache } from 'mostly-feathers-cache';
 
 import UserCommentEntity from '~/entities/user-like-entity';
 
-module.exports = function (options = {}) {
+export default function (options = {}) {
   return {
     before: {
       all: [
