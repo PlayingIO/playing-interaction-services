@@ -7,7 +7,7 @@ import shortid from 'shortid';
 import FavoriteModel from '~/models/favorite-model';
 import { Service } from '~/services/collection/collection-service';
 import defaultHooks from './favorite-hooks';
-import { subFavoriteEvents, subUnFavoriteEvents } from './favorite-events';
+import defaultEvents from './favorite-events';
 
 const debug = makeDebug('playing:interaction-services:favorites');
 
@@ -27,10 +27,9 @@ class FavoriteService extends Service {
   setup(app) {
     super.setup(app);
     this.hooks(defaultHooks(this.options));
-    subFavoriteEvents(this.app, this.options);
-    subUnFavoriteEvents(this.app, this.options);
+    defaultEvents(this.app, this.options);
   }
-  
+
   _getUserFavorite(params) {
     params = fp.assign(params, { paginate: false });
     return super.find(params).then((result) => {
