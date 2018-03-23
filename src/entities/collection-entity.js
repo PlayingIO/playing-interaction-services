@@ -1,11 +1,11 @@
 import Entity from 'mostly-entity';
 import fp from 'mostly-func';
-import BlobEntity from 'playing-content-services/lib/entities/blob-entity';
+import { entities as contents } from 'playing-content-services';
 import { DocTypes } from '~/constants';
 
 const CollectionEntity = new Entity('Collection', {
-  file: { using: BlobEntity },
-  files: { using: BlobEntity },
+  file: { using: contents.BlobEntity },
+  files: { using: contents.BlobEntity },
 });
 
 CollectionEntity.expose('parent', (obj, options) => {
