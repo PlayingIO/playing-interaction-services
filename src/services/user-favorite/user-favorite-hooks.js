@@ -5,7 +5,7 @@ import { cache } from 'mostly-feathers-cache';
 
 import UserFavoriteEntity from '~/entities/user-favorite-entity';
 
-module.exports = function(options = {}) {
+module.exports = function (options = {}) {
   return {
     before: {
       all: [

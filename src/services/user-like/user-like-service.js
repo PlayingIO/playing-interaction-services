@@ -11,24 +11,24 @@ const defaultOptions = {
 };
 
 class UserLikeService extends Service {
-  constructor(options) {
+  constructor (options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);
   }
 
-  setup(app) {
+  setup (app) {
     super.setup(app);
     this.hooks(defaultHooks(this.options));
   }
 
-  get(id, params) {
+  get (id, params) {
     params = Object.assign({ query: {} }, params);
     assert(params.query.user, 'params.query.user not provided');
     params.query.document = params.query.document || id;
     return super._first(null, null, params);
   }
 
-  create(data, params) {
+  create (data, params) {
     assert(data.document || data.documents, 'data.document(s) not provided.');
     assert(data.user, 'data.user not provided.');
 
@@ -53,7 +53,7 @@ class UserLikeService extends Service {
     });
   }
 
-  remove(id, params) {
+  remove (id, params) {
     if (id && id !== 'null') {
       return super.remove(id, params);
     } else {
@@ -70,10 +70,9 @@ class UserLikeService extends Service {
       });
     }
   }
-
 }
 
-export default function init(app, options, hooks) {
+export default function init (app, options, hooks) {
   options = Object.assign({ ModelName: 'user-like' }, options);
   return createService(app, UserLikeService, UserLikeModel, options);
 }

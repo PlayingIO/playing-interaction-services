@@ -5,7 +5,7 @@ import { cache } from 'mostly-feathers-cache';
 
 import UserShareEntity from '~/entities/user-share-entity';
 
-module.exports = function(options = {}) {
+module.exports = function (options = {}) {
   return {
     before: {
       all: [

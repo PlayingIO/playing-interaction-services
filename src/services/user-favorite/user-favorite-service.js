@@ -13,31 +13,31 @@ const defaultOptions = {
 };
 
 class UserFavoriteService extends Service {
-  constructor(options) {
+  constructor (options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);
   }
 
-  setup(app) {
+  setup (app) {
     super.setup(app);
     this.hooks(defaultHooks(this.options));
   }
 
-  find(params) {
+  find (params) {
     params = fp.assign({ query: {} }, params);
     params.query.$sort = params.query.$sort || { position: 1 };
 
     return super.find(params);
   }
 
-  get(id, params) {
+  get (id, params) {
     params = Object.assign({ query: {} }, params);
     assert(params.query.user, 'params.query.user not provided');
     params.query.document = params.query.document || id;
     return super._first(null, null, params);
   }
 
-  create(data, params) {
+  create (data, params) {
     assert(data.document || data.documents, 'data.document(s) not provided.');
     assert(data.user, 'data.user not provided.');
 
@@ -71,7 +71,7 @@ class UserFavoriteService extends Service {
     });
   }
 
-  remove(id, params) {
+  remove (id, params) {
     if (id && id !== 'null') {
       return super.remove(id, params);
     } else {
@@ -91,7 +91,7 @@ class UserFavoriteService extends Service {
     }
   }
 
-  reorder(id, data, params, original) {
+  reorder (id, data, params, original) {
     return this.get(data.target).then((target) => {
       if (!target) throw new Error("data.target not exists");
       target = target.data || target;
@@ -100,7 +100,7 @@ class UserFavoriteService extends Service {
   }
 }
 
-export default function init(app, options, hooks) {
+export default function init (app, options, hooks) {
   options = Object.assign({ ModelName: 'user-favorite' }, options);
   return createService(app, UserFavoriteService, UserFavoriteModel, options);
 }

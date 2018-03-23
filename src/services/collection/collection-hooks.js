@@ -28,7 +28,7 @@ const addCollectionEnrichers = (options) => (hook) => {
   return hook;
 };
 
-module.exports = function(options = {}) {
+module.exports = function (options = {}) {
   return {
     before: {
       all: [

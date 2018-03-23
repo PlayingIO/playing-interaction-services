@@ -1,6 +1,7 @@
 import assert from 'assert';
 import makeDebug from 'debug';
 import { Service, createService } from 'mostly-feathers-mongoose';
+import fp from 'mostly-func';
 import { plural } from 'pluralize';
 import UserCommentModel from '~/models/user-comment-model';
 import defaultHooks from './user-comment-hooks';
@@ -12,23 +13,23 @@ const defaultOptions = {
 };
 
 class UserCommentService extends Service {
-  constructor(options) {
+  constructor (options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);
   }
 
-  setup(app) {
+  setup (app) {
     super.setup(app);
     this.hooks(defaultHooks(this.options));
   }
 
-  get(id, params) {
+  get (id, params) {
     params = Object.assign({ query: {} }, params);
     params.query.subject = params.query.subject || id;
     return this.find(params);
   }
 
-  create(data, params) {
+  create (data, params) {
     assert(data.subject || data.subjects, 'data.subject(s) not provided.');
     assert(data.type, 'data.type not provided');
     assert(data.user, 'data.user not provided.');
@@ -52,7 +53,7 @@ class UserCommentService extends Service {
     });
   }
 
-  remove(id, params) {
+  remove (id, params) {
     params = Object.assign({ query: {} }, params);
     assert(params.query.userId || params.query.user, 'params.query.userId not provided');
     assert(params.query.commentedAt, 'params.query.commentedAt not provided');
@@ -66,7 +67,7 @@ class UserCommentService extends Service {
   }
 }
 
-export default function init(app, options, hooks) {
+export default function init (app, options, hooks) {
   options = Object.assign({ ModelName: 'user-comment' }, options);
   return createService(app, UserCommentService, UserCommentModel, options);
 }

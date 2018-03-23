@@ -13,31 +13,31 @@ const defaultOptions = {
 };
 
 class UserCollectionService extends Service {
-  constructor(options) {
+  constructor (options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);
   }
 
-  setup(app) {
+  setup (app) {
     super.setup(app);
     this.hooks(defaultHooks(this.options));
   }
 
-  find(params) {
+  find (params) {
     params = fp.assign({ query: {} }, params);
     params.query.$sort = params.query.$sort || { position: 1 };
 
     return super.find(params);
   }
 
-  get(id, params) {
+  get (id, params) {
     params = Object.assign({ query: {} }, params);
     assert(params.query.user, 'params.query.user not provided');
     params.query.document = params.query.document || id;
     return this._first(null, null, params);
   }
 
-  create(data, params) {
+  create (data, params) {
     assert(data.collect, 'data.collect not provided.');
     assert(data.document || data.documents, 'data.document(s) not provided.');
     assert(data.user, 'data.user not provided.');
@@ -68,7 +68,7 @@ class UserCollectionService extends Service {
     });
   }
 
-  remove(id, params) {
+  remove (id, params) {
     if (id && id !== 'null') {
       return super.remove(id, params);
     } else {
@@ -88,7 +88,7 @@ class UserCollectionService extends Service {
     }
   }
 
-  _reorder(id, data, params, original) {
+  _reorder (id, data, params, original) {
     return this.get(data.target).then((target) => {
       if (!target) throw new Error("data.target not exists");
       target = target.data || target;
@@ -97,7 +97,7 @@ class UserCollectionService extends Service {
   }
 }
 
-export default function init(app, options, hooks) {
+export default function init (app, options, hooks) {
   options = Object.assign({ ModelName: 'user-collection' }, options);
   return createService(app, UserCollectionService, UserCollectionModel, options);
 }

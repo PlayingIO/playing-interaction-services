@@ -11,24 +11,24 @@ const defaultOptions = {
 };
 
 class CollectionService extends Service {
-  constructor(options) {
+  constructor (options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);
   }
 
-  setup(app) {
+  setup (app) {
     super.setup(app);
     this.hooks(defaultHooks(this.options));
   }
   
-  _suggestion(id, data, params) {
+  _suggestion (id, data, params) {
     return super.find(params);
   }
 
   /*
    * reorder items in the collection
    */
-  _moveCollectionMember(id, data, params, original) {
+  _moveCollectionMember (id, data, params, original) {
     assert(data.select, 'data.select is not provided.');
     assert(data.target, 'data.target is not provided.');
 
@@ -52,7 +52,7 @@ class CollectionService extends Service {
   }
 }
 
-export default function init(app, options, hooks) {
+export default function init (app, options, hooks) {
   options = Object.assign({ ModelName: 'collection' }, options);
   return createService(app, CollectionService, CollectionModel, options);
 }
