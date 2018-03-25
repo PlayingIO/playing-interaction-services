@@ -4,10 +4,10 @@ import { createService } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
 import shortid from 'shortid';
 
-import FavoriteModel from '~/models/favorite-model';
-import { Service } from '~/services/collection/collection-service';
-import defaultHooks from './favorite-hooks';
-import defaultEvents from './favorite-events';
+import { Service } from '~/services/collection/collection.service';
+import FavoriteModel from '~/models/favorite.model';
+import defaultHooks from './favorite.hooks';
+import defaultEvents from './favorite.events';
 
 const debug = makeDebug('playing:interaction-services:favorites');
 

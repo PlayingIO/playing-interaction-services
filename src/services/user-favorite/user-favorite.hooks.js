@@ -3,7 +3,7 @@ import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authenticat
 import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
 
-import UserShareEntity from '~/entities/user-share-entity';
+import UserFavoriteEntity from '~/entities/user-favorite.entity';
 
 export default function (options = {}) {
   return {
@@ -15,10 +15,10 @@ export default function (options = {}) {
         cache(options.cache)
       ],
       get: [
-        hooks.prefixSelect('subject')
+        hooks.prefixSelect('document')
       ],
       find: [
-        hooks.prefixSelect('subject')
+        hooks.prefixSelect('document')
       ],
       create: [
         iff(isProvider('external'),
@@ -27,28 +27,28 @@ export default function (options = {}) {
       update: [
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'user' })),
-        hooks.depopulate('subject', 'user')
+        hooks.depopulate('document', 'user')
       ],
       patch: [
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'user' })),
-        hooks.depopulate('subject', 'user')
+        hooks.depopulate('document', 'user')
       ]
     },
     after: {
       all: [
-        hooks.populate('subject', { path: '@type', fallThrough: ['headers', 'user'] }), // absolute path
-        hooks.populate('group', { service: 'groups' }),
+        hooks.populate('favorite', { service: 'favorites' }),
+        hooks.populate('document', { path: '@type', fallThrough: ['headers', 'user'] }), // absolute path
         hooks.populate('user', { service: 'users' }),
         cache(options.cache),
-        hooks.presentEntity(UserShareEntity, options),
+        hooks.presentEntity(UserFavoriteEntity, options),
         hooks.responder()
       ],
       find: [
-        hooks.flatMerge('subject')
+        hooks.flatMerge('document')
       ],
       get: [
-        hooks.flatMerge('subject')
+        hooks.flatMerge('document')
       ]
     }
   };

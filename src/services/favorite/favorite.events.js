@@ -3,7 +3,7 @@ import fp from 'mostly-func';
 
 const debug = makeDebug('playing:interaction-services:favorite:events');
 
-const createActivity = async function(app, favorite, verb, message) {
+const createActivity = async function (app, favorite, verb, message) {
   const svcFeeds = app.service('feeds');
   const svcActivities = app.service('activities');
   const svcDocuments = app.service('documents');

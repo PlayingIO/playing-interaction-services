@@ -5,7 +5,7 @@ import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
 import { hooks as content } from 'playing-content-services';
 
-import CollectionEntity from '~/entities/collection-entity';
+import CollectionEntity from '~/entities/collection.entity';
 
 const addCollectionEnrichers = (options) => (hook) => {
   assert(hook.type === 'after', `addCollectionMetadata must be used as a 'after' hook.`);

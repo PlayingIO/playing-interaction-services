@@ -3,7 +3,7 @@ import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authenticat
 import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
 
-import UserLikeEntity from '~/entities/user-like-entity';
+import UserCollectionEntity from '~/entities/user-collection.entity';
 
 export default function (options = {}) {
   return {
@@ -15,10 +15,10 @@ export default function (options = {}) {
         cache(options.cache)
       ],
       get: [
-        hooks.prefixSelect('document')
+        hooks.prefixSelect('document', { excepts: ['collect', 'user']})
       ],
       find: [
-        hooks.prefixSelect('document')
+        hooks.prefixSelect('document', { excepts: ['collect', 'user']})
       ],
       create: [
         iff(isProvider('external'),
@@ -37,10 +37,11 @@ export default function (options = {}) {
     },
     after: {
       all: [
-        hooks.populate('document', { path: '@type', fallThrough: ['headers'] }), // absolute path
+        hooks.populate('collect', { service: 'collections' }),
+        hooks.populate('document', { path: '@type', fallThrough: ['headers', 'user'] }), // absolute path
         hooks.populate('user', { service: 'users' }),
         cache(options.cache),
-        hooks.presentEntity(UserLikeEntity, options),
+        hooks.presentEntity(UserCollectionEntity, options),
         hooks.responder()
       ],
       find: [

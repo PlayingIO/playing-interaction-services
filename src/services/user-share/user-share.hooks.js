@@ -3,7 +3,7 @@ import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authenticat
 import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
 
-import UserCollectionEntity from '~/entities/user-collection-entity';
+import UserShareEntity from '~/entities/user-share.entity';
 
 export default function (options = {}) {
   return {
@@ -15,10 +15,10 @@ export default function (options = {}) {
         cache(options.cache)
       ],
       get: [
-        hooks.prefixSelect('document', { excepts: ['collect', 'user']})
+        hooks.prefixSelect('subject')
       ],
       find: [
-        hooks.prefixSelect('document', { excepts: ['collect', 'user']})
+        hooks.prefixSelect('subject')
       ],
       create: [
         iff(isProvider('external'),
@@ -27,28 +27,28 @@ export default function (options = {}) {
       update: [
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'user' })),
-        hooks.depopulate('document', 'user')
+        hooks.depopulate('subject', 'user')
       ],
       patch: [
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'user' })),
-        hooks.depopulate('document', 'user')
+        hooks.depopulate('subject', 'user')
       ]
     },
     after: {
       all: [
-        hooks.populate('collect', { service: 'collections' }),
-        hooks.populate('document', { path: '@type', fallThrough: ['headers', 'user'] }), // absolute path
+        hooks.populate('subject', { path: '@type', fallThrough: ['headers', 'user'] }), // absolute path
+        hooks.populate('group', { service: 'groups' }),
         hooks.populate('user', { service: 'users' }),
         cache(options.cache),
-        hooks.presentEntity(UserCollectionEntity, options),
+        hooks.presentEntity(UserShareEntity, options),
         hooks.responder()
       ],
       find: [
-        hooks.flatMerge('document')
+        hooks.flatMerge('subject')
       ],
       get: [
-        hooks.flatMerge('document')
+        hooks.flatMerge('subject')
       ]
     }
   };
