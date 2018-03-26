@@ -39,7 +39,7 @@ export default function (options = {}) {
         hooks.populate('subject', { path: '@type', fallThrough: ['headers', 'user'] }), // absolute path
         hooks.populate('user', { service: 'users' }),
         cache(options.cache),
-        hooks.presentEntity(UserCommentEntity, options),
+        hooks.presentEntity(UserCommentEntity, options.entities),
         hooks.responder()
       ]
     }

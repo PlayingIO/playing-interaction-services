@@ -42,7 +42,7 @@ export default function (options = {}) {
         hooks.populate('creator', { service: 'users' }),
         content.documentEnrichers(options),
         cache(options.cache),
-        hooks.presentEntity(FavoriteEntity, options),
+        hooks.presentEntity(FavoriteEntity, options.entities)
       ],
       patch: [
         iff(

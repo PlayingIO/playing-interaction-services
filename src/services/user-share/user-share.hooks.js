@@ -41,7 +41,7 @@ export default function (options = {}) {
         hooks.populate('group', { service: 'groups' }),
         hooks.populate('user', { service: 'users' }),
         cache(options.cache),
-        hooks.presentEntity(UserShareEntity, options),
+        hooks.presentEntity(UserShareEntity, options.entities),
         hooks.responder()
       ],
       find: [

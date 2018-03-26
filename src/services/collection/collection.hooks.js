@@ -67,7 +67,7 @@ export default function (options = {}) {
         content.documentEnrichers(options),
         addCollectionEnrichers(options),
         cache(options.cache),
-        hooks.presentEntity(CollectionEntity, options),
+        hooks.presentEntity(CollectionEntity, options.entities),
         hooks.responder()
       ],
       find: [

@@ -40,7 +40,7 @@ export default function (options = {}) {
         hooks.populate('subject', { path: '@type', fallThrough: ['headers', 'user'] }), // absolute path
         hooks.populate('user', { service: 'users' }),
         cache(options.cache),
-        hooks.presentEntity(UserFeedbackEntity, options),
+        hooks.presentEntity(UserFeedbackEntity, options.entities),
         hooks.responder()
       ],
       find: [

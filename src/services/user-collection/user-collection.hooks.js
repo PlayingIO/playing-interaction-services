@@ -41,7 +41,7 @@ export default function (options = {}) {
         hooks.populate('document', { path: '@type', fallThrough: ['headers', 'user'] }), // absolute path
         hooks.populate('user', { service: 'users' }),
         cache(options.cache),
-        hooks.presentEntity(UserCollectionEntity, options),
+        hooks.presentEntity(UserCollectionEntity, options.entities),
         hooks.responder()
       ],
       find: [
