@@ -1,3 +1,4 @@
+import assert from 'assert';
 import makeDebug from 'debug';
 import fp from 'mostly-func';
 
@@ -5,11 +6,15 @@ const debug = makeDebug('playing:interaction-services:favorite:events');
 
 const createActivity = async function (app, favorite, verb, message) {
   const svcFeeds = app.service('feeds');
+  const svcDocuments = app.service('documents');
+
+  const document = await svcDocuments.get(favorite.document);
+  assert(document, 'favorite.document is not exists');
 
   const activity = {
     actor: `user:${favorite.user}`,
     verb: verb,
-    object: `document:${favorite.document}`,
+    object: `${document.type}:${favorite.document}`,
     foreignId: `favorite:${favorite.id}`,
     message: message,
     cc: [`user:${favorite.user}`]
