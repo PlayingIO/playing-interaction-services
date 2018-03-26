@@ -5,21 +5,18 @@ const debug = makeDebug('playing:interaction-services:favorite:events');
 
 const createActivity = async function (app, favorite, verb, message) {
   const svcFeeds = app.service('feeds');
-  const svcActivities = app.service('activities');
-  const svcDocuments = app.service('documents');
 
-  const feed = svcFeeds.get(`document:${favorite.document}`);
-  if (feed) {
-    await svcActivities.create({
-      feed: feed.id,
-      actor: `user:${favorite.user}`,
-      verb: verb,
-      object: `document:${favorite.document}`,
-      foreignId: `favorite:${favorite.id}`,
-      message: message,
-      cc: [`user:${favorite.user}`]
-    });
-  }
+  const activity = {
+    actor: `user:${favorite.user}`,
+    verb: verb,
+    object: `document:${favorite.document}`,
+    foreignId: `favorite:${favorite.id}`,
+    message: message,
+    cc: [`user:${favorite.user}`]
+  };
+
+  // add to document's activity log
+  await svcFeeds.action('addActivity').patch(`document:${favorite.document}`, activity);
 };
 
 export default function (app, options) {
@@ -31,7 +28,7 @@ export default function (app, options) {
     const favorite = resp.event;
     debug('favorite.added', favorite);
     if (favorite) {
-      createActivity(app, favorite, 'addedToFavorites', 'favorite the document');
+      createActivity(app, favorite, 'favorites.added', 'favorite the document');
     }
   });
 
@@ -43,7 +40,7 @@ export default function (app, options) {
     const favorite = resp.event;
     debug('favorite.removed', favorite);
     if (favorite) {
-      createActivity(app, favorite, 'removeFromFavorites', 'unfavorite the document');
+      createActivity(app, favorite, 'favorites.removed', 'unfavorite the document');
     }
   });
 }

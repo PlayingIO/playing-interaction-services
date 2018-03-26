@@ -47,11 +47,11 @@ export default function (options = {}) {
       patch: [
         iff(
           hooks.isAction('addToFavorites'),
-          hooks.publishEvent('favorite.added', { prefix: 'playing' })
+          hooks.publishEvent('favorites.added', { prefix: 'playing' })
         ),
         iff(
           hooks.isAction('removeFromFavorites'),
-          hooks.publishEvent('favorite.removed', { prefix: 'playing' })
+          hooks.publishEvent('favorites.removed', { prefix: 'playing' })
         )
       ]
     }
