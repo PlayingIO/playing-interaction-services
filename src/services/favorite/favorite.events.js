@@ -26,7 +26,6 @@ const createActivity = async function (app, favorite, verb, message) {
 
 export default function (app, options) {
   app.trans.add({
-    pubsub$: true,
     topic: 'playing.events',
     cmd: 'favorite.added'
   }, (resp) => {
@@ -38,7 +37,6 @@ export default function (app, options) {
   });
 
   app.trans.add({
-    pubsub$: true,
     topic: 'playing.events',
     cmd: 'favorite.removed'
   }, (resp) => {
