@@ -46,7 +46,7 @@ export default function (options = {}) {
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'creator' })),
         hooks.depopulate('parent'),
-        hooks.discardFields('id', 'metadata', 'ancestors', 'creator', 'createdAt', 'updatedAt', 'destroyedAt'),
+        hooks.discardFields('metadata', 'ancestors', 'creator', 'createdAt', 'updatedAt', 'destroyedAt'),
         content.computePath({ type: 'collection' }),
         content.computeAncestors()
       ],
@@ -54,7 +54,7 @@ export default function (options = {}) {
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'creator' })),
         hooks.depopulate('parent'),
-        hooks.discardFields('id', 'metadata', 'ancestors', 'creator', 'createdAt', 'updatedAt', 'destroyedAt'),
+        hooks.discardFields('metadata', 'ancestors', 'creator', 'createdAt', 'updatedAt', 'destroyedAt'),
         content.computePath({ type: 'collection' }),
         content.computeAncestors()
       ]

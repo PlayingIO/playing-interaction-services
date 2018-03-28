@@ -23,13 +23,13 @@ export default function (options = {}) {
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'creator' })),
         hooks.depopulate('parent'),
-        hooks.discardFields('id', 'metadata', 'path', 'createdAt', 'updatedAt', 'destroyedAt')
+        hooks.discardFields('metadata', 'path', 'createdAt', 'updatedAt', 'destroyedAt')
       ],
       patch: [
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'creator' })),
         hooks.depopulate('parent'),
-        hooks.discardFields('id', 'metadata', 'path', 'createdAt', 'updatedAt', 'destroyedAt')
+        hooks.discardFields('metadata', 'path', 'createdAt', 'updatedAt', 'destroyedAt')
       ]
     },
     after: {
