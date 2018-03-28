@@ -1,10 +1,8 @@
-import { plugins } from 'mostly-feathers-mongoose';
-
 const options = {
   timestamps: true
 };
 
-/*
+/**
  * feedback of a document
  */
 const fields = {

@@ -1,10 +1,8 @@
-import { plugins } from 'mostly-feathers-mongoose';
-
 const options = {
   timestamps: true
 };
 
-/*
+/**
  * list of documents liked by user (kudos)
  */
 const fields = {

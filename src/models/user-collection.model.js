@@ -4,8 +4,8 @@ const options = {
   timestamps: true
 };
 
-/*
- * sortable list of user collection documents
+/**
+ * Sortable list of user collection documents
  */
 const fields = {
   collect: { type: 'ObjectId', required: true },  // collection id

@@ -1,11 +1,9 @@
-import { plugins } from 'mostly-feathers-mongoose';
-
 const options = {
   timestamps: true
 };
 
-/*
- * share of a document
+/**
+ * Share of a document
  */
 const fields = {
   group: { type: 'ObjectId' },                    // share with group

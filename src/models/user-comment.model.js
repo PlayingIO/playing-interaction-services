@@ -1,11 +1,9 @@
-import { plugins } from 'mostly-feathers-mongoose';
-
 const options = {
   timestamps: true
 };
 
-/*
- * comments of a document
+/**
+ * Comments of a document
  */
 const fields = {
   audiences: [{ type: String }],                  // public/private or somebody

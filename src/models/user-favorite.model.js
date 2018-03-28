@@ -4,8 +4,8 @@ const options = {
   timestamps: true
 };
 
-/*
- * sortable list of documents in user's favorite collection
+/**
+ * Sortable list of documents in user's favorite collection
  */
 const fields = {
   favorite: { type: 'ObjectId', required: true }, // favorite id
