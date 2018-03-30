@@ -3,7 +3,7 @@ import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authenticat
 import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
 
-import UserShareEntity from '~/entities/user-share.entity';
+import UserShareEntity from '../../entities/user-share.entity';
 
 export default function (options = {}) {
   return {

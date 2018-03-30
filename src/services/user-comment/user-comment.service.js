@@ -4,7 +4,7 @@ import { Service, createService } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
 import { plural } from 'pluralize';
 
-import UserCommentModel from '~/models/user-comment.model';
+import UserCommentModel from '../../models/user-comment.model';
 import defaultHooks from './user-comment.hooks';
 
 const debug = makeDebug('playing:interaction-services:user-comments');
@@ -13,7 +13,7 @@ const defaultOptions = {
   name: 'user-comments'
 };
 
-class UserCommentService extends Service {
+export class UserCommentService extends Service {
   constructor (options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);

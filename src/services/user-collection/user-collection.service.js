@@ -3,7 +3,7 @@ import makeDebug from 'debug';
 import { Service, helpers, createService } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
 
-import UserCollectionModel from '~/models/user-collection.model';
+import UserCollectionModel from '../../models/user-collection.model';
 import defaultHooks from './user-collection.hooks';
 
 const debug = makeDebug('playing:interaction-services:user-collections');
@@ -12,7 +12,7 @@ const defaultOptions = {
   name: 'user-collections'
 };
 
-class UserCollectionService extends Service {
+export class UserCollectionService extends Service {
   constructor (options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);

@@ -3,7 +3,7 @@ import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authenticat
 import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
 
-import UserFeedbackEntity from '~/entities/user-feedback.entity';
+import UserFeedbackEntity from '../../entities/user-feedback.entity';
 
 export default function (options = {}) {
   return {

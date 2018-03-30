@@ -5,7 +5,7 @@ import { Service, createService } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
 import { plural } from 'pluralize';
 
-import UserFeedbackModel from '~/models/user-feedback.model';
+import UserFeedbackModel from '../../models/user-feedback.model';
 import defaultHooks from './user-feedback.hooks';
 
 const debug = makeDebug('playing:interaction-services:user-feedbacks');
@@ -14,7 +14,7 @@ const defaultOptions = {
   name: 'user-feedbacks'
 };
 
-class UserFeedbackService extends Service {
+export class UserFeedbackService extends Service {
   constructor (options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);

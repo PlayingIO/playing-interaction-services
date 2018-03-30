@@ -3,7 +3,7 @@ import makeDebug from 'debug';
 import { Service, helpers, createService } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
 
-import UserFavoriteModel from '~/models/user-favorite.model';
+import UserFavoriteModel from '../../models/user-favorite.model';
 import defaultHooks from './user-favorite.hooks';
 
 const debug = makeDebug('playing:interaction-services:user-favorites');
@@ -12,7 +12,7 @@ const defaultOptions = {
   name: 'user-favorites'
 };
 
-class UserFavoriteService extends Service {
+export class UserFavoriteService extends Service {
   constructor (options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);

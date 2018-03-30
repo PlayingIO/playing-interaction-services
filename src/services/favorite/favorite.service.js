@@ -4,8 +4,8 @@ import { createService } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
 import shortid from 'shortid';
 
-import { Service } from '~/services/collection/collection.service';
-import FavoriteModel from '~/models/favorite.model';
+import { CollectionService } from '../collection/collection.service';
+import FavoriteModel from '../../models/favorite.model';
 import defaultHooks from './favorite.hooks';
 import defaultEvents from './favorite.events';
 
@@ -18,7 +18,7 @@ const defaultOptions = {
 /**
  * Favorite is a particular collection
  */
-class FavoriteService extends Service {
+export class FavoriteService extends CollectionService {
   constructor (options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);

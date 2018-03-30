@@ -4,7 +4,7 @@ import { Service, createService } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
 import { plural } from 'pluralize';
 
-import UserShareModel from '~/models/user-share.model';
+import UserShareModel from '../../models/user-share.model';
 import defaultHooks from './user-share.hooks';
 
 const debug = makeDebug('playing:interaction-services:user-shares');
@@ -13,7 +13,7 @@ const defaultOptions = {
   name: 'user-shares'
 };
 
-class UserShareService extends Service {
+export class UserShareService extends Service {
   constructor (options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);

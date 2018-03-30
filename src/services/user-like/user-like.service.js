@@ -2,7 +2,7 @@ import assert from 'assert';
 import makeDebug from 'debug';
 import { Service, createService } from 'mostly-feathers-mongoose';
 
-import UserLikeModel from '~/models/user-like.model';
+import UserLikeModel from '../../models/user-like.model';
 import defaultHooks from './user-like.hooks';
 
 const debug = makeDebug('playing:interaction-services:user-likes');
@@ -11,7 +11,7 @@ const defaultOptions = {
   name: 'user-likes'
 };
 
-class UserLikeService extends Service {
+export class UserLikeService extends Service {
   constructor (options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);
