@@ -1,4 +1,4 @@
-import { DocTypes } from 'playing-content-services/lib/constants';
+import { DocTypes } from 'playing-content-services';
 
 export default Object.assign({
   collection: {
