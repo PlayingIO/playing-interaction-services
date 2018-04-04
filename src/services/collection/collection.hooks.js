@@ -74,7 +74,7 @@ export default function (options = {}) {
         hooks.assoc('documents', { service: 'user-collections', field: 'collect' })
       ],
       create: [
-        hooks.publishEvent('document.created', { prefix: 'playing' })
+        hooks.publishEvent('document.create', { prefix: 'playing' })
       ]
     }
   };

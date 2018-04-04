@@ -27,23 +27,21 @@ const createActivity = async function (app, favorite, verb, message) {
 export default function (app, options) {
   app.trans.add({
     topic: 'playing.events',
-    cmd: 'favorite.added'
+    cmd: 'document.favorite'
   }, (resp) => {
     const favorite = resp.event;
-    debug('favorite.added', favorite);
     if (favorite) {
-      createActivity(app, favorite, 'favorites.added', 'favorite the document');
+      createActivity(app, favorite, 'document.favorite', 'favorite the document');
     }
   });
 
   app.trans.add({
     topic: 'playing.events',
-    cmd: 'favorite.removed'
+    cmd: 'document.unfavorite'
   }, (resp) => {
     const favorite = resp.event;
-    debug('favorite.removed', favorite);
     if (favorite) {
-      createActivity(app, favorite, 'favorites.removed', 'unfavorite the document');
+      createActivity(app, favorite, 'document.unfavorite', 'unfavorite the document');
     }
   });
 }
