@@ -7,7 +7,6 @@ import shortid from 'shortid';
 import { CollectionService } from '../collection/collection.service';
 import FavoriteModel from '../../models/favorite.model';
 import defaultHooks from './favorite.hooks';
-import defaultEvents from './favorite.events';
 
 const debug = makeDebug('playing:interaction-services:favorites');
 
@@ -27,7 +26,6 @@ export class FavoriteService extends CollectionService {
   setup (app) {
     super.setup(app);
     this.hooks(defaultHooks(this.options));
-    defaultEvents(this.app, this.options);
   }
 
   _getUserFavorite (params) {
