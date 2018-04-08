@@ -43,16 +43,6 @@ export default function (options = {}) {
         content.documentEnrichers(options),
         cache(options.cache),
         hooks.presentEntity(FavoriteEntity, options.entities)
-      ],
-      patch: [
-        iff(
-          hooks.isAction('addToFavorites'),
-          hooks.publishEvent('favorite', { prefix: 'playing' })
-        ),
-        iff(
-          hooks.isAction('removeFromFavorites'),
-          hooks.publishEvent('unfavorite', { prefix: 'playing' })
-        )
       ]
     }
   };
