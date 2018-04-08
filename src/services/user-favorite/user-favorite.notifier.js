@@ -20,8 +20,8 @@ export default function (event) {
       };
 
       await feeds.addActivity(context.app, activity).feeds(
-        `document:${document.id}`,         // add to document's activity log
-        `user:${result.user}`,             // add to actor's activity log 
+        `${document.type}:${document.id}`, // add to document's activity log
+        `user:${result.user}`,             // add to actor's activity log
         `notification:${document.creator}` // add to document author's notification stream
       );
     };
