@@ -4,6 +4,7 @@ import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
 
 import UserFavoriteEntity from '../../entities/user-favorite.entity';
+import notifier from './user-favorite.notifier';
 
 export default function (options = {}) {
   return {
@@ -49,6 +50,12 @@ export default function (options = {}) {
       ],
       get: [
         hooks.flatMerge('document')
+      ],
+      create: [
+        notifier('favorite.create')
+      ],
+      remove: [
+        notifier('favorite.delete')
       ]
     }
   };
