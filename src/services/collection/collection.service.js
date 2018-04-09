@@ -22,14 +22,14 @@ export class CollectionService extends Service {
     this.hooks(defaultHooks(this.options));
   }
   
-  _suggestion (id, data, params) {
+  suggestion (id, data, params) {
     return super.find(params);
   }
 
   /*
    * reorder items in the collection
    */
-  _moveCollectionMember (id, data, params, original) {
+  moveCollectionMember (id, data, params, original) {
     assert(data.select, 'data.select is not provided.');
     assert(data.target, 'data.target is not provided.');
 

@@ -28,7 +28,7 @@ export class FavoriteService extends CollectionService {
     this.hooks(defaultHooks(this.options));
   }
 
-  _getUserFavorite (params) {
+  getUserFavorite (params) {
     params = fp.assign(params, { paginate: false });
     return super.find(params).then((result) => {
       // create own favorite if not exists
@@ -73,7 +73,7 @@ export class FavoriteService extends CollectionService {
   }
 
   // add a document to the user favorite
-  _addToFavorites (id, data, params, favorite) {
+  addToFavorites (id, data, params, favorite) {
     assert(data.document || data.documents, 'data.document(s) not provided.');
     assert(data.creator, 'data.creator not provided.');
 
@@ -88,7 +88,7 @@ export class FavoriteService extends CollectionService {
   }
 
   // remove a document from the user favorite
-  _removeFromFavorites (id, data, params, favorite) {
+  removeFromFavorites (id, data, params, favorite) {
     debug('removeFromFavorites', id, data, params, favorite);
     assert(data.document || data.documents, 'data.document(s) not provided.');
     assert(data.creator, 'data.creator not provided.');
