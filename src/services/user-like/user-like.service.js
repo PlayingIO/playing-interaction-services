@@ -26,7 +26,7 @@ export class UserLikeService extends Service {
     params = Object.assign({ query: {} }, params);
     assert(params.query.user, 'params.query.user not provided');
     params.query.document = params.query.document || id;
-    return super._first(null, null, params);
+    return super.first(null, null, params);
   }
 
   create (data, params) {
@@ -45,7 +45,7 @@ export class UserLikeService extends Service {
     return getDocuments().then((docs) => {
       if (!docs || docs.length !== ids.length) throw new Error('some data.document(s) not exists');
       return Promise.all(docs.map((doc) => {
-        return super._upsert(null, {
+        return super.upsert(null, {
           document: doc.id,
           type: doc.type,
           user: data.user

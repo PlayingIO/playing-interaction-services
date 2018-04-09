@@ -28,7 +28,7 @@ export class UserShareService extends Service {
     params = Object.assign({ query: {} }, params);
     assert(params.query.user, 'params.query.user not provided');
     params.query.subject = params.query.subject || id;
-    return super._first(null, null, params);
+    return super.first(null, null, params);
   }
 
   create (data, params) {

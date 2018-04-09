@@ -34,7 +34,7 @@ export class UserFavoriteService extends Service {
     params = Object.assign({ query: {} }, params);
     assert(params.query.user, 'params.query.user not provided');
     params.query.document = params.query.document || id;
-    return super._first(null, null, params);
+    return super.first(null, null, params);
   }
 
   create (data, params) {
@@ -61,7 +61,7 @@ export class UserFavoriteService extends Service {
       if (!docs || docs.length !== ids.length) throw new Error('some data.document(s) not exists');
       if (!favorite) throw new Error('favorite collection not exists');
       return Promise.all(docs.map((doc) => {
-        return super._upsert(null, {
+        return super.upsert(null, {
           document: doc.id,
           favorite: favorite.id,
           type: doc.type,
