@@ -19,9 +19,9 @@ export default function (event) {
         message: message
       };
 
-      await feeds.addActivity(context.app, activity).feeds(
-        `${document.type}:${document.id}`, // add to document's activity log
+      await feeds.addActivity(context.app, activity,
         `user:${result.user}`,             // add to actor's activity log
+        `${document.type}:${document.id}`, // add to document's activity log
         `notification:${document.creator}` // add to document author's notification stream
       );
     };
