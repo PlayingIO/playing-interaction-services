@@ -1,6 +1,6 @@
 {
   "name": "playing-interaction-services",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "User interaction management microservices for playful applications",
   "author": "Forafish",
   "license": "MIT",
