@@ -15,7 +15,7 @@ const defaultOptions = {
 
 export class UserCommentService extends Service {
   constructor (options) {
-    options = Object.assign({}, defaultOptions, options);
+    options = fp.assign(defaultOptions, options);
     super(options);
   }
 
@@ -69,7 +69,7 @@ export class UserCommentService extends Service {
 }
 
 export default function init (app, options, hooks) {
-  options = Object.assign({ ModelName: 'user-comment' }, options);
+  options = fp.assign({ ModelName: 'user-comment' }, options);
   return createService(app, UserCommentService, UserCommentModel, options);
 }
 
