@@ -14,7 +14,7 @@ const defaultOptions = {
 
 export class UserCollectionService extends Service {
   constructor (options) {
-    options = Object.assign({}, defaultOptions, options);
+    options = fp.assign(defaultOptions, options);
     super(options);
   }
 
@@ -98,7 +98,7 @@ export class UserCollectionService extends Service {
 }
 
 export default function init (app, options, hooks) {
-  options = Object.assign({ ModelName: 'user-collection' }, options);
+  options = fp.assign({ ModelName: 'user-collection' }, options);
   return createService(app, UserCollectionService, UserCollectionModel, options);
 }
 
