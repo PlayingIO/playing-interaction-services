@@ -15,7 +15,7 @@ const defaultOptions = {
 
 export class UserShareService extends Service {
   constructor (options) {
-    options = Object.assign({}, defaultOptions, options);
+    options = fp.assign(defaultOptions, options);
     super(options);
   }
 
@@ -56,7 +56,7 @@ export class UserShareService extends Service {
 }
 
 export default function init (app, options, hooks) {
-  options = Object.assign({ ModelName: 'user-share' }, options);
+  options = fp.assign({ ModelName: 'user-share' }, options);
   return createService(app, UserShareService, UserShareModel, options);
 }
 
