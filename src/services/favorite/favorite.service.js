@@ -19,7 +19,7 @@ const defaultOptions = {
  */
 export class FavoriteService extends CollectionService {
   constructor (options) {
-    options = Object.assign({}, defaultOptions, options);
+    options = fp.assign(defaultOptions, options);
     super(options);
   }
 
@@ -105,7 +105,7 @@ export class FavoriteService extends CollectionService {
 }
 
 export default function init (app, options, hooks) {
-  options = Object.assign({ ModelName: 'favorite' }, options);
+  options = fp.assign({ ModelName: 'favorite' }, options);
   return createService(app, FavoriteService, FavoriteModel, options);
 }
 
