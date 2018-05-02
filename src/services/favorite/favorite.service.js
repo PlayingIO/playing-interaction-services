@@ -55,7 +55,7 @@ export class FavoriteService extends CollectionService {
   get (id, params) {
     params = fp.assign({ query: {} }, params);
     
-    const action = params.__action;
+    const action = params.action;
     
     if (id === 'me') {
       assert(params.query.creator, 'query.creator not provided.');
