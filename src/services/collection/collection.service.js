@@ -1,6 +1,7 @@
 import assert from 'assert';
 import makeDebug from 'debug';
 import { Service, createService } from 'mostly-feathers-mongoose';
+import fp from 'mostly-func';
 
 import CollectionModel from '../../models/collection.model';
 import defaultHooks from './collection.hooks';
