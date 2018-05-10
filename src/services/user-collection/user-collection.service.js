@@ -34,7 +34,7 @@ export class UserCollectionService extends Service {
     params = Object.assign({ query: {} }, params);
     assert(params.query.user, 'params.query.user not provided');
     params.query.document = params.query.document || id;
-    return this.first(null, null, params);
+    return this.first(params);
   }
 
   create (data, params) {
