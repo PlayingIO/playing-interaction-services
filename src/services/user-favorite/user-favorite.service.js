@@ -34,7 +34,7 @@ export class UserFavoriteService extends Service {
     params = fp.assign({ query: {} }, params);
     assert(params.query.user, 'params.query.user not provided');
     params.query.document = params.query.document || id;
-    return super.first(null, null, params);
+    return super.first(params);
   }
 
   create (data, params) {
