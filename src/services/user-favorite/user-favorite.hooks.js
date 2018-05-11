@@ -2,9 +2,10 @@ import { iff, isProvider } from 'feathers-hooks-common';
 import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
 import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
+import { hooks as feeds } from 'playing-feed-services';
 
 import UserFavoriteEntity from '../../entities/user-favorite.entity';
-import notifier from './user-favorite.notifier';
+import notifiers from './user-favorite.notifiers';
 
 export default function (options = {}) {
   return {
@@ -33,6 +34,7 @@ export default function (options = {}) {
       patch: [
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'user' })),
+        hooks.addRouteObject('userFavorite', { service: 'user-favorites' }),
         hooks.depopulate('document', 'user')
       ]
     },
@@ -52,10 +54,10 @@ export default function (options = {}) {
         hooks.flatMerge('document')
       ],
       create: [
-        notifier('favorite.create')
+        feeds.notify('favorite.create', notifiers)
       ],
       remove: [
-        notifier('favorite.delete')
+        feeds.notify('favorite.delete', notifiers)
       ]
     }
   };
