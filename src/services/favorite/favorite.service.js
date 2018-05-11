@@ -29,7 +29,7 @@ export class FavoriteService extends CollectionService {
   }
 
   _getUserFavorite (params) {
-    params = fp.assign(params, { paginate: false });
+    params.paginate = false;
     return super.find(params).then((result) => {
       // create own favorite if not exists
       if (result && result.length === 0) {
