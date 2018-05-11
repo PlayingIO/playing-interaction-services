@@ -24,7 +24,7 @@ export class UserLikeService extends Service {
   }
 
   get (id, params) {
-    params = fp.assign({ query: {} }, params);
+    params = { query: {}, ...params };
     assert(params.query.user, 'params.query.user not provided');
     params.query.document = params.query.document || id;
     return super.first(params);

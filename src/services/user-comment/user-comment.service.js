@@ -25,7 +25,7 @@ export class UserCommentService extends Service {
   }
 
   get (id, params) {
-    params = fp.assign({ query: {} }, params);
+    params = { query: {}, ...params };
     params.query.subject = params.query.subject || id;
     return this.find(params);
   }
@@ -55,7 +55,7 @@ export class UserCommentService extends Service {
   }
 
   remove (id, params) {
-    params = fp.assign({ query: {} }, params);
+    params = { query: {}, ...params };
     assert(params.query.userId || params.query.user, 'params.query.userId not provided');
     assert(params.query.commentedAt, 'params.query.commentedAt not provided');
     params.query.subject = params.query.subject || id;

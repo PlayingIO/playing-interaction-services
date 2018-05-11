@@ -26,7 +26,7 @@ export class UserFeedbackService extends Service {
   }
 
   get (id, params) {
-    params = fp.assign({ query: {} }, params);
+    params = { query: {}, ...params };
     assert(params.query.user, 'params.query.user not provided');
     params.query.subject = params.query.subject || id;
     return super.first(params);

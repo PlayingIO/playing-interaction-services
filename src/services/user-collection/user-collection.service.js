@@ -24,14 +24,14 @@ export class UserCollectionService extends Service {
   }
 
   find (params) {
-    params = fp.assign({ query: {} }, params);
+    params = { query: {}, ...params };
     params.query.$sort = params.query.$sort || { position: 1 };
 
     return super.find(params);
   }
 
   get (id, params) {
-    params = fp.assign({ query: {} }, params);
+    params = { query: {}, ...params };
     assert(params.query.user, 'params.query.user not provided');
     params.query.document = params.query.document || id;
     return this.first(params);

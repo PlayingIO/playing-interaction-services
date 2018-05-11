@@ -47,13 +47,13 @@ export class FavoriteService extends CollectionService {
   }
 
   find (params) {
-    params = fp.assign({ query: {} }, params);
+    params = { query: {}, ...params };
     
     return super.find(params);
   }
 
   get (id, params) {
-    params = fp.assign({ query: {} }, params);
+    params = { query: {}, ...params };
     
     const action = params.action;
     
