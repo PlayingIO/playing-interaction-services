@@ -23,21 +23,21 @@ export class UserFavoriteService extends Service {
     this.hooks(defaultHooks(this.options));
   }
 
-  find (params) {
+  async find (params) {
     params = { query: {}, ...params };
     params.query.$sort = params.query.$sort || { position: 1 };
 
     return super.find(params);
   }
 
-  get (id, params) {
+  async get (id, params) {
     params = { query: {}, ...params };
     assert(params.query.user, 'params.query.user not provided');
     params.query.document = params.query.document || id;
     return super.first(params);
   }
 
-  create (data, params) {
+  async create (data, params) {
     assert(data.document || data.documents, 'data.document(s) not provided.');
     assert(data.user, 'data.user not provided.');
 
@@ -46,32 +46,37 @@ export class UserFavoriteService extends Service {
     
     const ids = [].concat(data.document || data.documents);
 
-    const getDocuments = () => svcDocuments.find({
+    const getDocuments = (ids) => svcDocuments.find({
       query: { _id: { $in: ids }, $select: ['type'] },
       paginate: false,
     });
-    const getFavorite = () => data.favorite
-      ? svcFavorites.get(data.favorite, { query: { $select: ['id'] } })
-      : svcFavorites.get('me', { query: { creator: data.user, $select: ['id'] } });
+    const getFavorite = (user, id) => id
+      ? svcFavorites.get(id, { query: { $select: ['id'] } })
+      : svcFavorites.get('me', { query: { creator: user, $select: ['id'] } });
 
-    return Promise.all([
-      getDocuments(),
-      getFavorite()
-    ]).then(([docs, favorite]) => {
-      if (!docs || docs.length !== ids.length) throw new Error('some data.document(s) not exists');
-      if (!favorite) throw new Error('favorite collection not exists');
-      return Promise.all(docs.map((doc) => {
-        return super.upsert(null, {
-          document: doc.id,
-          favorite: favorite.id,
-          type: doc.type,
-          user: data.user
-        });
-      }));
-    });
+    const [documents, favorite] = await Promise.all([
+      getDocuments(ids),
+      getFavorite(data.user, data.favorite)
+    ]);
+    if (!documents || documents.length !== ids.length) {
+      throw new Error('some data.document(s) not exists');
+    }
+    if (!favorite) {
+      throw new Error('favorite collection not exists');
+    }
+
+    params.locals = { subjects: documents }; // for notifiers
+
+    return Promise.all(fp.map(doc =>
+      super.upsert(null, {
+        document: doc.id,
+        favorite: favorite.id,
+        type: doc.type,
+        user: data.user
+      }), documents));
   }
 
-  remove (id, params) {
+  async remove (id, params) {
     if (id && id !== 'null') {
       return super.remove(id, params);
     } else {
@@ -79,9 +84,19 @@ export class UserFavoriteService extends Service {
       assert(params.query.document, 'query.document not provided.');
       assert(params.query.user, 'query.user not provided.');
 
+      const svcDocuments = this.app.service('documents');
+
+      const ids = params.query.document.split(',');
+      const documents = await svcDocuments.find({
+        query: { _id: { $in: ids }, $select: ['type'] },
+        paginate: false,
+      });
+
+      params.locals = { subjects: documents }; // for notifiers
+
       return super.remove(null, {
         query: {
-          document: { $in: params.query.document.split(',') },
+          document: { $in: ids },
           favorite: params.query.favorite,
           user: params.query.user
         },
@@ -91,11 +106,13 @@ export class UserFavoriteService extends Service {
     }
   }
 
-  reorder (id, data, params, original) {
+  async reorder (id, data, params) {
+    const userFavorite = params.userFavorite;
+    assert(userFavorite, 'User favorite is not exists');
     return this.get(data.target).then((target) => {
       if (!target) throw new Error("data.target not exists");
       target = target.data || target;
-      return helpers.reorderPosition(this.Model, original, target.position, { classify: 'favorite' });
+      return helpers.reorderPosition(this.Model, userFavorite, target.position, { classify: 'favorite' });
     });
   }
 }
