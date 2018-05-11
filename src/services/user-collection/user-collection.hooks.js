@@ -15,10 +15,10 @@ export default function (options = {}) {
         cache(options.cache)
       ],
       get: [
-        hooks.prefixSelect('document', { excepts: ['collect', 'user']})
+        hooks.prefixSelect('subject', { excepts: ['collect', 'user']})
       ],
       find: [
-        hooks.prefixSelect('document', { excepts: ['collect', 'user']})
+        hooks.prefixSelect('subject', { excepts: ['collect', 'user']})
       ],
       create: [
         iff(isProvider('external'),
@@ -27,28 +27,28 @@ export default function (options = {}) {
       update: [
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'user' })),
-        hooks.depopulate('document', 'user')
+        hooks.depopulate('subject', 'user')
       ],
       patch: [
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'user' })),
-        hooks.depopulate('document', 'user')
+        hooks.depopulate('subject', 'user')
       ]
     },
     after: {
       all: [
         hooks.populate('collect', { service: 'collections' }),
-        hooks.populate('document', { path: '@type', fallThrough: ['headers', 'user'] }), // absolute path
+        hooks.populate('subject', { path: '@type', fallThrough: ['headers', 'user'] }), // absolute path
         hooks.populate('user', { service: 'users' }),
         cache(options.cache),
         hooks.presentEntity(UserCollectionEntity, options.entities),
         hooks.responder()
       ],
       find: [
-        hooks.flatMerge('document')
+        hooks.flatMerge('subject')
       ],
       get: [
-        hooks.flatMerge('document')
+        hooks.flatMerge('subject')
       ]
     }
   };

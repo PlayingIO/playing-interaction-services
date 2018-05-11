@@ -39,7 +39,7 @@ export class CollectionService extends Service {
     return Promise.all(
       [data.select, data.target].map(item => {
         return svcUserCollections.get(null, { query: {
-          document: item,
+          subject: item,
           collect: original.id
         }});
       })

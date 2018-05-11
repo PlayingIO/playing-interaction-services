@@ -33,19 +33,19 @@ export class UserCollectionService extends Service {
   get (id, params) {
     params = { query: {}, ...params };
     assert(params.query.user, 'params.query.user not provided');
-    params.query.document = params.query.document || id;
+    params.query.subject = params.query.subject || id;
     return this.first(params);
   }
 
   create (data, params) {
     assert(data.collect, 'data.collect not provided.');
-    assert(data.document || data.documents, 'data.document(s) not provided.');
+    assert(data.subject || data.subjects, 'data.subject(s) not provided.');
     assert(data.user, 'data.user not provided.');
 
     const svcDocuments = this.app.service('documents');
     const svcCollections = this.app.service('collections');
     
-    const ids = [].concat(data.document || data.documents);
+    const ids = [].concat(data.subject || data.subjects);
 
     const getDocuments = () => svcDocuments.find({ query: { _id: { $in: ids } } });
     const getCollection = () => svcCollections.get(data.collect);
@@ -55,11 +55,11 @@ export class UserCollectionService extends Service {
       getCollection()
     ]).then(([results, collection]) => {
       const docs = results && results.data || results;
-      if (!docs || docs.length !== ids.length) throw new Error('some data.document(s) not exists');
+      if (!docs || docs.length !== ids.length) throw new Error('some data.subject(s) not exists');
       if (!collection) throw new Error('parent collection not exists');
       return Promise.all(docs.map((doc) => {
         return super.upsert(null, {
-          document: doc.id,
+          subject: doc.id,
           collect: collection.id,
           type: doc.type,
           user: data.user
@@ -73,12 +73,12 @@ export class UserCollectionService extends Service {
       return super.remove(id, params);
     } else {
       assert(params.query.collect, 'params.query.collect not provided.');
-      assert(params.query.document, 'query.document not provided.');
+      assert(params.query.subject, 'query.subject not provided.');
       assert(params.query.user, 'query.user not provided.');
 
       return super.remove(null, {
         query: {
-          document: { $in: params.query.document.split(',') },
+          subject: { $in: params.query.subject.split(',') },
           collect: params.query.collect,
           user: params.query.user
         },
