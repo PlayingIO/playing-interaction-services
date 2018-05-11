@@ -65,7 +65,7 @@ export class UserFeedbackService extends Service {
 }
 
 export default function init (app, options, hooks) {
-  options = fp.assign({ ModelName: 'user-feedback' }, options);
+  options = { ModelName: 'user-feedback', ...options };
   return createService(app, UserFeedbackService, UserFeedbackModel, options);
 }
 

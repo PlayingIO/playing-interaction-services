@@ -105,7 +105,7 @@ export class FavoriteService extends CollectionService {
 }
 
 export default function init (app, options, hooks) {
-  options = fp.assign({ ModelName: 'favorite' }, options);
+  options = { ModelName: 'favorite', ...options };
   return createService(app, FavoriteService, FavoriteModel, options);
 }
 

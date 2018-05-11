@@ -69,7 +69,7 @@ export class UserCommentService extends Service {
 }
 
 export default function init (app, options, hooks) {
-  options = fp.assign({ ModelName: 'user-comment' }, options);
+  options = { ModelName: 'user-comment', ...options };
   return createService(app, UserCommentService, UserCommentModel, options);
 }
 

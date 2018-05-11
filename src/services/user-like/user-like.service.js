@@ -75,7 +75,7 @@ export class UserLikeService extends Service {
 }
 
 export default function init (app, options, hooks) {
-  options = fp.assign({ ModelName: 'user-like' }, options);
+  options = { ModelName: 'user-like', ...options };
   return createService(app, UserLikeService, UserLikeModel, options);
 }
 

@@ -98,7 +98,7 @@ export class UserCollectionService extends Service {
 }
 
 export default function init (app, options, hooks) {
-  options = fp.assign({ ModelName: 'user-collection' }, options);
+  options = { ModelName: 'user-collection', ...options };
   return createService(app, UserCollectionService, UserCollectionModel, options);
 }
 

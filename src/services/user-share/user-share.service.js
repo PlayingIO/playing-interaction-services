@@ -56,7 +56,7 @@ export class UserShareService extends Service {
 }
 
 export default function init (app, options, hooks) {
-  options = fp.assign({ ModelName: 'user-share' }, options);
+  options = { ModelName: 'user-share', ...options };
   return createService(app, UserShareService, UserShareModel, options);
 }
 

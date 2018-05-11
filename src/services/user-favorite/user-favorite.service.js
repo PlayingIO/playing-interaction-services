@@ -101,7 +101,7 @@ export class UserFavoriteService extends Service {
 }
 
 export default function init (app, options, hooks) {
-  options = fp.assign({ ModelName: 'user-favorite' }, options);
+  options = { ModelName: 'user-favorite', ...options };
   return createService(app, UserFavoriteService, UserFavoriteModel, options);
 }
 

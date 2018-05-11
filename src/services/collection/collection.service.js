@@ -55,7 +55,7 @@ export class CollectionService extends Service {
 }
 
 export default function init (app, options, hooks) {
-  options = fp.assign({ ModelName: 'collection' }, options);
+  options = { ModelName: 'collection', ...options };
   return createService(app, CollectionService, CollectionModel, options);
 }
 
