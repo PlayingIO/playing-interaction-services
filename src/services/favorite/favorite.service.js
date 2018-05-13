@@ -61,43 +61,6 @@ export class FavoriteService extends CollectionService {
       return super.get(id, params);
     }
   }
-
-  // add a document to the user favorite
-  async addToFavorites (id, data, params) {
-    const favorite = params.favorite;
-    assert(favorite, 'Favorite is not exists');
-    assert(data.document || data.documents, 'data.document(s) not provided.');
-    assert(data.creator, 'data.creator not provided.');
-
-    const svcUserFavorites = this.app.service('user-favorites');
-    
-    debug('Add to favorite', favorite.id, 'with', data.document || data.documents);
-    return svcUserFavorites.create({
-      favorite: favorite.id,
-      document: data.document || data.documents,
-      user: data.creator
-    }, params);
-  }
-
-  // remove a document from the user favorite
-  async removeFromFavorites (id, data, params) {
-    const favorite = params.favorite;
-    assert(favorite, 'Favorite is not exists');
-    assert(data.document || data.documents, 'data.document(s) not provided.');
-    assert(data.creator, 'data.creator not provided.');
-    
-    const svcUserFavorites = this.app.service('user-favorites');
-
-    debug('Remove from favorite', favorite.id, 'with', data.document || data.documents);
-    return svcUserFavorites.remove(null, {
-      query: {
-        favorite: favorite.id,
-        document: data.document || data.documents,
-        user: data.creator
-      },
-      user: params.user
-    });
-  }
 }
 
 export default function init (app, options, hooks) {
