@@ -33,9 +33,15 @@ export default function (options = {}) {
     before: {
       all: [
         hooks.authenticate('jwt', options.auth),
+        cache(options.cache)
+      ],
+      find: [
         iff(isProvider('external'),
           queryWithCurrentUser({ idField: 'id', as: 'creator' })),
-        cache(options.cache)
+      ],
+      get: [
+        iff(isProvider('external'),
+          queryWithCurrentUser({ idField: 'id', as: 'creator' })),
       ],
       create: [
         iff(isProvider('external'),
@@ -53,6 +59,8 @@ export default function (options = {}) {
       patch: [
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'creator' })),
+        iff(hooks.isAction('move'),
+          hooks.addRouteObject('collection', { service: 'collections', field: 'id' })),
         hooks.depopulate('parent'),
         hooks.discardFields('metadata', 'ancestors', 'creator', 'createdAt', 'updatedAt', 'destroyedAt'),
         content.computePath({ type: 'collection' }),

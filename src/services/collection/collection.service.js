@@ -24,29 +24,31 @@ export class CollectionService extends Service {
   }
 
   /*
-   * reorder items in the collection
+   * move/reorder items in the collection
    */
-  moveCollectionMember (id, data, params, original) {
+  async move (id, data, params) {
+    const collection = params.collection;
+    assert(collection, 'collection is not exists');
     assert(data.select, 'data.select is not provided.');
     assert(data.target, 'data.target is not provided.');
 
     const svcUserCollections = this.app.service('user-collections');
 
-    return Promise.all(
+    const [select, target] = await Promise.all(
       [data.select, data.target].map(item => {
         return svcUserCollections.get(null, { query: {
           subject: item,
-          collect: original.id
+          collect: collection.id
         }});
       })
-    ).then(([select, target]) => {
-      debug('moveCollectionMember', select, target);
-      if (!select) throw new Error('data.select document not exists.');
-      if (!target) throw new Error('data.target document not exists.');
-      return svcUserCollections.action('reorder').patch(select.id, {
-        target: target.id
-      });
-    }).then(() => original);
+    );
+    debug('moveCollectionMember', select, target);
+    if (!select) throw new Error('data.select document not exists.');
+    if (!target) throw new Error('data.target document not exists.');
+    await svcUserCollections.action('reorder').patch(select.id, {
+      target: target.id
+    });
+    return collection;
   }
 }
 
