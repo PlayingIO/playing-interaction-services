@@ -17,34 +17,34 @@ export default function (options = {}) {
         cache(options.cache)
       ],
       get: [
-        hooks.prefixSelect('document')
+        hooks.prefixSelect('subject')
       ],
       find: [
-        hooks.prefixSelect('document')
+        hooks.prefixSelect('subject')
       ],
       create: [
       ],
       update: [
-        hooks.depopulate('document', 'user')
+        hooks.depopulate('subject', 'user')
       ],
       patch: [
-        hooks.depopulate('document', 'user')
+        hooks.depopulate('subject', 'user')
       ]
     },
     after: {
       all: [
         hooks.populate('favorite', { service: 'favorites' }),
-        hooks.populate('document', { path: '@type', fallThrough: ['headers', 'user'] }), // absolute path
+        hooks.populate('subject', { path: '@type', fallThrough: ['headers', 'user'] }), // absolute path
         hooks.populate('user', { service: 'users' }),
         cache(options.cache),
         hooks.presentEntity(UserFavoriteEntity, options.entities),
         hooks.responder()
       ],
       find: [
-        hooks.flatMerge('document')
+        hooks.flatMerge('subject')
       ],
       get: [
-        hooks.flatMerge('document')
+        hooks.flatMerge('subject')
       ],
       create: [
         feeds.notify('favorite.create', notifiers)

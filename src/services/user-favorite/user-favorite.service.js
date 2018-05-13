@@ -30,17 +30,17 @@ export class UserFavoriteService extends Service {
     return super.find(params);
   }
 
-  async _getDocuments (ids, params) {
+  async _getSubjects (ids, params) {
     const svcDocuments = this.app.service('documents');
-    const documents = await svcDocuments.find({
+    const subjects = await svcDocuments.find({
       query: { _id: { $in: ids }, $select: ['type'] },
       user: params.user,
       paginate: false,
     });
-    if (!documents || documents.length !== ids.length) {
-      throw new Error('some data.document(s) not exists');
+    if (!subjects || subjects.length !== ids.length) {
+      throw new Error('some data.subject(s) not exists');
     }
-    return documents;
+    return subjects;
   }
 
   async _getFavorite (params) {
@@ -58,47 +58,47 @@ export class UserFavoriteService extends Service {
   async get (id, params) {
     params = { query: {}, ...params };
     assert(params.query.user, 'params.query.user not provided');
-    params.query.document = params.query.document || id;
+    params.query.subject = params.query.subject || id;
     return super.first(params);
   }
 
   async create (data, params) {
-    assert(data.document || data.documents, 'data.document(s) not provided.');
+    assert(data.subject || data.subjects, 'data.subject(s) not provided.');
 
-    const ids = [].concat(data.document || data.documents);
-    const [documents, favorite] = await Promise.all([
-      this._getDocuments(ids, params),
+    const ids = [].concat(data.subject || data.subjects);
+    const [subjects, favorite] = await Promise.all([
+      this._getSubjects(ids, params),
       this._getFavorite(params)
     ]);
 
-    params.locals = { subjects: documents }; // for notifiers
+    params.locals = { subjects: subjects }; // for notifiers
 
-    return Promise.all(fp.map(doc =>
+    return Promise.all(fp.map(subject =>
       super.upsert(null, {
-        document: doc.id,
+        subject: subject.id,
         favorite: favorite.id,
-        type: doc.type,
+        type: subject.type,
         user: params.user.id
-      }), documents));
+      }), subjects));
   }
 
   async remove (id, params) {
     if (id && id !== 'null') {
       return super.remove(id, params);
     } else {
-      assert(params.query.document, 'query.document not provided.');
+      assert(params.query.subject, 'query.subject not provided.');
 
-      const ids = params.query.document.split(',');
-      const [documents, favorite] = await Promise.all([
-        this._getDocuments(ids, params),
+      const ids = params.query.subject.split(',');
+      const [subjects, favorite] = await Promise.all([
+        this._getSubjects(ids, params),
         this._getFavorite(params)
       ]);
 
-      params.locals = { subjects: documents }; // for notifiers
+      params.locals = { subjects: subjects }; // for notifiers
 
       return super.remove(null, {
         query: {
-          document: { $in: ids },
+          subject: { $in: ids },
           favorite: favorite.id,
           user: params.user.id
         },
