@@ -40,11 +40,12 @@ export class UserFavoriteService extends Service {
 
   async create (data, params) {
     assert(data.subject || data.subjects, 'data.subject(s) not provided.');
+    data.type = data.type || 'document';
 
     const ids = [].concat(data.subject || data.subjects);
     const [subjects, favorite] = await Promise.all([
-      getSubjects(this.app, ids, params),
-      getFavorite(this.app, params)
+      getSubjects(this.app, data.type, ids, params),
+      getFavorite(this.app, data.type, params)
     ]);
 
     params.locals = { subjects: subjects }; // for notifiers
@@ -63,11 +64,12 @@ export class UserFavoriteService extends Service {
       return super.remove(id, params);
     } else {
       assert(params.query.subject, 'query.subject is not provided.');
+      params.query.type = params.query.type || 'document';
 
       const ids = params.query.subject.split(',');
       const [subjects, favorite] = await Promise.all([
-        getSubjects(this.app, ids, params),
-        getFavorite(this.app, params)
+        getSubjects(this.app, params.query.type, ids, params),
+        getFavorite(this.app, params.query.type, params)
       ]);
 
       params.locals = { subjects: subjects }; // for notifiers
