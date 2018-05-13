@@ -23,7 +23,7 @@ export class UserCollectionService extends Service {
     this.hooks(defaultHooks(this.options));
   }
 
-  find (params) {
+  async find (params) {
     params = { query: {}, ...params };
     params.query.user = params.query.user || params.user.id;
     params.query.$sort = params.query.$sort || { position: 1 };
@@ -31,7 +31,7 @@ export class UserCollectionService extends Service {
     return super.find(params);
   }
 
-  get (id, params) {
+  async get (id, params) {
     params = { query: {}, ...params };
     params.query.subject = params.query.subject || id;
     params.query.user = params.query.user || params.user.id;
