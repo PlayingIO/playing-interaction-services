@@ -1,6 +1,31 @@
 import assert from 'assert';
 import { helpers } from 'mostly-feathers-mongoose';
 
+export const getSubjects = async (app, ids, params) => {
+  const svcDocuments = app.service('documents');
+  const subjects = await svcDocuments.find({
+    query: { _id: { $in: ids }, $select: ['type'] },
+    user: params.user,
+    paginate: false,
+  });
+  if (!subjects || subjects.length !== ids.length) {
+    throw new Error('some data.subject(s) not exists');
+  }
+  return subjects;
+};
+
+export const getFavorite = async (app, params) => {
+  const svcFavorites = app.service('favorites');
+  const favorite = await svcFavorites.get('me', {
+    query: { $select: ['id'] },
+    user: params.user,
+  });
+  if (!favorite) {
+    throw new Error('favorite collection not exists');
+  }
+  return favorite;
+};
+
 // create a interaction activity
 export const createInteractionActivity = (context, interaction, subject, custom) => {
   const actor = helpers.getId(interaction.user);
