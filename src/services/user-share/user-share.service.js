@@ -2,15 +2,17 @@ import assert from 'assert';
 import makeDebug from 'debug';
 import { Service, createService } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
-import { plural } from 'pluralize';
+import shortid from 'shortid';
 
 import UserShareModel from '../../models/user-share.model';
 import defaultHooks from './user-share.hooks';
+import { getSubjects } from '../../helpers';
 
 const debug = makeDebug('playing:interaction-services:user-shares');
 
 const defaultOptions = {
-  name: 'user-shares'
+  name: 'user-shares',
+  payloads: ['os', 'osVersion', 'deviceType', 'app', 'appVersion']
 };
 
 export class UserShareService extends Service {
@@ -31,27 +33,24 @@ export class UserShareService extends Service {
     return super.first(params);
   }
 
-  create (data, params) {
+  async create (data, params) {
     assert(data.subject || data.subjects, 'data.subject(s) not provided.');
-    assert(data.type, 'data.type not provided');
-    assert(data.user || data.group, 'data.user or data.group not provided.');
+    data.type = data.type || 'document';
+    const payload = fp.pick(this.options.payloads, data);
 
-    const svcSubjects = this.app.service(plural(data.type));
-    
     const ids = [].concat(data.subject || data.subjects);
+    const subjects = await getSubjects(this.app, data.type, ids, params);
 
-    const getSubjects = () => svcSubjects.find({
-      query: { _id: { $in: ids }, $select: ['type'] },
-      paginate: false,
-    });
-
-    return getSubjects().then((docs) => {
-      if (!docs || docs.length !== ids.length) throw new Error('some data.subject(s) not exists');
-      return Promise.all(docs.map((doc) => {
-        const share = fp.merge({ subject: doc.id, type: doc.type }, data);
-        return super.create(share);
-      }));
-    });
+    return Promise.all(fp.map(subject => {
+      return super.upsert(null, {
+        hashid: shortid.generate(),
+        subject: subject.id,
+        type: subject.type,
+        user: params.user.id,
+        payload: payload,
+        group: data.group
+      });
+    }, subjects));
   }
 }
 
