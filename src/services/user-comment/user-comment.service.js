@@ -2,10 +2,10 @@ import assert from 'assert';
 import makeDebug from 'debug';
 import { Service, createService } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
-import { plural } from 'pluralize';
 
 import UserCommentModel from '../../models/user-comment.model';
 import defaultHooks from './user-comment.hooks';
+import { getSubjects } from '../../helpers';
 
 const debug = makeDebug('playing:interaction-services:user-comments');
 
@@ -30,38 +30,45 @@ export class UserCommentService extends Service {
     return this.find(params);
   }
 
-  create (data, params) {
+  async create (data, params) {
     assert(data.subject || data.subjects, 'data.subject(s) not provided.');
-    assert(data.type, 'data.type not provided');
-    assert(data.user, 'data.user not provided.');
     assert(data.comment, 'data.comment not provided.');
+    data.type = data.type || 'document';
 
-    const svcSubjects = this.app.service(plural(data.type));
-    
     const ids = [].concat(data.subject || data.subjects);
+    const subjects = await getSubjects(this.app, data.type, ids, params);
 
-    const getSubjects = () => svcSubjects.find({
-      query: { _id: { $in: ids }, $select: ['type'] },
-      paginate: false,
-    });
-
-    return getSubjects().then((docs) => {
-      if (!docs || docs.length !== ids.length) throw new Error('some data.subject(s) not exists');
-      return Promise.all(docs.map((doc) => {
-        const comment = fp.merge({ subject: doc.id, type: doc.type }, data);
-        return super.create(comment);
-      }));
-    });
+    return Promise.all(fp.map(subject => {
+      return super.upsert(null, {
+        subject: subject.id,
+        type: subject.type,
+        comment: data.comment,
+        commentedAt: data.commentedAt,
+        audiences: data.audiences,
+        user: params.user.id
+      });
+    }, subjects));
   }
 
-  remove (id, params) {
+  async remove (id, params) {
     params = { query: {}, ...params };
-    assert(params.query.userId || params.query.user, 'params.query.userId not provided');
-    assert(params.query.commentedAt, 'params.query.commentedAt not provided');
-    params.query.subject = params.query.subject || id;
+    assert(params.query.commentedAt, 'params.query.commentedAt is not provided');
+    const type = params.query.type || 'document';
+    const subjectId = params.query.subject || id;
+    const userId = params.query.userId || params.user.id;
+
+    const subjects = await getSubjects(this.app, type, [subjectId], params);
+    const subject = subjects[0];
+    // TODO check with permission rules
+    if (!fp.idEquals(userId, params.user.id) ||
+        !fp.idEquals(subject.creator, params.user.id))
+    {
+      throw new Error('Delete comment is not allowed');
+    }
+
     return super.remove(null, { query: {
-      subject: params.query.subject,
-      user: params.query.userId || params.query.user,
+      subject: subjectId,
+      user: subjectId,
       commentedAt: params.query.commentedAt,
       $multi: true
     }});
