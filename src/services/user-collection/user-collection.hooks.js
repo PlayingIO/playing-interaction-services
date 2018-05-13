@@ -10,8 +10,6 @@ export default function (options = {}) {
     before: {
       all: [
         hooks.authenticate('jwt', options.auth),
-        iff(isProvider('external'),
-          queryWithCurrentUser({ idField: 'id', as: 'user' })),
         cache(options.cache)
       ],
       get: [
@@ -21,17 +19,11 @@ export default function (options = {}) {
         hooks.prefixSelect('subject', { excepts: ['collect', 'user']})
       ],
       create: [
-        iff(isProvider('external'),
-          associateCurrentUser({ idField: 'id', as: 'user' }))
       ],
       update: [
-        iff(isProvider('external'),
-          associateCurrentUser({ idField: 'id', as: 'user' })),
         hooks.depopulate('subject', 'user')
       ],
       patch: [
-        iff(isProvider('external'),
-          associateCurrentUser({ idField: 'id', as: 'user' })),
         hooks.depopulate('subject', 'user')
       ]
     },

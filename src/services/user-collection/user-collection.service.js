@@ -25,6 +25,7 @@ export class UserCollectionService extends Service {
 
   find (params) {
     params = { query: {}, ...params };
+    params.query.user = params.user.id;
     params.query.$sort = params.query.$sort || { position: 1 };
 
     return super.find(params);
@@ -32,15 +33,14 @@ export class UserCollectionService extends Service {
 
   get (id, params) {
     params = { query: {}, ...params };
-    assert(params.query.user, 'params.query.user not provided');
     params.query.subject = params.query.subject || id;
+    params.query.user = params.user.id;
     return this.first(params);
   }
 
   create (data, params) {
     assert(data.collect, 'data.collect not provided.');
     assert(data.subject || data.subjects, 'data.subject(s) not provided.');
-    assert(data.user, 'data.user not provided.');
 
     const svcDocuments = this.app.service('documents');
     const svcCollections = this.app.service('collections');
@@ -62,7 +62,7 @@ export class UserCollectionService extends Service {
           subject: doc.id,
           collect: collection.id,
           type: doc.type,
-          user: data.user
+          user: params.user.id
         });
       }));
     });
@@ -74,13 +74,12 @@ export class UserCollectionService extends Service {
     } else {
       assert(params.query.collect, 'params.query.collect not provided.');
       assert(params.query.subject, 'query.subject not provided.');
-      assert(params.query.user, 'query.user not provided.');
 
       return super.remove(null, {
         query: {
           subject: { $in: params.query.subject.split(',') },
           collect: params.query.collect,
-          user: params.query.user
+          user: params.user.id
         },
         provider: params.provider,
         $multi: true
