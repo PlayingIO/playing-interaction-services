@@ -15,39 +15,35 @@ export default function (options = {}) {
         cache(options.cache)
       ],
       get: [
-        hooks.prefixSelect('document')
+        hooks.prefixSelect('subject')
       ],
       find: [
-        hooks.prefixSelect('document')
+        hooks.prefixSelect('subject')
       ],
       create: [
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'user' }))
       ],
       update: [
-        iff(isProvider('external'),
-          associateCurrentUser({ idField: 'id', as: 'user' })),
-        hooks.depopulate('document', 'user')
+        hooks.depopulate('subject', 'user')
       ],
       patch: [
-        iff(isProvider('external'),
-          associateCurrentUser({ idField: 'id', as: 'user' })),
-        hooks.depopulate('document', 'user')
+        hooks.depopulate('subject', 'user')
       ]
     },
     after: {
       all: [
-        hooks.populate('document', { path: '@type', fallThrough: ['headers'] }), // absolute path
+        hooks.populate('subject', { path: '@type', fallThrough: ['headers'] }), // absolute path
         hooks.populate('user', { service: 'users' }),
         cache(options.cache),
         hooks.presentEntity(UserLikeEntity, options.entities),
         hooks.responder()
       ],
       find: [
-        hooks.flatMerge('document')
+        hooks.flatMerge('subject')
       ],
       get: [
-        hooks.flatMerge('document')
+        hooks.flatMerge('subject')
       ]
     }
   };

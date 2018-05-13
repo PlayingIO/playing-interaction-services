@@ -5,6 +5,7 @@ import fp from 'mostly-func';
 
 import UserLikeModel from '../../models/user-like.model';
 import defaultHooks from './user-like.hooks';
+import { getSubjects } from '../../helpers';
 
 const debug = makeDebug('playing:interaction-services:user-likes');
 
@@ -26,48 +27,39 @@ export class UserLikeService extends Service {
   get (id, params) {
     params = { query: {}, ...params };
     assert(params.query.user, 'params.query.user not provided');
-    params.query.document = params.query.document || id;
+    params.query.subject = params.query.subject || id;
     return super.first(params);
   }
 
-  create (data, params) {
-    assert(data.document || data.documents, 'data.document(s) not provided.');
-    assert(data.user, 'data.user not provided.');
+  async create (data, params) {
+    assert(data.subject || data.subjects, 'data.subject(s) not provided.');
 
-    const svcDocuments = this.app.service('documents');
-    
-    const ids = [].concat(data.document || data.documents);
+    const ids = [].concat(data.subject || data.subjects);
+    const subjects = await getSubjects(this.app, ids, params);
 
-    const getDocuments = () => svcDocuments.find({
-      query: { _id: { $in: ids }, $select: ['type'] },
-      paginate: false,
-    });
-
-    return getDocuments().then((docs) => {
-      if (!docs || docs.length !== ids.length) throw new Error('some data.document(s) not exists');
-      return Promise.all(docs.map((doc) => {
-        return super.upsert(null, {
-          document: doc.id,
-          type: doc.type,
-          user: data.user
-        });
-      }));
-    });
+    return Promise.all(fp.map(subject => {
+      return super.upsert(null, {
+        subject: subject.id,
+        type: subject.type,
+        user: params.user.id
+      });
+    }, subjects));
   }
 
-  remove (id, params) {
-    if (id && id !== 'null') {
+  async remove (id, params) {
+    if (id) {
       return super.remove(id, params);
     } else {
-      assert(params.query.document, 'query.document not provided.');
-      assert(params.query.user, 'query.user not provided.');
+      assert(params.query.subject, 'query.subject is not provided.');
+
+      const ids = params.query.subject.split(',');
+      const subjects = await getSubjects(this.app, ids, params);
 
       return super.remove(null, {
         query: {
-          document: { $in: params.query.document.split(',') },
+          subject: { $in: ids },
           user: params.query.user
         },
-        provider: params.provider,
         $multi: true
       });
     }
