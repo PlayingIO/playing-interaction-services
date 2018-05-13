@@ -1,4 +1,3 @@
-import assert from 'assert';
 import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
 import { iff, isProvider } from 'feathers-hooks-common';
 import { hooks } from 'mostly-feathers-mongoose';
@@ -6,27 +5,7 @@ import { cache } from 'mostly-feathers-cache';
 import { hooks as content } from 'playing-content-services';
 
 import CollectionEntity from '../../entities/collection.entity';
-
-const addCollectionEnrichers = (options) => (hook) => {
-  assert(hook.type === 'after', `addCollectionMetadata must be used as a 'after' hook.`);
-
-  // If no enrichers-document header then skip this hook
-  if (!(hook.params.headers && hook.params.headers['enrichers-document'])) {
-    return hook;
-  }
-
-  let enrichers = hook.params.headers['enrichers-document'].split(',').map(e => e.trim());
-  let results = [].concat(hook.result && hook.result.data || hook.result || []);
-  
-  if (enrichers.indexOf('permissions') > -1) {
-    results.forEach((doc) => {
-      doc.metadata = doc.metadata || {};
-      doc.metadata.permissions = doc.metadata.permissions || [];
-      doc.metadata.permissions.push('ReadCanCollect');
-    });
-  }
-  return hook;
-};
+import { collectionEnrichers } from '../../hooks';
 
 export default function (options = {}) {
   return {
@@ -73,7 +52,7 @@ export default function (options = {}) {
         hooks.populate('ancestors'), // with typed id
         hooks.populate('creator', { service: 'users' }),
         content.documentEnrichers(options),
-        addCollectionEnrichers(options),
+        collectionEnrichers(options),
         cache(options.cache),
         hooks.presentEntity(CollectionEntity, options.entities),
         hooks.responder()

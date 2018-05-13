@@ -36,13 +36,13 @@ export class CollectionService extends Service {
 
     const [select, target] = await Promise.all(
       [data.select, data.target].map(item => {
-        return svcUserCollections.get(null, { query: {
-          subject: item,
-          collect: collection.id
-        }});
+        return svcUserCollections.get(null, {
+          query: { subject: item, collect: collection.id },
+          user: params.user
+        });
       })
     );
-    debug('moveCollectionMember', select, target);
+    debug('move collection member', select, target);
     if (!select) throw new Error('data.select document not exists.');
     if (!target) throw new Error('data.target document not exists.');
     await svcUserCollections.action('reorder').patch(select.id, {
