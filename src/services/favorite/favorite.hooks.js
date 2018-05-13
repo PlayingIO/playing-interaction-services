@@ -29,7 +29,6 @@ export default function (options = {}) {
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'creator' })),
         hooks.depopulate('parent'),
-        hooks.addRouteObject('favorite', { service: 'favorites', field: 'id' }),
         hooks.discardFields('metadata', 'path', 'createdAt', 'updatedAt', 'destroyedAt')
       ]
     },
