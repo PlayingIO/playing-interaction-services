@@ -33,9 +33,10 @@ export class UserLikeService extends Service {
 
   async create (data, params) {
     assert(data.subject || data.subjects, 'data.subject(s) not provided.');
+    data.type = data.type || 'document';
 
     const ids = [].concat(data.subject || data.subjects);
-    const subjects = await getSubjects(this.app, ids, params);
+    const subjects = await getSubjects(this.app, data.type, ids, params);
 
     return Promise.all(fp.map(subject => {
       return super.upsert(null, {
@@ -51,9 +52,10 @@ export class UserLikeService extends Service {
       return super.remove(id, params);
     } else {
       assert(params.query.subject, 'query.subject is not provided.');
+      params.query.type = params.query.type || 'document';
 
       const ids = params.query.subject.split(',');
-      const subjects = await getSubjects(this.app, ids, params);
+      const subjects = await getSubjects(this.app, params.query.type, ids, params);
 
       return super.remove(null, {
         query: {
