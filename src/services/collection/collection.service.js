@@ -22,10 +22,6 @@ export class CollectionService extends Service {
     super.setup(app);
     this.hooks(defaultHooks(this.options));
   }
-  
-  suggestion (id, data, params) {
-    return super.find(params);
-  }
 
   /*
    * reorder items in the collection
