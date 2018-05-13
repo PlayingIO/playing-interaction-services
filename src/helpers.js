@@ -15,6 +15,18 @@ export const getSubjects = async (app, type, ids, params) => {
   return subjects;
 };
 
+export const getCollection = async (app, id, params) => {
+  const svcCollections = app.service('favorites');
+  const collection = await svcCollections.get(id, {
+    query: { $select: ['id'] },
+    user: params.user,
+  });
+  if (!collection) {
+    throw new Error('collection is not exists');
+  }
+  return collection;
+};
+
 export const getFavorite = async (app, params) => {
   const svcFavorites = app.service('favorites');
   const favorite = await svcFavorites.get('me', {
@@ -22,7 +34,7 @@ export const getFavorite = async (app, params) => {
     user: params.user,
   });
   if (!favorite) {
-    throw new Error('favorite collection not exists');
+    throw new Error('favorite collection is not exists');
   }
   return favorite;
 };
