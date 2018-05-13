@@ -3,15 +3,16 @@ import makeDebug from 'debug';
 import mongoose from 'mongoose';
 import { Service, createService } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
-import { plural } from 'pluralize';
 
 import UserFeedbackModel from '../../models/user-feedback.model';
 import defaultHooks from './user-feedback.hooks';
+import { getSubjects } from '../../helpers';
 
 const debug = makeDebug('playing:interaction-services:user-feedbacks');
 
 const defaultOptions = {
-  name: 'user-feedbacks'
+  name: 'user-feedbacks',
+  payloads: ['os', 'osVersion', 'deviceType', 'app', 'appVersion']
 };
 
 export class UserFeedbackService extends Service {
@@ -32,35 +33,28 @@ export class UserFeedbackService extends Service {
     return super.first(params);
   }
 
-  create (data, params) {
+  async create (data, params) {
     assert(data.subject || data.subjects, 'data.subject(s) not provided.');
-    assert(data.user || data.group, 'data.user or data.group not provided.');
-    
+    const payload = fp.pick(this.options.payloads, data);
+
     const ids = [].concat(data.subject || data.subjects);
 
-    let getSubjects = null;
+    let subjects = ids;
     if (data.type) {
-      const svcSubjects = this.app.service(plural(data.type));
-      getSubjects = svcSubjects.find({
-        query: {
-          _id: { $in: fp.map(id => mongoose.Types.ObjectId(id), ids) },
-          $select: ['type']
-        },
-        paginate: false,
-      });
-    } else {
-      getSubjects = Promise.resolve(fp.map(id => {
-        return { id };
-      }, ids));
+      subjects = await getSubjects(this.app, data.type, ids, params);
     }
 
-    return getSubjects.then((docs) => {
-      if (!docs || docs.length !== ids.length) throw new Error('some data.subject(s) not exists');
-      return Promise.all(docs.map((doc) => {
-        const feedback = fp.merge({ subject: doc.id, type: doc.type }, data);
-        return super.create(feedback);
-      }));
-    });
+    return Promise.all(fp.map(subject => {
+      return super.upsert(null, {
+        subject: subject.id,
+        type: subject.type,
+        comment: data.comment,
+        rating: data.rating,
+        tag: data.tag,
+        user: params.user.id,
+        payload: payload
+      });
+    }, subjects));
   }
 }
 
