@@ -26,15 +26,15 @@ export class UserFavoriteService extends Service {
 
   async find (params) {
     params = { query: {}, ...params };
+    params.query.user = params.query.user || params.user.id;
     params.query.$sort = params.query.$sort || { position: 1 };
-
     return super.find(params);
   }
 
   async get (id, params) {
     params = { query: {}, ...params };
-    assert(params.query.user, 'params.query.user not provided');
     params.query.subject = params.query.subject || id;
+    params.query.user = params.query.user || params.user.id;
     return super.first(params);
   }
 
@@ -45,7 +45,7 @@ export class UserFavoriteService extends Service {
     const ids = [].concat(data.subject || data.subjects);
     const [subjects, favorite] = await Promise.all([
       getSubjects(this.app, data.type, ids, params),
-      getFavorite(this.app, data.type, params)
+      getFavorite(this.app, params)
     ]);
 
     params.locals = { subjects: subjects }; // for notifiers
@@ -69,7 +69,7 @@ export class UserFavoriteService extends Service {
       const ids = params.query.subject.split(',');
       const [subjects, favorite] = await Promise.all([
         getSubjects(this.app, params.query.type, ids, params),
-        getFavorite(this.app, params.query.type, params)
+        getFavorite(this.app, params)
       ]);
 
       params.locals = { subjects: subjects }; // for notifiers
