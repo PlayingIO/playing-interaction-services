@@ -106,16 +106,6 @@ export class UserFavoriteService extends Service {
       });
     }
   }
-
-  async reorder (id, data, params) {
-    const userFavorite = params.userFavorite;
-    assert(userFavorite, 'User favorite is not exists');
-    return this.get(data.target).then((target) => {
-      if (!target) throw new Error("data.target not exists");
-      target = target.data || target;
-      return helpers.reorderPosition(this.Model, userFavorite, target.position, { classify: 'favorite' });
-    });
-  }
 }
 
 export default function init (app, options, hooks) {
