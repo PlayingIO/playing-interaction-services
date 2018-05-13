@@ -26,16 +26,9 @@ export class UserFeedbackService extends Service {
     this.hooks(defaultHooks(this.options));
   }
 
-  async find (params) {
-    params = { query: {}, ...params };
-    params.query.user = params.query.user || params.user.id;
-    return super.find(params);
-  }
-
   async get (id, params) {
     params = { query: {}, ...params };
     params.query.subject = params.query.subject || id;
-    params.query.user = params.query.user || params.user.id;
     return super.first(params);
   }
 

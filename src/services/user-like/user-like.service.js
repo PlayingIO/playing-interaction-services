@@ -24,15 +24,8 @@ export class UserLikeService extends Service {
     this.hooks(defaultHooks(this.options));
   }
 
-  async find (params) {
-    params = { query: {}, ...params };
-    params.query.user = params.query.user || params.user.id;
-    return super.find(params);
-  }
-
   async get (id, params) {
     params = { query: {}, ...params };
-    assert(params.query.user, 'params.query.user not provided');
     params.query.subject = params.query.subject || id;
     return super.first(params);
   }
