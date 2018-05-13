@@ -1,5 +1,4 @@
 import { iff, isProvider } from 'feathers-hooks-common';
-import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
 import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
 
