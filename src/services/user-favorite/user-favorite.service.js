@@ -30,6 +30,31 @@ export class UserFavoriteService extends Service {
     return super.find(params);
   }
 
+  async _getDocuments (ids, params) {
+    const svcDocuments = this.app.service('documents');
+    const documents = await svcDocuments.find({
+      query: { _id: { $in: ids }, $select: ['type'] },
+      user: params.user,
+      paginate: false,
+    });
+    if (!documents || documents.length !== ids.length) {
+      throw new Error('some data.document(s) not exists');
+    }
+    return documents;
+  }
+
+  async _getFavorite (params) {
+    const svcFavorites = this.app.service('favorites');
+    const favorite = await svcFavorites.get('me', {
+      query: { $select: ['id'] },
+      user: params.user,
+    });
+    if (!favorite) {
+      throw new Error('favorite collection not exists');
+    }
+    return favorite;
+  }
+
   async get (id, params) {
     params = { query: {}, ...params };
     assert(params.query.user, 'params.query.user not provided');
@@ -39,31 +64,12 @@ export class UserFavoriteService extends Service {
 
   async create (data, params) {
     assert(data.document || data.documents, 'data.document(s) not provided.');
-    assert(data.user, 'data.user not provided.');
 
-    const svcDocuments = this.app.service('documents');
-    const svcFavorites = this.app.service('favorites');
-    
     const ids = [].concat(data.document || data.documents);
-
-    const getDocuments = (ids) => svcDocuments.find({
-      query: { _id: { $in: ids }, $select: ['type'] },
-      paginate: false,
-    });
-    const getFavorite = (user, id) => id
-      ? svcFavorites.get(id, { query: { $select: ['id'] } })
-      : svcFavorites.get('me', { query: { creator: user, $select: ['id'] } });
-
     const [documents, favorite] = await Promise.all([
-      getDocuments(ids),
-      getFavorite(data.user, data.favorite)
+      this._getDocuments(ids, params),
+      this._getFavorite(params)
     ]);
-    if (!documents || documents.length !== ids.length) {
-      throw new Error('some data.document(s) not exists');
-    }
-    if (!favorite) {
-      throw new Error('favorite collection not exists');
-    }
 
     params.locals = { subjects: documents }; // for notifiers
 
@@ -72,7 +78,7 @@ export class UserFavoriteService extends Service {
         document: doc.id,
         favorite: favorite.id,
         type: doc.type,
-        user: data.user
+        user: params.user.id
       }), documents));
   }
 
@@ -80,27 +86,22 @@ export class UserFavoriteService extends Service {
     if (id && id !== 'null') {
       return super.remove(id, params);
     } else {
-      assert(params.query.favorite, 'params.query.favorite not provided.');
       assert(params.query.document, 'query.document not provided.');
-      assert(params.query.user, 'query.user not provided.');
-
-      const svcDocuments = this.app.service('documents');
 
       const ids = params.query.document.split(',');
-      const documents = await svcDocuments.find({
-        query: { _id: { $in: ids }, $select: ['type'] },
-        paginate: false,
-      });
+      const [documents, favorite] = await Promise.all([
+        this._getDocuments(ids, params),
+        this._getFavorite(params)
+      ]);
 
       params.locals = { subjects: documents }; // for notifiers
 
       return super.remove(null, {
         query: {
           document: { $in: ids },
-          favorite: params.query.favorite,
-          user: params.query.user
+          favorite: favorite.id,
+          user: params.user.id
         },
-        provider: params.provider,
         $multi: true
       });
     }

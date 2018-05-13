@@ -23,18 +23,11 @@ export default function (options = {}) {
         hooks.prefixSelect('document')
       ],
       create: [
-        iff(isProvider('external'),
-          associateCurrentUser({ idField: 'id', as: 'user' }))
       ],
       update: [
-        iff(isProvider('external'),
-          associateCurrentUser({ idField: 'id', as: 'user' })),
         hooks.depopulate('document', 'user')
       ],
       patch: [
-        iff(isProvider('external'),
-          associateCurrentUser({ idField: 'id', as: 'user' })),
-        hooks.addRouteObject('userFavorite', { service: 'user-favorites' }),
         hooks.depopulate('document', 'user')
       ]
     },
