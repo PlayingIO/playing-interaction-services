@@ -5,6 +5,7 @@ import fp from 'mostly-func';
 
 import UserCollectionModel from '../../models/user-collection.model';
 import defaultHooks from './user-collection.hooks';
+import { getSubjects, getCollection } from '../../helpers';
 
 const debug = makeDebug('playing:interaction-services:user-collections');
 
@@ -25,60 +26,52 @@ export class UserCollectionService extends Service {
 
   async find (params) {
     params = { query: {}, ...params };
-    params.query.user = params.query.user || params.user.id;
     params.query.$sort = params.query.$sort || { position: 1 };
-
     return super.find(params);
   }
 
   async get (id, params) {
     params = { query: {}, ...params };
     params.query.subject = params.query.subject || id;
-    params.query.user = params.query.user || params.user.id;
     return this.first(params);
   }
 
-  create (data, params) {
+  async create (data, params) {
     assert(data.collect, 'data.collect not provided.');
     assert(data.subject || data.subjects, 'data.subject(s) not provided.');
 
-    const svcDocuments = this.app.service('documents');
-    const svcCollections = this.app.service('collections');
-    
     const ids = [].concat(data.subject || data.subjects);
-
-    const getDocuments = () => svcDocuments.find({ query: { _id: { $in: ids } } });
-    const getCollection = () => svcCollections.get(data.collect);
-
-    return Promise.all([
-      getDocuments(),
-      getCollection()
-    ]).then(([results, collection]) => {
-      const docs = results && results.data || results;
-      if (!docs || docs.length !== ids.length) throw new Error('some data.subject(s) not exists');
-      if (!collection) throw new Error('parent collection not exists');
-      return Promise.all(docs.map((doc) => {
-        return super.upsert(null, {
-          subject: doc.id,
-          collect: collection.id,
-          type: doc.type,
-          user: params.user.id
-        });
-      }));
-    });
+    const [subjects, collection] = await Promise.all([
+      getSubjects(this.app, data.type, ids, params),
+      getCollection(this.app, data.collect, params)
+    ]);
+    return Promise.all(fp.map(subject => {
+      return super.upsert(null, {
+        subject: subject.id,
+        collect: collection.id,
+        type: subject.type,
+        user: params.user.id
+      });
+    }, subjects));
   }
 
-  remove (id, params) {
-    if (id && id !== 'null') {
+  async remove (id, params) {
+    if (id) {
       return super.remove(id, params);
     } else {
       assert(params.query.collect, 'params.query.collect not provided.');
       assert(params.query.subject, 'query.subject not provided.');
 
+      const ids = params.query.subject.split(',');
+      const [subjects, collection] = await Promise.all([
+        getSubjects(this.app, params.query.type, ids, params),
+        getCollection(this.app, params.query.collect, params)
+      ]);
+
       return super.remove(null, {
         query: {
-          subject: { $in: params.query.subject.split(',') },
-          collect: params.query.collect,
+          subject: { $in: ids },
+          collect: collection.id,
           user: params.user.id
         },
         provider: params.provider,
@@ -87,12 +80,15 @@ export class UserCollectionService extends Service {
     }
   }
 
-  reorder (id, data, params, original) {
-    return this.get(data.target).then((target) => {
-      if (!target) throw new Error("data.target not exists");
-      target = target.data || target;
-      return helpers.reorderPosition(this.Model, original, target.position, { classify: 'collect' });
-    });
+  async reorder (id, data, params) {
+    const [original, target] = await Promise.all([
+      this.get(params.primary),
+      this.get(data.target)
+    ]);
+    assert(original, 'original collection is not exists');
+    assert(target, 'target collection is not exists');
+
+    return helpers.reorderPosition(this.Model, original, target.position, { classify: 'collect' });
   }
 }
 
