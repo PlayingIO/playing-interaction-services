@@ -25,7 +25,7 @@ export class UserCollectionService extends Service {
 
   find (params) {
     params = { query: {}, ...params };
-    params.query.user = params.user.id;
+    params.query.user = params.query.user || params.user.id;
     params.query.$sort = params.query.$sort || { position: 1 };
 
     return super.find(params);
@@ -34,7 +34,7 @@ export class UserCollectionService extends Service {
   get (id, params) {
     params = { query: {}, ...params };
     params.query.subject = params.query.subject || id;
-    params.query.user = params.user.id;
+    params.query.user = params.query.user || params.user.id;
     return this.first(params);
   }
 

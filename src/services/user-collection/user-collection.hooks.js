@@ -1,5 +1,5 @@
 import { iff, isProvider } from 'feathers-hooks-common';
-import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
+import { queryWithCurrentUser } from 'feathers-authentication-hooks';
 import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
 
@@ -13,9 +13,13 @@ export default function (options = {}) {
         cache(options.cache)
       ],
       get: [
+        iff(isProvider('external'),
+          queryWithCurrentUser({ idField: 'id', as: 'user' })),
         hooks.prefixSelect('subject', { excepts: ['collect', 'user']})
       ],
       find: [
+        iff(isProvider('external'),
+          queryWithCurrentUser({ idField: 'id', as: 'user' })),
         hooks.prefixSelect('subject', { excepts: ['collect', 'user']})
       ],
       create: [
