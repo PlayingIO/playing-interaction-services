@@ -22,34 +22,6 @@ export class CollectionService extends Service {
     super.setup(app);
     this.hooks(defaultHooks(this.options));
   }
-
-  /*
-   * move/reorder items in the collection
-   */
-  async move (id, data, params) {
-    const collection = params.collection;
-    assert(collection, 'collection is not exists');
-    assert(data.select, 'data.select is not provided.');
-    assert(data.target, 'data.target is not provided.');
-
-    const svcUserCollections = this.app.service('user-collections');
-
-    const [select, target] = await Promise.all(
-      [data.select, data.target].map(item => {
-        return svcUserCollections.get(null, {
-          query: { subject: item, collect: collection.id },
-          user: params.user
-        });
-      })
-    );
-    debug('move collection member', select, target);
-    if (!select) throw new Error('data.select document not exists.');
-    if (!target) throw new Error('data.target document not exists.');
-    await svcUserCollections.action('reorder').patch(select.id, {
-      target: target.id
-    });
-    return collection;
-  }
 }
 
 export default function init (app, options, hooks) {

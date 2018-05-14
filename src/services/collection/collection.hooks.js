@@ -38,8 +38,6 @@ export default function (options = {}) {
       patch: [
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'creator' })),
-        iff(hooks.isAction('move'),
-          hooks.addRouteObject('collection', { service: 'collections', field: 'id' })),
         hooks.depopulate('parent'),
         hooks.discardFields('metadata', 'ancestors', 'creator', 'createdAt', 'updatedAt', 'destroyedAt'),
         content.computePath({ type: 'collection' }),
