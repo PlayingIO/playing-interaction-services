@@ -12,12 +12,12 @@ export default function (options = {}) {
         hooks.authenticate('jwt', options.auth),
         cache(options.cache)
       ],
-      get: [
+      find: [
         iff(isProvider('external'),
           queryWithCurrentUser({ idField: 'id', as: 'user' })),
         hooks.prefixSelect('subject')
       ],
-      find: [
+      get: [
         iff(isProvider('external'),
           queryWithCurrentUser({ idField: 'id', as: 'user' })),
         hooks.prefixSelect('subject')
