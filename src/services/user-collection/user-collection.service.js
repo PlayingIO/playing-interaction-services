@@ -26,14 +26,16 @@ export class UserCollectionService extends Service {
 
   async find (params) {
     params = { query: {}, ...params };
+    assert(params.query.collect, 'collect is not provided.');
     params.query.$sort = params.query.$sort || { position: 1 };
     return super.find(params);
   }
 
   async get (id, params) {
     params = { query: {}, ...params };
-    params.query.subject = params.query.subject || id;
-    return this.first(params);
+    params.query.collect = params.query.collect || id;
+    params.query.$sort = params.query.$sort || { position: 1 };
+    return this.find(params);
   }
 
   async create (data, params) {
