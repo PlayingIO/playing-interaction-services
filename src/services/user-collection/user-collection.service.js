@@ -82,15 +82,22 @@ export class UserCollectionService extends Service {
     });
   }
 
-  async reorder (id, data, params) {
-    const [original, target] = await Promise.all([
-      this.get(params.primary),
-      this.get(data.target)
-    ]);
-    assert(original, 'original collection is not exists');
-    assert(target, 'target collection is not exists');
+  /*
+   * move positions of members in the collection
+   */
+  async move (id, data, params) {
+    assert(data.select, 'data.select is not provided.');
+    assert(data.target, 'data.target is not provided.');
 
-    return helpers.reorderPosition(this.Model, original, target.position, { classify: 'collect' });
+    debug('move collection member', id, data.select, data.target);
+    const [select, target] = await Promise.all([
+      this.get(id, { query: { subject: data.select, user: params.user.id } }),
+      this.get(id, { query: { subject: data.target, user: params.user.id } })
+    ]);
+    assert(select, 'select item is not exists');
+    assert(target, 'target item is not exists');
+
+    return helpers.reorderPosition(this.Model, select, target.position, { classify: 'collect' });
   }
 }
 
