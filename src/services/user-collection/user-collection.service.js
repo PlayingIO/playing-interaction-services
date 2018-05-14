@@ -97,7 +97,10 @@ export class UserCollectionService extends Service {
     assert(select, 'select item is not exists');
     assert(target, 'target item is not exists');
 
-    return helpers.reorderPosition(this.Model, select, target.position, { classify: 'collect' });
+    return helpers.reorderPosition(this.Model, select, target.position, {
+      idField: 'subject',
+      classify: 'collect'
+    });
   }
 }
 
