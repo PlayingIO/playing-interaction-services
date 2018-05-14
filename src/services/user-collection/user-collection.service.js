@@ -32,10 +32,10 @@ export class UserCollectionService extends Service {
 
   async get (id, params) {
     params = { query: {}, ...params };
-    // id as collection id by default
-    params.query.collect = id || params.query.collect;
-    params.query.$sort = params.query.$sort || { position: 1 };
-    return this.find(params);
+    params.query.collect = id || params.query.collect; // id as collection id
+    assert(params.query.collect, 'collect is not provided');
+    assert(params.query.subject, 'subject is not provided');
+    return this.first(params);
   }
 
   async create (data, params) {
@@ -59,29 +59,27 @@ export class UserCollectionService extends Service {
   }
 
   async remove (id, params) {
-    if (id) {
-      return super.remove(id, params);
-    } else {
-      assert(params.query.collect, 'params.query.collect not provided.');
-      assert(params.query.subject, 'query.subject not provided.');
-      params.query.type = params.query.type || 'document';
+    params = { query: {}, ...params };
+    params.query.collect = id || params.query.collect; // id as collection id
+    assert(params.query.collect, 'params.query.collect not provided.');
+    assert(params.query.subject, 'query.subject not provided.');
+    params.query.type = params.query.type || 'document';
 
-      const ids = params.query.subject.split(',');
-      const [subjects, collection] = await Promise.all([
-        getSubjects(this.app, params.query.type, ids, params),
-        getCollection(this.app, params.query.collect, params)
-      ]);
+    const ids = params.query.subject.split(',');
+    const [subjects, collection] = await Promise.all([
+      getSubjects(this.app, params.query.type, ids, params),
+      getCollection(this.app, params.query.collect, params)
+    ]);
 
-      return super.remove(null, {
-        query: {
-          subject: { $in: ids },
-          collect: collection.id,
-          user: params.user.id
-        },
-        provider: params.provider,
-        $multi: true
-      });
-    }
+    return super.remove(null, {
+      query: {
+        subject: { $in: ids },
+        collect: collection.id,
+        user: params.user.id
+      },
+      provider: params.provider,
+      $multi: true
+    });
   }
 
   async reorder (id, data, params) {
