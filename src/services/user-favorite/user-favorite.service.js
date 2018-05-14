@@ -26,7 +26,6 @@ export class UserFavoriteService extends Service {
 
   async find (params) {
     params = { query: {}, ...params };
-    params.query.user = params.query.user || params.user.id;
     params.query.$sort = params.query.$sort || { position: 1 };
     return super.find(params);
   }
@@ -34,7 +33,6 @@ export class UserFavoriteService extends Service {
   async get (id, params) {
     params = { query: {}, ...params };
     params.query.subject = params.query.subject || id;
-    params.query.user = params.query.user || params.user.id;
     return super.first(params);
   }
 
