@@ -24,12 +24,6 @@ export class UserFavoriteService extends Service {
     this.hooks(defaultHooks(this.options));
   }
 
-  async find (params) {
-    params = { query: {}, ...params };
-    params.query.$sort = params.query.$sort || { position: 1 };
-    return super.find(params);
-  }
-
   async get (id, params) {
     params = { query: {}, ...params };
     params.query.subject = params.query.subject || id;
