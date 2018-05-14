@@ -16,7 +16,7 @@ export const getSubjects = async (app, type, ids, params) => {
 };
 
 export const getCollection = async (app, id, params) => {
-  const svcCollections = app.service('favorites');
+  const svcCollections = app.service('collections');
   const collection = await svcCollections.get(id, {
     query: { $select: ['id'] },
     user: params.user,
