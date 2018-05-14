@@ -39,6 +39,7 @@ export class UserCollectionService extends Service {
   async create (data, params) {
     assert(data.collect, 'data.collect not provided.');
     assert(data.subject || data.subjects, 'data.subject(s) not provided.');
+    data.type = data.type || 'document';
 
     const ids = [].concat(data.subject || data.subjects);
     const [subjects, collection] = await Promise.all([
@@ -61,6 +62,7 @@ export class UserCollectionService extends Service {
     } else {
       assert(params.query.collect, 'params.query.collect not provided.');
       assert(params.query.subject, 'query.subject not provided.');
+      params.query.type = params.query.type || 'document';
 
       const ids = params.query.subject.split(',');
       const [subjects, collection] = await Promise.all([

@@ -58,7 +58,7 @@ export default function (options = {}) {
         hooks.responder()
       ],
       find: [
-        hooks.assoc('documents', { service: 'user-collections', field: 'collect' })
+        hooks.assoc('members', { service: 'user-collections', field: 'collect' })
       ],
       create: [
         content.documentNotifier('document.create')
