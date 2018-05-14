@@ -48,13 +48,13 @@ export class FavoriteService extends CollectionService {
 
   async find (params) {
     params = { query: {}, ...params };
-    
+
     return super.find(params);
   }
 
   async get (id, params) {
     params = { query: {}, ...params };
-    
+
     if (id === 'me') {
       return this._getUserFavorite(params);
     } else {
