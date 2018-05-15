@@ -25,7 +25,8 @@ export default function (options = {}) {
       create: [
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'creator' })),
-        content.computePath({ type: 'collection' })
+        content.computePath({ type: 'collection' }),
+        content.computeAncestors(),
       ],
       update: [
         iff(isProvider('external'),
