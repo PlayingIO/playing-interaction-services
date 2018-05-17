@@ -20,16 +20,12 @@ export default function (options = {}) {
           associateCurrentUser({ idField: 'id', as: 'creator' }))
       ],
       update: [
-        iff(isProvider('external'),
-          associateCurrentUser({ idField: 'id', as: 'creator' })),
         hooks.depopulate('parent'),
-        hooks.discardFields('metadata', 'path', 'createdAt', 'updatedAt', 'destroyedAt')
+        hooks.discardFields('metadata', 'path', 'creator', 'createdAt', 'updatedAt', 'destroyedAt')
       ],
       patch: [
-        iff(isProvider('external'),
-          associateCurrentUser({ idField: 'id', as: 'creator' })),
         hooks.depopulate('parent'),
-        hooks.discardFields('metadata', 'path', 'createdAt', 'updatedAt', 'destroyedAt')
+        hooks.discardFields('metadata', 'path', 'creator', 'createdAt', 'updatedAt', 'destroyedAt')
       ]
     },
     after: {
