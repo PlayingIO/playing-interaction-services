@@ -31,6 +31,15 @@ export class UserAlertService extends Service {
     params.query.subject = params.query.subject || id;
     return super.first(params);
   }
+
+  async create (data, params) {
+    return super.upsert(null, {
+      $set: data,
+      user: params.user.id
+    }, {
+      user: params.user.id
+    });
+  }
 }
 
 export default function init (app, options, hooks) {
