@@ -40,6 +40,18 @@ export class UserAlertService extends Service {
       user: params.user.id
     });
   }
+
+  async update (id, data, params) {
+    return super.update(id, {
+      $set: { [id]: new Date(), ...data }
+    }, params);
+  }
+
+  async patch (id, data, params) {
+    return super.patch(id, {
+      $set: { [id]: new Date(), ...data }
+    }, params);
+  }
 }
 
 export default function init (app, options, hooks) {
