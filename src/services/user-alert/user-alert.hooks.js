@@ -25,10 +25,10 @@ export default function (options = {}) {
       create: [
       ],
       update: [
-        hooks.discard('user')
+        hooks.discardFields('user')
       ],
       patch: [
-        hooks.discard('user')
+        hooks.discardFields('user')
       ]
     },
     after: {
