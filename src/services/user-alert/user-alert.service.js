@@ -52,6 +52,12 @@ export class UserAlertService extends Service {
       $set: { [id]: new Date(), ...data }
     }, params);
   }
+
+  async remove (id, params) {
+    return super.path(id, {
+      $unset: { [id]: 0 }
+    }, params);
+  }
 }
 
 export default function init (app, options, hooks) {
