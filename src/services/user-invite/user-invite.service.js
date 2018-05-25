@@ -6,7 +6,7 @@ import { helpers as feeds } from 'playing-feed-services';
 
 import defaultHooks from './user-invite.hooks';
 
-const debug = makeDebug('playing:mission-services:users/invites');
+const debug = makeDebug('playing:interaction-services:users/invites');
 
 const defaultOptions = {
   name: 'users/invites',
@@ -60,6 +60,12 @@ export class UserInviteService {
           user: params.user
         });
       }
+      case 'team.invite': {
+        return this.app.service('teams/invites').patch(activity.id, null, {
+          primary: helpers.getId(activity.object),
+          user: params.user
+        });
+      }
       default:
         throw new Error(`Unkown activity verb: ${activity.verb}`);
     }
@@ -76,13 +82,18 @@ export class UserInviteService {
       throw new Error('No pending invite is found for this invite id.');
     }
     switch (activity.verb) {
-      case 'mission.invite': {
+      case 'mission.invite':
         return this.app.service('user-missions/invites').remove(activity.id, {
           primary: helpers.getId(activity.object),
           user: params.user,
           action: 'reject'
         });
-      }
+      case 'team.invite':
+        return this.app.service('teams/invites').remove(activity.id, {
+          primary: helpers.getId(activity.object),
+          user: params.user,
+          action: 'reject'
+        });
       default:
         throw new Error(`Unkown activity verb: ${activity.verb}`);
     }
