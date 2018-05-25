@@ -6,7 +6,7 @@ import { helpers as feeds } from 'playing-feed-services';
 
 import defaultHooks from './user-request.hooks';
 
-const debug = makeDebug('playing:mission-services:users/requests');
+const debug = makeDebug('playing:interaction-services:users/requests');
 
 const defaultOptions = {
   name: 'users/requests',
@@ -55,10 +55,22 @@ export class UserRequestService {
     if (!activity) {
       throw new Error('No pending request is found for this request id.');
     }
-    return this.app.service('user-missions/approvals').remove(activity.id, {
-      primary: helpers.getId(activity.object),
-      user: params.user
-    });
+    switch (activity.verb) {
+      case 'mission.join.request':
+      case 'mission.roles.request':
+        return this.app.service('user-missions/approvals').remove(activity.id, {
+          primary: helpers.getId(activity.object),
+          user: params.user
+        });
+      case 'team.join.request':
+      case 'team.roles.request':
+        return this.app.service('teams/approvals').remove(activity.id, {
+          primary: helpers.getId(activity.object),
+          user: params.user
+        });
+      default:
+        throw new Error(`Unkown activity verb: ${activity.verb}`);
+    }
   }
 }
 
