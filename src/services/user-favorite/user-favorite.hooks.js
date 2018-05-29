@@ -2,7 +2,7 @@ import { iff, isProvider } from 'feathers-hooks-common';
 import { queryWithCurrentUser } from 'feathers-authentication-hooks';
 import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
-import { hooks as feeds } from 'playing-feed-services';
+import feeds from 'playing-feed-common';
 
 import UserFavoriteEntity from '../../entities/user-favorite.entity';
 import notifiers from './user-favorite.notifiers';
