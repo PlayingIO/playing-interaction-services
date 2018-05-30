@@ -1,11 +1,10 @@
 import Entity from 'mostly-entity';
 import fp from 'mostly-func';
-import { entities as contents } from 'playing-content-services';
-import { DocTypes } from '../constants';
+import { BlobEntity, DocTypes } from 'playing-content-common';
 
 const FavoriteEntity = new Entity('Favorite', {
-  file: { using: contents.BlobEntity },
-  files: { using: contents.BlobEntity },
+  file: { using: BlobEntity },
+  files: { using: BlobEntity },
 });
 
 FavoriteEntity.expose('parent', (obj, options) => {

@@ -2,7 +2,7 @@ import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authenticat
 import { disallow, iff, isProvider } from 'feathers-hooks-common';
 import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
-import { hooks as content } from 'playing-content-services';
+import contents from 'playing-content-common';
 
 import FavoriteEntity from '../../entities/favorite.entity';
 
@@ -36,7 +36,7 @@ export default function (options = {}) {
         hooks.populate('parent', { service: 'documents', fallThrough: ['headers'] }),
         hooks.populate('ancestors'), // with typed id
         hooks.populate('creator', { service: 'users' }),
-        content.documentEnrichers(options),
+        contents.documentEnrichers(options),
         cache(options.cache),
         hooks.presentEntity(FavoriteEntity, options.entities)
       ]

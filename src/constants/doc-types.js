@@ -1,4 +1,4 @@
-import { DocTypes } from 'playing-content-services';
+import { DocTypes } from 'playing-content-common';
 
 export default Object.assign({
   collection: {

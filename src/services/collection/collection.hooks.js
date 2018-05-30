@@ -2,7 +2,7 @@ import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authenticat
 import { iff, isProvider } from 'feathers-hooks-common';
 import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
-import { hooks as content } from 'playing-content-services';
+import contents from 'playing-content-common';
 
 import CollectionEntity from '../../entities/collection.entity';
 import { collectionEnrichers } from '../../hooks';
@@ -25,24 +25,24 @@ export default function (options = {}) {
       create: [
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'creator' })),
-        content.computePath({ type: 'collection' }),
-        content.computeAncestors()
+        contents.computePath({ type: 'collection' }),
+        contents.computeAncestors()
       ],
       update: [
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'creator' })),
         hooks.depopulate('parent'),
         hooks.discardFields('metadata', 'ancestors', 'creator', 'createdAt', 'updatedAt', 'destroyedAt'),
-        content.computePath({ type: 'collection' }),
-        content.computeAncestors()
+        contents.computePath({ type: 'collection' }),
+        contents.computeAncestors()
       ],
       patch: [
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'creator' })),
         hooks.depopulate('parent'),
         hooks.discardFields('metadata', 'ancestors', 'creator', 'createdAt', 'updatedAt', 'destroyedAt'),
-        content.computePath({ type: 'collection' }),
-        content.computeAncestors()
+        contents.computePath({ type: 'collection' }),
+        contents.computeAncestors()
       ]
     },
     after: {
@@ -50,7 +50,7 @@ export default function (options = {}) {
         hooks.populate('parent', { service: 'documents', fallThrough: ['headers'] }),
         hooks.populate('ancestors'), // with typed id
         hooks.populate('creator', { service: 'users' }),
-        content.documentEnrichers(options),
+        contents.documentEnrichers(options),
         collectionEnrichers(options),
         cache(options.cache),
         hooks.presentEntity(CollectionEntity, options.entities),
@@ -60,7 +60,7 @@ export default function (options = {}) {
         hooks.assoc('members', { service: 'user-collections', field: 'collect' })
       ],
       create: [
-        content.documentNotifier('document.create')
+        contents.documentNotifier('document.create')
       ]
     }
   };
