@@ -1,7 +1,7 @@
-Playing Interaction Services
-============================
+Playing User Interactions Services
+==================================
 
-User interaction management microservices for playful applications.
+User interactions management microservices for playful applications.
 
 # Usage
 
