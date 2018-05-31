@@ -4,7 +4,7 @@ import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
 import contents from 'playing-content-common';
 
-import CollectionEntity from '../../entities/collection.entity';
+import { CollectionEntity } from 'playing-interaction-common';
 import { collectionEnrichers } from '../../hooks';
 
 export default function (options = {}) {

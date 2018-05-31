@@ -4,7 +4,7 @@ import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
 import contents from 'playing-content-common';
 
-import FavoriteEntity from '../../entities/favorite.entity';
+import { FavoriteEntity } from 'playing-interaction-common';
 
 export default function (options = {}) {
   return {
