@@ -2,6 +2,6 @@ import Entity from 'mostly-entity';
 
 const UserLikeEntity = new Entity('UserLike');
 
-UserLikeEntity.excepts('createdAt', 'updatedAt', 'destroyedAt');
+UserLikeEntity.excepts('_id');
 
 export default UserLikeEntity.asImmutable();

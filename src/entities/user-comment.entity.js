@@ -2,6 +2,6 @@ import Entity from 'mostly-entity';
 
 const UserCommentEntity = new Entity('UserComment');
 
-UserCommentEntity.excepts('createdAt', 'updatedAt', 'destroyedAt');
+UserCommentEntity.excepts('_id');
 
 export default UserCommentEntity.asImmutable();
