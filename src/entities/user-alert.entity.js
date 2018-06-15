@@ -2,6 +2,6 @@ import Entity from 'mostly-entity';
 
 const UserAlertEntity = new Entity('UserAlert');
 
-UserAlertEntity.excepts('_id');
+UserAlertEntity.discard('_id');
 
 export default UserAlertEntity.asImmutable();
