@@ -4,4 +4,4 @@ const UserCommentEntity = new Entity('UserComment');
 
 UserCommentEntity.discard('_id');
 
-export default UserCommentEntity.asImmutable();
+export default UserCommentEntity.freeze();

@@ -4,4 +4,4 @@ const UserFavoriteEntity = new Entity('UserFavorite');
 
 UserFavoriteEntity.discard('createdAt', 'updatedAt', 'destroyedAt');
 
-export default UserFavoriteEntity.asImmutable();
+export default UserFavoriteEntity.freeze();

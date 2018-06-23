@@ -4,4 +4,4 @@ const UserFeedbackEntity = new Entity('UserFeedback');
 
 UserFeedbackEntity.discard('_id');
 
-export default UserFeedbackEntity.asImmutable();
+export default UserFeedbackEntity.freeze();

@@ -4,4 +4,4 @@ const UserAlertEntity = new Entity('UserAlert');
 
 UserAlertEntity.discard('_id');
 
-export default UserAlertEntity.asImmutable();
+export default UserAlertEntity.freeze();

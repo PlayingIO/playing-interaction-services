@@ -4,4 +4,4 @@ const UserShareEntity = new Entity('UserShare');
 
 UserShareEntity.discard('_id');
 
-export default UserShareEntity.asImmutable();
+export default UserShareEntity.freeze();
