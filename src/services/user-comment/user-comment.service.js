@@ -31,8 +31,8 @@ export class UserCommentService extends Service {
   }
 
   async create (data, params) {
-    assert(data.subject || data.subjects, 'data.subject(s) not provided.');
-    assert(data.comment, 'data.comment not provided.');
+    assert(data.subject || data.subjects, 'subject(s) not provided.');
+    assert(data.comment, 'comment not provided.');
     data.type = data.type || 'document';
 
     const ids = [].concat(data.subject || data.subjects);
@@ -52,7 +52,7 @@ export class UserCommentService extends Service {
 
   async remove (id, params) {
     params = { query: {}, ...params };
-    assert(params.query.commentedAt, 'params.query.commentedAt is not provided');
+    assert(params.query.commentedAt, 'query.commentedAt is not provided');
     const type = params.query.type || 'document';
     const subjectId = params.query.subject || id;
     const userId = params.query.userId || params.user.id;

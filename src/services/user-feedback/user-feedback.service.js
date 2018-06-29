@@ -33,7 +33,7 @@ export class UserFeedbackService extends Service {
   }
 
   async create (data, params) {
-    assert(data.subject || data.subjects, 'data.subject(s) not provided.');
+    assert(data.subject || data.subjects, 'subject(s) not provided.');
     const payload = fp.pick(this.options.payloads, data);
 
     const ids = [].concat(data.subject || data.subjects);

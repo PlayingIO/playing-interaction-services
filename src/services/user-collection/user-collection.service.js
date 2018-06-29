@@ -39,8 +39,8 @@ export class UserCollectionService extends Service {
   }
 
   async create (data, params) {
-    assert(data.collect, 'data.collect not provided.');
-    assert(data.subject || data.subjects, 'data.subject(s) not provided.');
+    assert(data.collect, 'collect not provided.');
+    assert(data.subject || data.subjects, 'subject(s) not provided.');
     data.type = data.type || 'document';
 
     const ids = [].concat(data.subject || data.subjects);
@@ -61,7 +61,7 @@ export class UserCollectionService extends Service {
   async remove (id, params) {
     params = { query: {}, ...params };
     params.query.collect = id || params.query.collect; // id as collection id
-    assert(params.query.collect, 'params.query.collect not provided.');
+    assert(params.query.collect, 'query.collect not provided.');
     assert(params.query.subject, 'query.subject not provided.');
     params.query.type = params.query.type || 'document';
 
@@ -86,8 +86,8 @@ export class UserCollectionService extends Service {
    * move positions of members in the collection
    */
   async move (id, data, params) {
-    assert(data.select, 'data.select is not provided.');
-    assert(data.target, 'data.target is not provided.');
+    assert(data.select, 'select is not provided.');
+    assert(data.target, 'target is not provided.');
 
     debug('move collection member', id, data.select, data.target);
     const [select, target] = await Promise.all([

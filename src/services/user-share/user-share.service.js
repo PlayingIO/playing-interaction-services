@@ -33,7 +33,7 @@ export class UserShareService extends Service {
   }
 
   async create (data, params) {
-    assert(data.subject || data.subjects, 'data.subject(s) not provided.');
+    assert(data.subject || data.subjects, 'subject(s) not provided.');
     data.type = data.type || 'document';
     const payload = fp.pick(this.options.payloads, data);
 
