@@ -1,5 +1,4 @@
 import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
-import { disallow, iff, isProvider } from 'feathers-hooks-common';
 import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
 import contents from 'playing-content-common';
@@ -11,13 +10,11 @@ export default function (options = {}) {
     before: {
       all: [
         hooks.authenticate('jwt', options.auth),
-        iff(isProvider('external'),
-          queryWithCurrentUser({ idField: 'id', as: 'creator' })),
+        queryWithCurrentUser({ idField: 'id', as: 'creator' }),
         cache(options.cache)
       ],
       create: [
-        iff(isProvider('external'),
-          associateCurrentUser({ idField: 'id', as: 'creator' }))
+        associateCurrentUser({ idField: 'id', as: 'creator' })
       ],
       update: [
         hooks.depopulate('parent'),
