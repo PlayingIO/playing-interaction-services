@@ -27,14 +27,13 @@ export const getCollection = async (app, id, params) => {
   return collection;
 };
 
-export const getFavorite = async (app, params) => {
+export const getFavorite = async (app, user) => {
   const svcFavorites = app.service('favorites');
   const favorite = await svcFavorites.get('me', {
-    query: { $select: ['id'] },
-    user: params.user,
+    query: { user, $select: ['id'] }
   });
   if (!favorite) {
-    throw new Error('favorite collection is not exists');
+    throw new Error('Favorite collection is not exists');
   }
   return favorite;
 };
