@@ -42,18 +42,19 @@ export class UserCollectionService extends Service {
     assert(data.collect, 'collect not provided.');
     assert(data.subject || data.subjects, 'subject(s) not provided.');
     data.type = data.type || 'document';
+    data.user = data.user || params.user.id;
 
     const ids = [].concat(data.subject || data.subjects);
     const [subjects, collection] = await Promise.all([
       getSubjects(this.app, data.type, ids, params),
-      getCollection(this.app, data.collect, params)
+      getCollection(this.app, data.collect, data.user)
     ]);
     return Promise.all(fp.map(subject => {
       return super.upsert(null, {
         subject: subject.id,
         collect: collection.id,
         type: subject.type,
-        user: params.user.id
+        user: data.user
       });
     }, subjects));
   }
@@ -64,18 +65,19 @@ export class UserCollectionService extends Service {
     assert(params.query.collect, 'query.collect not provided.');
     assert(params.query.subject, 'query.subject not provided.');
     params.query.type = params.query.type || 'document';
+    params.query.user = params.query.user || params.user.id;
 
     const ids = params.query.subject.split(',');
     const [subjects, collection] = await Promise.all([
       getSubjects(this.app, params.query.type, ids, params),
-      getCollection(this.app, params.query.collect, params)
+      getCollection(this.app, params.query.collect, params.query.user)
     ]);
 
     return super.remove(null, {
       query: {
         subject: { $in: ids },
         collect: collection.id,
-        user: params.user.id
+        user: params.query.user
       },
       provider: params.provider,
       $multi: true
