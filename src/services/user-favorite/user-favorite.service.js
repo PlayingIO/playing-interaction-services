@@ -33,12 +33,15 @@ export class UserFavoriteService extends Service {
   async create (data, params) {
     assert(data.subject || data.subjects, 'subject(s) not provided.');
     data.type = data.type || 'document';
+    data.user = data.user || params.user.id;
 
     const ids = [].concat(data.subject || data.subjects);
     const [subjects, favorite] = await Promise.all([
       getSubjects(this.app, data.type, ids, params),
-      getFavorite(this.app, params)
+      getFavorite(this.app, data.user)
     ]);
+    assert(subjects.length, 'Subjects is not exists');
+    assert(favorite, 'Favorite collection is not exists');
 
     params.locals = { subjects: subjects }; // for notifiers
 
@@ -47,8 +50,9 @@ export class UserFavoriteService extends Service {
         subject: subject.id,
         favorite: favorite.id,
         type: subject.type,
-        user: params.user.id
-      }), subjects));
+        user: data.user
+      }), subjects)
+    );
   }
 
   async remove (id, params) {
@@ -57,11 +61,12 @@ export class UserFavoriteService extends Service {
     } else {
       assert(params.query.subject, 'query.subject is not provided.');
       params.query.type = params.query.type || 'document';
+      params.query.user = params.query.user || params.user.id;
 
       const ids = params.query.subject.split(',');
       const [subjects, favorite] = await Promise.all([
         getSubjects(this.app, params.query.type, ids, params),
-        getFavorite(this.app, params)
+        getFavorite(this.app, params.query.user)
       ]);
 
       params.locals = { subjects: subjects }; // for notifiers
@@ -70,7 +75,7 @@ export class UserFavoriteService extends Service {
         query: {
           subject: { $in: ids },
           favorite: favorite.id,
-          user: params.user.id
+          user: params.query.user
         },
         $multi: true
       });
