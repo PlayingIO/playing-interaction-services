@@ -2,11 +2,10 @@ import assert from 'assert';
 import { helpers } from 'mostly-feathers-mongoose';
 import { plural } from 'pluralize';
 
-export const getSubjects = async (app, type, ids, params) => {
+export const getSubjects = async (app, type, ids) => {
   const svcDocuments = app.service(plural(type));
   const subjects = await svcDocuments.find({
     query: { _id: { $in: ids }, $select: ['type'] },
-    user: params.user,
     paginate: false,
   });
   if (!subjects || subjects.length !== ids.length) {
