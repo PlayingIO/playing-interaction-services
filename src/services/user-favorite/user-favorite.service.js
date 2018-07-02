@@ -37,10 +37,10 @@ export class UserFavoriteService extends Service {
 
     const ids = [].concat(data.subject || data.subjects);
     const [subjects, favorite] = await Promise.all([
-      getSubjects(this.app, data.type, ids, params),
+      getSubjects(this.app, data.type, ids),
       getFavorite(this.app, data.user)
     ]);
-    assert(subjects.length, 'Subjects is not exists');
+    assert(subjects.length, 'Subject is not exists');
     assert(favorite, 'Favorite collection is not exists');
 
     params.locals = { subjects: subjects }; // for notifiers
@@ -65,10 +65,12 @@ export class UserFavoriteService extends Service {
 
       const ids = params.query.subject.split(',');
       const [subjects, favorite] = await Promise.all([
-        getSubjects(this.app, params.query.type, ids, params),
+        getSubjects(this.app, params.query.type, ids),
         getFavorite(this.app, params.query.user)
       ]);
-
+      assert(subjects.length, 'Subject is not exists');
+      assert(favorite, 'Favorite collection is not exists');
+  
       params.locals = { subjects: subjects }; // for notifiers
 
       return super.remove(null, {
