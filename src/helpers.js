@@ -15,11 +15,10 @@ export const getSubjects = async (app, type, ids, params) => {
   return subjects;
 };
 
-export const getCollection = async (app, id, params) => {
+export const getCollection = async (app, id, user) => {
   const svcCollections = app.service('collections');
   const collection = await svcCollections.get(id, {
-    query: { $select: ['id'] },
-    user: params.user,
+    query: { user, $select: ['id'] }
   });
   if (!collection) {
     throw new Error('collection is not exists');
