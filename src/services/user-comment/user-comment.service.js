@@ -36,7 +36,8 @@ export class UserCommentService extends Service {
     data.type = data.type || 'document';
 
     const ids = [].concat(data.subject || data.subjects);
-    const subjects = await getSubjects(this.app, data.type, ids, params);
+    const subjects = await getSubjects(this.app, data.type, ids);
+    assert(subjects.length, 'Subject is not exists');
 
     return Promise.all(fp.map(subject => {
       return super.upsert(null, {
@@ -57,7 +58,9 @@ export class UserCommentService extends Service {
     const subjectId = params.query.subject || id;
     const userId = params.query.userId || params.user.id;
 
-    const subjects = await getSubjects(this.app, type, [subjectId], params);
+    const subjects = await getSubjects(this.app, type, [subjectId]);
+    assert(subjects.length, 'Subject is not exists');
+
     const subject = subjects[0];
     // TODO check with permission rules
     if (!fp.idEquals(userId, params.user.id) ||

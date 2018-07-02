@@ -6,7 +6,6 @@ import shortid from 'shortid';
 
 import UserAlertModel from '../../models/user-alert.model';
 import defaultHooks from './user-alert.hooks';
-import { getSubjects } from '../../helpers';
 
 const debug = makeDebug('playing:interaction-services:user-alerts');
 
