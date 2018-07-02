@@ -1,6 +1,6 @@
 import assert from 'assert';
 import makeDebug from 'debug';
-import { createService } from 'mostly-feathers-mongoose';
+import { createService, helpers } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
 import shortid from 'shortid';
 
@@ -29,8 +29,9 @@ export class FavoriteService extends CollectionService {
   }
 
   async _getUserFavorite (params) {
+    const user = helpers.getCurrentUser(params);
     const favorite = await super.find({
-      query: { creator: params.user.id, ...params.query },
+      query: { creator: user, ...params.query },
       paginate: false
     });
     // create own favorite if not exists
@@ -38,7 +39,7 @@ export class FavoriteService extends CollectionService {
       return super.create({
         title: 'My Favorite',
         description: 'User favorite collection',
-        creator: params.user.id,
+        creator: user,
         path: '/favorites/' + shortid.generate()
       });
     } else {
