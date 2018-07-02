@@ -46,9 +46,12 @@ export class UserCollectionService extends Service {
 
     const ids = [].concat(data.subject || data.subjects);
     const [subjects, collection] = await Promise.all([
-      getSubjects(this.app, data.type, ids, params),
+      getSubjects(this.app, data.type, ids),
       getCollection(this.app, data.collect, data.user)
     ]);
+    assert(subjects.length, 'Subject is not exists');
+    assert(collection, 'Collection is not exists');
+
     return Promise.all(fp.map(subject => {
       return super.upsert(null, {
         subject: subject.id,
@@ -69,9 +72,11 @@ export class UserCollectionService extends Service {
 
     const ids = params.query.subject.split(',');
     const [subjects, collection] = await Promise.all([
-      getSubjects(this.app, params.query.type, ids, params),
+      getSubjects(this.app, params.query.type, ids),
       getCollection(this.app, params.query.collect, params.query.user)
     ]);
+    assert(subjects.length, 'Subject is not exists');
+    assert(collection, 'Collection is not exists');
 
     return super.remove(null, {
       query: {
