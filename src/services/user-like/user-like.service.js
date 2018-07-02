@@ -35,7 +35,8 @@ export class UserLikeService extends Service {
     data.type = data.type || 'document';
 
     const ids = [].concat(data.subject || data.subjects);
-    const subjects = await getSubjects(this.app, data.type, ids, params);
+    const subjects = await getSubjects(this.app, data.type, ids);
+    assert(subjects.length, 'Subject is not exists');
 
     return Promise.all(fp.map(subject => {
       return super.upsert(null, {
@@ -54,7 +55,8 @@ export class UserLikeService extends Service {
       params.query.type = params.query.type || 'document';
 
       const ids = params.query.subject.split(',');
-      const subjects = await getSubjects(this.app, params.query.type, ids, params);
+      const subjects = await getSubjects(this.app, params.query.type, ids);
+      assert(subjects.length, 'Subject is not exists');
 
       return super.remove(null, {
         query: {
