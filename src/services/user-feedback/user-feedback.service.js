@@ -33,15 +33,14 @@ export class UserFeedbackService extends Service {
   }
 
   async create (data, params) {
-    assert(data.subject || data.subjects, 'subject(s) not provided.');
-    const payload = fp.pick(this.options.payloads, data);
+    assert(data.subject || data.subjects, 'subject(s) is not provided.');
+    data.type = data.type || 'document';
 
+    const payload = fp.pick(this.options.payloads, data);
     const ids = [].concat(data.subject || data.subjects);
 
-    let subjects = ids;
-    if (data.type) {
-      subjects = await getSubjects(this.app, data.type, ids, params);
-    }
+    const subjects = await getSubjects(this.app, data.type, ids);
+    assert(subjects.length, 'Subject is not exists');
 
     return Promise.all(fp.map(subject => {
       return super.upsert(null, {
