@@ -8,6 +8,8 @@ const createFavorite = (context) => {
   const userFavorites = helpers.getHookDataAsArray(context);
   const { subjects } = context.params.locals;
   const actor = helpers.getCurrentUser(context);
+  if (!userFavorites.length || !actor) return;
+
   const custom = {
     actor: `user:${actor}`,
     verb: 'favorite.create',
@@ -29,6 +31,8 @@ const deleteFavorite = (context) => {
   const userFavorites = helpers.getHookDataAsArray(context);
   const { subjects } = context.params.locals;
   const actor = helpers.getCurrentUser(context);
+  if (!userFavorites.length || !actor) return;
+
   const custom = {
     actor: `user:${actor}`,
     verb: 'favorite.delete',
