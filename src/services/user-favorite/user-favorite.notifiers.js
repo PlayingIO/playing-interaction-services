@@ -7,7 +7,7 @@ import { createInteractionActivity } from '../../helpers';
 const createFavorite = (context) => {
   const userFavorites = helpers.getHookDataAsArray(context);
   const { subjects } = context.params.locals;
-  const actor = context.params.user.id;
+  const actor = helpers.getCurrentUser(context);
   const custom = {
     actor: `user:${actor}`,
     verb: 'favorite.create',
@@ -28,7 +28,7 @@ const createFavorite = (context) => {
 const deleteFavorite = (context) => {
   const userFavorites = helpers.getHookDataAsArray(context);
   const { subjects } = context.params.locals;
-  const actor = context.params.user.id;
+  const actor = helpers.getCurrentUser(context);
   const custom = {
     actor: `user:${actor}`,
     verb: 'favorite.delete',
