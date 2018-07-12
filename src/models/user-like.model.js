@@ -12,11 +12,10 @@ const fields = {
   user: { type: 'ObjectId', required: true }      // user id
 };
 
-export default function model (app, name) {
+module.exports = function model (app, name) {
   const mongoose = app.get('mongoose');
   const schema = new mongoose.Schema(fields, options);
   schema.index({ subject: 1, user: 1 }, { unique: true });
   return mongoose.model(name, schema);
-}
-
-model.schema = fields;
+};
+module.exports.schema = fields;

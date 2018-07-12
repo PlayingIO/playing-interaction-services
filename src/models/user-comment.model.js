@@ -17,12 +17,11 @@ const fields = {
   commentedAt: { type: Date }                     // commented at
 };
 
-export default function model (app, name) {
+module.exports = function model (app, name) {
   const mongoose = app.get('mongoose');
   const schema = new mongoose.Schema(fields, options);
   schema.index({ subject: 1, type: 1, user: 1 });
   schema.index({ commentedAt: 1, user: 1 });
   return mongoose.model(name, schema);
-}
-
-model.schema = fields;
+};
+module.exports.schema = fields;
