@@ -1,12 +1,12 @@
-import assert from 'assert';
-import makeDebug from 'debug';
-import { createService, helpers } from 'mostly-feathers-mongoose';
-import fp from 'mostly-func';
-import shortid from 'shortid';
+const assert = require('assert');
+const makeDebug = require('debug');
+const { createService, helpers } = require('mostly-feathers-mongoose');
+const fp = require('mostly-func');
+const shortid = require('shortid');
 
-import { CollectionService } from '../collection/collection.service';
-import FavoriteModel from '../../models/favorite.model';
-import defaultHooks from './favorite.hooks';
+const { Service: CollectionService } = require('../collection/collection.service');
+const FavoriteModel = require('../../models/favorite.model');
+const defaultHooks = require('./favorite.hooks');
 
 const debug = makeDebug('playing:interaction-services:favorites');
 
@@ -17,7 +17,7 @@ const defaultOptions = {
 /**
  * Favorite is a particular collection
  */
-export class FavoriteService extends CollectionService {
+class FavoriteService extends CollectionService {
   constructor (options) {
     options = fp.assignAll(defaultOptions, options);
     super(options);
@@ -62,9 +62,8 @@ export class FavoriteService extends CollectionService {
   }
 }
 
-export default function init (app, options, hooks) {
+module.exports = function init (app, options, hooks) {
   options = { ModelName: 'favorite', ...options };
   return createService(app, FavoriteService, FavoriteModel, options);
-}
-
-init.Service = FavoriteService;
+};
+module.exports.Service = FavoriteService;

@@ -1,12 +1,12 @@
-import { queryWithCurrentUser } from 'feathers-authentication-hooks';
-import { hooks } from 'mostly-feathers-mongoose';
-import { cache } from 'mostly-feathers-cache';
-import feeds from 'playing-feed-common';
+const { queryWithCurrentUser } = require('feathers-authentication-hooks');
+const { hooks } = require('mostly-feathers-mongoose');
+const { cache } = require('mostly-feathers-cache');
+const feeds = require('playing-feed-common');
 
-import UserFavoriteEntity from '../../entities/user-favorite.entity';
-import notifiers from './user-favorite.notifiers';
+const UserFavoriteEntity = require('../../entities/user-favorite.entity');
+const notifiers = require('./user-favorite.notifiers');
 
-export default function (options = {}) {
+module.exports = function (options = {}) {
   return {
     before: {
       all: [
@@ -53,4 +53,4 @@ export default function (options = {}) {
       ]
     }
   };
-}
+};

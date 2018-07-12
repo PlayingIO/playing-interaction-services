@@ -1,11 +1,11 @@
-import assert from 'assert';
-import makeDebug from 'debug';
-import { Service, createService } from 'mostly-feathers-mongoose';
-import fp from 'mostly-func';
+const assert = require('assert');
+const makeDebug = require('debug');
+const { Service, createService } = require('mostly-feathers-mongoose');
+const fp = require('mostly-func');
 
-import UserLikeModel from '../../models/user-like.model';
-import defaultHooks from './user-like.hooks';
-import { getSubjects } from '../../helpers';
+const UserLikeModel = require('../../models/user-like.model');
+const defaultHooks = require('./user-like.hooks');
+const { getSubjects } = require('../../helpers');
 
 const debug = makeDebug('playing:interaction-services:user-likes');
 
@@ -13,7 +13,7 @@ const defaultOptions = {
   name: 'user-likes'
 };
 
-export class UserLikeService extends Service {
+class UserLikeService extends Service {
   constructor (options) {
     options = fp.assignAll(defaultOptions, options);
     super(options);
@@ -69,9 +69,8 @@ export class UserLikeService extends Service {
   }
 }
 
-export default function init (app, options, hooks) {
+module.exports = function init (app, options, hooks) {
   options = { ModelName: 'user-like', ...options };
   return createService(app, UserLikeService, UserLikeModel, options);
-}
-
-init.Service = UserLikeService;
+};
+module.exports.Service = UserLikeService;

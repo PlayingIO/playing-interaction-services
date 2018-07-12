@@ -1,11 +1,11 @@
-import assert from 'assert';
-import makeDebug from 'debug';
-import { Service, helpers, createService } from 'mostly-feathers-mongoose';
-import fp from 'mostly-func';
+const assert = require('assert');
+const makeDebug = require('debug');
+const { Service, helpers, createService } = require('mostly-feathers-mongoose');
+const fp = require('mostly-func');
 
-import UserFavoriteModel from '../../models/user-favorite.model';
-import defaultHooks from './user-favorite.hooks';
-import { getSubjects, getFavorite } from '../../helpers';
+const UserFavoriteModel = require('../../models/user-favorite.model');
+const defaultHooks = require('./user-favorite.hooks');
+const { getSubjects, getFavorite } = require('../../helpers');
 
 const debug = makeDebug('playing:interaction-services:user-favorites');
 
@@ -13,7 +13,7 @@ const defaultOptions = {
   name: 'user-favorites'
 };
 
-export class UserFavoriteService extends Service {
+class UserFavoriteService extends Service {
   constructor (options) {
     options = fp.assignAll(defaultOptions, options);
     super(options);
@@ -85,9 +85,8 @@ export class UserFavoriteService extends Service {
   }
 }
 
-export default function init (app, options, hooks) {
+module.exports = function init (app, options, hooks) {
   options = { ModelName: 'user-favorite', ...options };
   return createService(app, UserFavoriteService, UserFavoriteModel, options);
-}
-
-init.Service = UserFavoriteService;
+};
+module.exports.Service = UserFavoriteService;

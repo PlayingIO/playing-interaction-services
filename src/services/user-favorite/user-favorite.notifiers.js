@@ -1,7 +1,7 @@
-import fp from 'mostly-func';
-import { helpers } from 'mostly-feathers-mongoose';
+const fp = require('mostly-func');
+const { helpers } = require('mostly-feathers-mongoose');
 
-import { createInteractionActivity } from '../../helpers';
+const { createInteractionActivity } = require('../../helpers');
 
 // create favorite activity
 const createFavorite = (context) => {
@@ -49,7 +49,7 @@ const deleteFavorite = (context) => {
   }, userFavorites);
 };
 
-export default {
+module.exports = {
   'favorite.create': createFavorite,
   'favorite.delete': deleteFavorite
 };

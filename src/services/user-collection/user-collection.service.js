@@ -1,11 +1,11 @@
-import assert from 'assert';
-import makeDebug from 'debug';
-import { Service, helpers, createService } from 'mostly-feathers-mongoose';
-import fp from 'mostly-func';
+const assert = require('assert');
+const makeDebug = require('debug');
+const { Service, helpers, createService } = require('mostly-feathers-mongoose');
+const fp = require('mostly-func');
 
-import UserCollectionModel from '../../models/user-collection.model';
-import defaultHooks from './user-collection.hooks';
-import { getSubjects, getCollection } from '../../helpers';
+const UserCollectionModel = require('../../models/user-collection.model');
+const defaultHooks = require('./user-collection.hooks');
+const { getSubjects, getCollection } = require('../../helpers');
 
 const debug = makeDebug('playing:interaction-services:user-collections');
 
@@ -13,7 +13,7 @@ const defaultOptions = {
   name: 'user-collections'
 };
 
-export class UserCollectionService extends Service {
+class UserCollectionService extends Service {
   constructor (options) {
     options = fp.assignAll(defaultOptions, options);
     super(options);
@@ -111,9 +111,8 @@ export class UserCollectionService extends Service {
   }
 }
 
-export default function init (app, options, hooks) {
+module.exports = function init (app, options, hooks) {
   options = { ModelName: 'user-collection', ...options };
   return createService(app, UserCollectionService, UserCollectionModel, options);
-}
-
-init.Service = UserCollectionService;
+};
+module.exports.Service = UserCollectionService;

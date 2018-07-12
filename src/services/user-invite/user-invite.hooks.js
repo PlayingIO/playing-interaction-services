@@ -1,10 +1,10 @@
-import { hooks } from 'mostly-feathers-mongoose';
-import { cache } from 'mostly-feathers-cache';
-import { sanitize, validate } from 'mostly-feathers-validate';
+const { hooks } = require('mostly-feathers-mongoose');
+const { cache } = require('mostly-feathers-cache');
+const { sanitize, validate } = require('mostly-feathers-validate');
 
-import accepts from './user-invite.accepts';
+const accepts = require('./user-invite.accepts');
 
-export default function (options = {}) {
+module.exports = function (options = {}) {
   return {
     before: {
       all: [
@@ -27,4 +27,4 @@ export default function (options = {}) {
       ]
     }
   };
-}
+};

@@ -1,4 +1,4 @@
-export default function accepts (context) {
+module.exports = function accepts (context) {
   // validation rules
   const invite = { arg: 'id', type: 'string', required: true, description: 'Invite id' };
 
@@ -6,4 +6,4 @@ export default function accepts (context) {
     patch: [ invite ],
     remove: [ invite ]
   };
-}
+};

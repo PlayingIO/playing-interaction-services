@@ -1,12 +1,12 @@
-import assert from 'assert';
-import makeDebug from 'debug';
-import mongoose from 'mongoose';
-import { Service, createService } from 'mostly-feathers-mongoose';
-import fp from 'mostly-func';
+const assert = require('assert');
+const makeDebug = require('debug');
+const mongoose = require('mongoose');
+const { Service, createService } = require('mostly-feathers-mongoose');
+const fp = require('mostly-func');
 
-import UserFeedbackModel from '../../models/user-feedback.model';
-import defaultHooks from './user-feedback.hooks';
-import { getSubjects } from '../../helpers';
+const UserFeedbackModel = require('../../models/user-feedback.model');
+const defaultHooks = require('./user-feedback.hooks');
+const { getSubjects } = require('../../helpers');
 
 const debug = makeDebug('playing:interaction-services:user-feedbacks');
 
@@ -15,7 +15,7 @@ const defaultOptions = {
   payloads: ['os', 'osVersion', 'deviceType', 'app', 'appVersion']
 };
 
-export class UserFeedbackService extends Service {
+class UserFeedbackService extends Service {
   constructor (options) {
     options = fp.assignAll(defaultOptions, options);
     super(options);
@@ -56,9 +56,8 @@ export class UserFeedbackService extends Service {
   }
 }
 
-export default function init (app, options, hooks) {
+module.exports = function init (app, options, hooks) {
   options = { ModelName: 'user-feedback', ...options };
   return createService(app, UserFeedbackService, UserFeedbackModel, options);
-}
-
-init.Service = UserFeedbackService;
+};
+module.exports.Service = UserFeedbackService;

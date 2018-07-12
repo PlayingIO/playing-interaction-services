@@ -1,11 +1,11 @@
-import assert from 'assert';
-import makeDebug from 'debug';
-import { Service, createService } from 'mostly-feathers-mongoose';
-import fp from 'mostly-func';
-import shortid from 'shortid';
+const assert = require('assert');
+const makeDebug = require('debug');
+const { Service, createService } = require('mostly-feathers-mongoose');
+const fp = require('mostly-func');
+const shortid = require('shortid');
 
-import UserAlertModel from '../../models/user-alert.model';
-import defaultHooks from './user-alert.hooks';
+const UserAlertModel = require('../../models/user-alert.model');
+const defaultHooks = require('./user-alert.hooks');
 
 const debug = makeDebug('playing:interaction-services:user-alerts');
 
@@ -14,7 +14,7 @@ const defaultOptions = {
   payloads: ['os', 'osVersion', 'deviceType', 'app', 'appVersion']
 };
 
-export class UserAlertService extends Service {
+class UserAlertService extends Service {
   constructor (options) {
     options = fp.assignAll(defaultOptions, options);
     super(options);
@@ -59,9 +59,8 @@ export class UserAlertService extends Service {
   }
 }
 
-export default function init (app, options, hooks) {
+module.exports = function init (app, options, hooks) {
   options = { ModelName: 'user-alert', ...options };
   return createService(app, UserAlertService, UserAlertModel, options);
-}
-
-init.Service = UserAlertService;
+};
+module.exports.Service = UserAlertService;

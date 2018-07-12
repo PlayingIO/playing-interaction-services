@@ -1,12 +1,12 @@
-import assert from 'assert';
-import makeDebug from 'debug';
-import { Service, createService } from 'mostly-feathers-mongoose';
-import fp from 'mostly-func';
-import shortid from 'shortid';
+const assert = require('assert');
+const makeDebug = require('debug');
+const { Service, createService } = require('mostly-feathers-mongoose');
+const fp = require('mostly-func');
+const shortid = require('shortid');
 
-import UserShareModel from '../../models/user-share.model';
-import defaultHooks from './user-share.hooks';
-import { getSubjects } from '../../helpers';
+const UserShareModel = require('../../models/user-share.model');
+const defaultHooks = require('./user-share.hooks');
+const { getSubjects } = require('../../helpers');
 
 const debug = makeDebug('playing:interaction-services:user-shares');
 
@@ -15,7 +15,7 @@ const defaultOptions = {
   payloads: ['os', 'osVersion', 'deviceType', 'app', 'appVersion']
 };
 
-export class UserShareService extends Service {
+class UserShareService extends Service {
   constructor (options) {
     options = fp.assignAll(defaultOptions, options);
     super(options);
@@ -55,9 +55,8 @@ export class UserShareService extends Service {
   }
 }
 
-export default function init (app, options, hooks) {
+module.exports = function init (app, options, hooks) {
   options = { ModelName: 'user-share', ...options };
   return createService(app, UserShareService, UserShareModel, options);
-}
-
-init.Service = UserShareService;
+};
+module.exports.Service = UserShareService;

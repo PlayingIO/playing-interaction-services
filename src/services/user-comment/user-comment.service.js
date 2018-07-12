@@ -1,11 +1,11 @@
-import assert from 'assert';
-import makeDebug from 'debug';
-import { Service, createService } from 'mostly-feathers-mongoose';
-import fp from 'mostly-func';
+const assert = require('assert');
+const makeDebug = require('debug');
+const { Service, createService } = require('mostly-feathers-mongoose');
+const fp = require('mostly-func');
 
-import UserCommentModel from '../../models/user-comment.model';
-import defaultHooks from './user-comment.hooks';
-import { getSubjects } from '../../helpers';
+const UserCommentModel = require('../../models/user-comment.model');
+const defaultHooks = require('./user-comment.hooks');
+const { getSubjects } = require('../../helpers');
 
 const debug = makeDebug('playing:interaction-services:user-comments');
 
@@ -13,7 +13,7 @@ const defaultOptions = {
   name: 'user-comments'
 };
 
-export class UserCommentService extends Service {
+class UserCommentService extends Service {
   constructor (options) {
     options = fp.assignAll(defaultOptions, options);
     super(options);
@@ -78,9 +78,8 @@ export class UserCommentService extends Service {
   }
 }
 
-export default function init (app, options, hooks) {
+module.exports = function init (app, options, hooks) {
   options = { ModelName: 'user-comment', ...options };
   return createService(app, UserCommentService, UserCommentModel, options);
-}
-
-init.Service = UserCommentService;
+};
+module.exports.Service = UserCommentService;

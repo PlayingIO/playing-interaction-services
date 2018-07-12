@@ -1,10 +1,10 @@
-import assert from 'assert';
-import makeDebug from 'debug';
-import fp from 'mostly-func';
-import { helpers } from 'mostly-feathers-mongoose';
-import feeds from 'playing-feed-common';
+const assert = require('assert');
+const makeDebug = require('debug');
+const fp = require('mostly-func');
+const { helpers } = require('mostly-feathers-mongoose');
+const feeds = require('playing-feed-common');
 
-import defaultHooks from './user-request.hooks';
+const defaultHooks = require('./user-request.hooks');
 
 const debug = makeDebug('playing:interaction-services:users/requests');
 
@@ -18,7 +18,7 @@ const defaultOptions = {
   ]
 };
 
-export class UserRequestService {
+class UserRequestService {
   constructor (options) {
     this.options = fp.assignAll(defaultOptions, options);
     this.name = this.options.name;
@@ -74,8 +74,7 @@ export class UserRequestService {
   }
 }
 
-export default function init (app, options, hooks) {
+module.exports = function init (app, options, hooks) {
   return new UserRequestService(options);
-}
-
-init.Service = UserRequestService;
+};
+module.exports.Service = UserRequestService;

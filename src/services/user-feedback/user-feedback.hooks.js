@@ -1,10 +1,10 @@
-import { queryWithCurrentUser } from 'feathers-authentication-hooks';
-import { hooks } from 'mostly-feathers-mongoose';
-import { cache } from 'mostly-feathers-cache';
+const { queryWithCurrentUser } = require('feathers-authentication-hooks');
+const { hooks } = require('mostly-feathers-mongoose');
+const { cache } = require('mostly-feathers-cache');
 
-import UserFeedbackEntity from '../../entities/user-feedback.entity';
+const UserFeedbackEntity = require('../../entities/user-feedback.entity');
 
-export default function (options = {}) {
+module.exports = function (options = {}) {
   return {
     before: {
       all: [
@@ -44,4 +44,4 @@ export default function (options = {}) {
       ]
     }
   };
-}
+};
