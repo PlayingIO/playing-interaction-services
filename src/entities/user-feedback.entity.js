@@ -1,7 +1,7 @@
-import Entity from 'mostly-entity';
+const Entity = require('mostly-entity');
 
 const UserFeedbackEntity = new Entity('UserFeedback');
 
 UserFeedbackEntity.discard('_id');
 
-export default UserFeedbackEntity.freeze();
+module.exports = UserFeedbackEntity.freeze();

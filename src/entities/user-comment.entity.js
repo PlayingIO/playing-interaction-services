@@ -1,7 +1,7 @@
-import Entity from 'mostly-entity';
+const Entity = require('mostly-entity');
 
 const UserCommentEntity = new Entity('UserComment');
 
 UserCommentEntity.discard('_id');
 
-export default UserCommentEntity.freeze();
+module.exports = UserCommentEntity.freeze();

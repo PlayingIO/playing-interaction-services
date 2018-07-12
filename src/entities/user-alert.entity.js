@@ -1,7 +1,7 @@
-import Entity from 'mostly-entity';
+const Entity = require('mostly-entity');
 
 const UserAlertEntity = new Entity('UserAlert');
 
 UserAlertEntity.discard('_id');
 
-export default UserAlertEntity.freeze();
+module.exports = UserAlertEntity.freeze();

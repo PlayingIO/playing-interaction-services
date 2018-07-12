@@ -1,7 +1,7 @@
-import Entity from 'mostly-entity';
+const Entity = require('mostly-entity');
 
 const UserCollectionEntity = new Entity('UserCollection');
 
 UserCollectionEntity.discard('_id');
 
-export default UserCollectionEntity.freeze();
+module.exports = UserCollectionEntity.freeze();

@@ -1,7 +1,7 @@
-import Entity from 'mostly-entity';
+const Entity = require('mostly-entity');
 
 const UserLikeEntity = new Entity('UserLike');
 
 UserLikeEntity.discard('_id');
 
-export default UserLikeEntity.freeze();
+module.exports = UserLikeEntity.freeze();
