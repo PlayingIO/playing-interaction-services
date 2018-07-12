@@ -1,5 +1,5 @@
-import collectionEnrichers from './collection-enrichers';
+const collectionEnrichers = require('./collection-enrichers');
 
-export {
+module.exports = {
   collectionEnrichers
 };

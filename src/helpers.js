@@ -1,8 +1,7 @@
-import assert from 'assert';
-import { helpers } from 'mostly-feathers-mongoose';
-import { plural } from 'pluralize';
+const { helpers } = require('mostly-feathers-mongoose');
+const { plural } = require('pluralize');
 
-export const getSubjects = async (app, type, ids) => {
+const getSubjects = async (app, type, ids) => {
   const svcDocuments = app.service(plural(type));
   const subjects = await svcDocuments.find({
     query: { _id: { $in: ids }, $select: ['type'] },
@@ -14,7 +13,7 @@ export const getSubjects = async (app, type, ids) => {
   return subjects;
 };
 
-export const getCollection = async (app, id, user) => {
+const getCollection = async (app, id, user) => {
   const svcCollections = app.service('collections');
   const collection = await svcCollections.get(id, {
     query: { user, $select: ['id'] }
@@ -25,7 +24,7 @@ export const getCollection = async (app, id, user) => {
   return collection;
 };
 
-export const getFavorite = async (app, user) => {
+const getFavorite = async (app, user) => {
   const svcFavorites = app.service('favorites');
   const favorite = await svcFavorites.get('me', {
     query: { user, $select: ['id'] }
@@ -37,7 +36,7 @@ export const getFavorite = async (app, user) => {
 };
 
 // create a interaction activity
-export const createInteractionActivity = (context, interaction, subject, custom) => {
+const createInteractionActivity = (context, interaction, subject, custom) => {
   const actor = helpers.getId(interaction.user);
   return {
     actor: `user:${actor}`,
@@ -46,4 +45,11 @@ export const createInteractionActivity = (context, interaction, subject, custom)
     time: new Date().toISOString(),
     ...custom
   };
+};
+
+module.exports = {
+  createInteractionActivity,
+  getCollection,
+  getFavorite,
+  getSubjects
 };

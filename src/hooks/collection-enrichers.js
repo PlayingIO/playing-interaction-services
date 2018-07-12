@@ -1,7 +1,7 @@
-import assert from 'assert';
-import { helpers } from 'mostly-feathers-mongoose';
+const assert = require('assert');
+const { helpers } = require('mostly-feathers-mongoose');
 
-export default function collectionEnrichers (options) {
+module.exports = function collectionEnrichers (options) {
   return context => {
     assert(context.type === 'after', `collectionEnrichers must be used as a 'after' hook.`);
 
@@ -23,4 +23,4 @@ export default function collectionEnrichers (options) {
     }
     return context;
   };
-}
+};
