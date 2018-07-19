@@ -70,7 +70,7 @@ class UserFavoriteService extends Service {
       ]);
       assert(subjects.length, 'Subject is not exists');
       assert(favorite, 'Favorite collection is not exists');
-  
+
       params.locals = { subjects: subjects }; // for notifiers
 
       return super.remove(null, {
