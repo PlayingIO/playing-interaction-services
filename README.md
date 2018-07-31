@@ -12,7 +12,7 @@ Please see the [documentation site](https://playingio.github.io) for more detail
 ## Installation
 
 ```bash
-npm install playing-interaction-services
+npm install playing-interaction-services --save
 ```
 
 # License
